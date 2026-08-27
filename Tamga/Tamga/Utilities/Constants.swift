@@ -6,7 +6,7 @@ enum Constants {
     enum App {
         static let name = "Tamga"
         static let bundleId = "com.tamga.app"
-        static let version = "1.0.0"
+        static let version = "1.5.0"
         static let minMacOSVersion = "13.0"
     }
 
