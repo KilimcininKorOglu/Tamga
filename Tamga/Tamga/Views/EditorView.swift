@@ -14,85 +14,25 @@ struct EditorView: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @State private var lineCount: Int = 1
-    @State private var scrollOffset: CGFloat = 0
 
     var body: some View {
-        GeometryReader { geometry in
-            HStack(spacing: 0) {
-                if showLineNumbers {
-                    LineNumbersView(
-                        lineCount: lineCount,
-                        fontSize: fontSize,
-                        scrollOffset: scrollOffset
-                    )
-                    .frame(width: lineNumberWidth)
-
-                    Divider()
-                }
-
-                HighlightedTextEditor(
-                    text: $text,
-                    language: language,
-                    isDarkMode: colorScheme == .dark,
-                    fontSize: fontSize,
-                    fontName: fontName,
-                    isWordWrapEnabled: isWordWrapEnabled,
-                    showInvisibleCharacters: showInvisibleCharacters,
-                    goToPosition: goToPosition,
-                    onLineCountChange: { count in
-                        lineCount = count
-                    },
-                    onScrollChange: { offset in
-                        scrollOffset = offset
-                    }
-                )
+        // Line numbers are drawn by the scroll view's own ruler, so they follow the
+        // real text layout: a soft-wrapped line keeps one number, and a folded block
+        // contributes none.
+        HighlightedTextEditor(
+            text: $text,
+            language: language,
+            isDarkMode: colorScheme == .dark,
+            fontSize: fontSize,
+            fontName: fontName,
+            isWordWrapEnabled: isWordWrapEnabled,
+            showInvisibleCharacters: showInvisibleCharacters,
+            showLineNumbers: showLineNumbers,
+            goToPosition: goToPosition,
+            onLineCountChange: { count in
+                lineCount = count
             }
-        }
-    }
-
-    private var lineNumberWidth: CGFloat {
-        let digits = String(lineCount).count
-        return CGFloat(max(digits, 3)) * 10 + 20
-    }
-}
-
-// MARK: - Line Numbers View
-
-struct LineNumbersView: View {
-    let lineCount: Int
-    let fontSize: CGFloat
-    let scrollOffset: CGFloat
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var backgroundColor: Color {
-        colorScheme == .dark
-            ? Color(nsColor: NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1))
-            : Color(nsColor: .controlBackgroundColor).opacity(0.5)
-    }
-
-    private var textColor: Color {
-        colorScheme == .dark
-            ? Color(nsColor: NSColor(red: 0.5, green: 0.5, blue: 0.55, alpha: 1))
-            : Color.secondary
-    }
-
-    var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .trailing, spacing: 0) {
-                ForEach(1...max(lineCount, 1), id: \.self) { lineNumber in
-                    Text("\(lineNumber)")
-                        .font(.system(size: fontSize, design: .monospaced))
-                        .foregroundColor(textColor)
-                        .frame(height: fontSize * 1.4)
-                }
-            }
-            .padding(.horizontal, 8)
-            .padding(.top, 8)
-            .offset(y: -scrollOffset)
-        }
-        .disabled(true)
-        .background(backgroundColor)
+        )
     }
 }
 
@@ -106,9 +46,9 @@ struct HighlightedTextEditor: NSViewRepresentable {
     let fontName: String
     let isWordWrapEnabled: Bool
     let showInvisibleCharacters: Bool
+    let showLineNumbers: Bool
     let goToPosition: Int?
     let onLineCountChange: (Int) -> Void
-    let onScrollChange: (CGFloat) -> Void
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -156,7 +96,16 @@ struct HighlightedTextEditor: NSViewRepresentable {
         context.coordinator.textView = textView
         context.coordinator.scrollView = scrollView
 
-        // Observe scroll changes
+        // Line numbers live in the scroll view's vertical ruler so they follow the
+        // layout manager instead of an assumed row height.
+        let ruler = LineNumberRulerView(textView: textView, scrollView: scrollView)
+        scrollView.verticalRulerView = ruler
+        scrollView.hasVerticalRuler = true
+        scrollView.rulersVisible = showLineNumbers
+        context.coordinator.lineNumberRuler = ruler
+        context.coordinator.updateRulerAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
+
+        // The ruler must repaint while scrolling, because it draws only the visible lines.
         NotificationCenter.default.addObserver(
             context.coordinator,
             selector: #selector(Coordinator.scrollViewDidScroll(_:)),
@@ -211,6 +160,11 @@ struct HighlightedTextEditor: NSViewRepresentable {
         // Update colors for dark mode
         updateColors(textView: textView, isDarkMode: isDarkMode)
 
+        // Update the line number gutter
+        scrollView.rulersVisible = showLineNumbers
+        context.coordinator.updateRulerAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
+        context.coordinator.refreshLineNumbers()
+
         // Apply syntax highlighting
         context.coordinator.applySyntaxHighlighting(language: language, isDarkMode: isDarkMode)
 
@@ -240,6 +194,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         var parent: HighlightedTextEditor
         weak var textView: NSTextView?
         weak var scrollView: NSScrollView?
+        weak var lineNumberRuler: LineNumberRulerView?
         var lastGoToPosition: Int?
 
         private let highlighter = SyntaxHighlighter.shared
@@ -263,7 +218,32 @@ struct HighlightedTextEditor: NSViewRepresentable {
             guard let textView = textView, !isUpdating else { return }
             parent.text = textView.string
             updateLineCount()
+            refreshLineNumbers()
             applySyntaxHighlighting(language: parent.language, isDarkMode: parent.isDarkMode)
+        }
+
+        /// Repaints the gutter and widens it when the line count grows a digit.
+        func refreshLineNumbers() {
+            guard let lineNumberRuler else { return }
+            lineNumberRuler.updateThickness(forLineCount: currentLineCount())
+            lineNumberRuler.needsDisplay = true
+        }
+
+        func updateRulerAppearance(fontSize: CGFloat, isDarkMode: Bool) {
+            guard let lineNumberRuler else { return }
+            lineNumberRuler.numberFont = .monospacedSystemFont(ofSize: max(fontSize - 2, 9), weight: .regular)
+            lineNumberRuler.numberColor = isDarkMode
+                ? NSColor(red: 0.5, green: 0.5, blue: 0.55, alpha: 1)
+                : NSColor.secondaryLabelColor
+            lineNumberRuler.gutterColor = isDarkMode
+                ? NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1)
+                : NSColor.controlBackgroundColor
+        }
+
+        private func currentLineCount() -> Int {
+            guard let textView = textView else { return 1 }
+            let text = textView.string
+            return text.isEmpty ? 1 : text.components(separatedBy: .newlines).count
         }
 
         func applySyntaxHighlighting(language: SyntaxLanguage, isDarkMode: Bool) {
@@ -310,9 +290,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         }
 
         @objc func scrollViewDidScroll(_ notification: Notification) {
-            guard let scrollView = scrollView else { return }
-            let offset = scrollView.contentView.bounds.origin.y
-            parent.onScrollChange(offset)
+            lineNumberRuler?.needsDisplay = true
         }
     }
 }
