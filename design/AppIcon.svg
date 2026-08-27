@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Tamga</title>
+  <defs>
+    <linearGradient id="tamgaBackground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4C82E4"/>
+      <stop offset="1" stop-color="#1B3A87"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" ry="185" fill="url(#tamgaBackground)"/>
+  <g fill="#FFFFFF">
+    <rect x="280" y="316" width="464" height="104" rx="14" ry="14"/>
+    <rect x="460" y="316" width="104" height="392" rx="14" ry="14"/>
+  </g>
+</svg>
