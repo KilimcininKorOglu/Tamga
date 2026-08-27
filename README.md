@@ -57,8 +57,8 @@ Download the latest release from the [Releases](../../releases) page.
 
 ```bash
 # Clone the repository
-git clone https://github.com/user/tamga.git
-cd tamga
+git clone https://github.com/KilimcininKorOglu/Tamga.git
+cd Tamga
 
 # Build (the Xcode project lives in the Tamga/ subdirectory)
 xcodebuild -project Tamga/Tamga.xcodeproj -scheme Tamga -destination 'platform=macOS' build
