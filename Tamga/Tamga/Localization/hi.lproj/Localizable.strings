@@ -65,6 +65,7 @@
 "recent.files" = "हाल की फ़ाइलें";
 "remove.duplicate.lines" = "डुप्लिकेट पंक्तियां हटाएं";
 "replace" = "बदलें";
+"replace.menu" = "बदलें...";
 "replace.all" = "सभी बदलें";
 "replace.placeholder" = "इससे बदलें";
 "reset.zoom" = "ज़ूम रीसेट करें";

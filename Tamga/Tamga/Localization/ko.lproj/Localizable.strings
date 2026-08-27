@@ -65,6 +65,7 @@
 "recent.files" = "최근 파일";
 "remove.duplicate.lines" = "중복 줄 제거";
 "replace" = "바꾸기";
+"replace.menu" = "바꾸기...";
 "replace.all" = "모두 바꾸기";
 "replace.placeholder" = "바꿀 내용";
 "reset.zoom" = "확대/축소 재설정";

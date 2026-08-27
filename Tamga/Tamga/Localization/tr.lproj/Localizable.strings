@@ -65,6 +65,7 @@
 "recent.files" = "Son Dosyalar";
 "remove.duplicate.lines" = "Tekrar Eden Satırları Kaldır";
 "replace" = "Değiştir";
+"replace.menu" = "Değiştir...";
 "replace.all" = "Tümünü Değiştir";
 "replace.placeholder" = "Bununla değiştir";
 "reset.zoom" = "Yakınlaştırmayı Sıfırla";

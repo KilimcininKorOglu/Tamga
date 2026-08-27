@@ -65,6 +65,7 @@
 "recent.files" = "Tệp gần đây";
 "remove.duplicate.lines" = "Xóa dòng trùng";
 "replace" = "Thay thế";
+"replace.menu" = "Thay thế...";
 "replace.all" = "Thay tất cả";
 "replace.placeholder" = "Thay bằng";
 "reset.zoom" = "Đặt lại thu phóng";

@@ -5,6 +5,7 @@ struct FindReplaceView: View {
     @Binding var searchText: String
     @Binding var replaceText: String
     @Binding var isVisible: Bool
+    @Binding var showReplace: Bool
     let matchCount: Int
     let currentMatch: Int
     let onFindNext: () -> Void
@@ -12,7 +13,6 @@ struct FindReplaceView: View {
     let onReplace: () -> Void
     let onReplaceAll: () -> Void
 
-    @State private var showReplace: Bool = false
     @FocusState private var isSearchFocused: Bool
 
     var body: some View {
@@ -52,7 +52,11 @@ struct FindReplaceView: View {
                 .help(String(localized: "find.next"))
 
                 Button(action: { showReplace.toggle() }) {
-                    Image(systemName: showReplace ? "chevron.up.square" : "chevron.down.square")
+                    HStack(spacing: 4) {
+                        Image(systemName: showReplace ? "chevron.up.square" : "chevron.down.square")
+                        Text(String(localized: "replace"))
+                            .font(.caption)
+                    }
                 }
                 .buttonStyle(.borderless)
                 .help(String(localized: "toggle.replace"))
@@ -109,6 +113,7 @@ struct FindReplaceView: View {
             searchText: .constant("test"),
             replaceText: .constant(""),
             isVisible: .constant(true),
+            showReplace: .constant(true),
             matchCount: 5,
             currentMatch: 2,
             onFindNext: {},

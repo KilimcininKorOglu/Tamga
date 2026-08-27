@@ -65,6 +65,7 @@
 "recent.files" = "Recente bestanden";
 "remove.duplicate.lines" = "Verwijder duplicaten";
 "replace" = "Vervang";
+"replace.menu" = "Vervang...";
 "replace.all" = "Vervang alles";
 "replace.placeholder" = "Vervangen door";
 "reset.zoom" = "Reset zoom";

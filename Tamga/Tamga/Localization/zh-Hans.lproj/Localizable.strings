@@ -65,6 +65,7 @@
 "recent.files" = "最近文件";
 "remove.duplicate.lines" = "删除重复行";
 "replace" = "替换";
+"replace.menu" = "替换...";
 "replace.all" = "全部替换";
 "replace.placeholder" = "替换为";
 "reset.zoom" = "重置缩放";

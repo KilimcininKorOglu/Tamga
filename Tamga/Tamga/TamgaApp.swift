@@ -136,6 +136,11 @@ struct TamgaApp: App {
                 }
                 .keyboardShortcut("g", modifiers: [.command, .shift])
 
+                Button(String(localized: "replace.menu")) {
+                    documentViewModel?.showReplace()
+                }
+                .keyboardShortcut("f", modifiers: [.command, .option])
+
                 Divider()
 
                 Button(String(localized: "go.to.line")) {

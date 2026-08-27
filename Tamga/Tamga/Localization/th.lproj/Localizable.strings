@@ -65,6 +65,7 @@
 "recent.files" = "ไฟล์ล่าสุด";
 "remove.duplicate.lines" = "ลบบรรทัดซ้ำ";
 "replace" = "แทนที่";
+"replace.menu" = "แทนที่...";
 "replace.all" = "แทนที่ทั้งหมด";
 "replace.placeholder" = "แทนที่ด้วย";
 "reset.zoom" = "รีเซ็ตซูม";

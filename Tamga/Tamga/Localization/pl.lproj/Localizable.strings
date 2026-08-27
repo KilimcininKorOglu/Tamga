@@ -65,6 +65,7 @@
 "recent.files" = "Ostatnie pliki";
 "remove.duplicate.lines" = "Usuń duplikaty";
 "replace" = "Zamień";
+"replace.menu" = "Zamień...";
 "replace.all" = "Zamień wszystko";
 "replace.placeholder" = "Zamień na";
 "reset.zoom" = "Resetuj powiększenie";

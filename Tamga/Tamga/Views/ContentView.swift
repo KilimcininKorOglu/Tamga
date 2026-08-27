@@ -145,6 +145,7 @@ struct ContentView: View {
                         searchText: $documentViewModel.searchText,
                         replaceText: $documentViewModel.replaceText,
                         isVisible: $documentViewModel.isSearchVisible,
+                        showReplace: $documentViewModel.isReplaceVisible,
                         matchCount: documentViewModel.searchResults.count,
                         currentMatch: documentViewModel.currentSearchIndex,
                         onFindNext: { documentViewModel.findNext() },

@@ -65,6 +65,7 @@
 "recent.files" = "Недавние файлы";
 "remove.duplicate.lines" = "Удалить дубликаты строк";
 "replace" = "Заменить";
+"replace.menu" = "Заменить...";
 "replace.all" = "Заменить все";
 "replace.placeholder" = "Заменить на";
 "reset.zoom" = "Сбросить масштаб";
