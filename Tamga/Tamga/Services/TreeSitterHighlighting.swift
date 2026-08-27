@@ -31,34 +31,46 @@ enum TreeSitterTheme {
         return [.font: font, .foregroundColor: color]
     }
 
+    /// Theme colour per capture root. Extend this when a grammar's `highlights.scm`
+    /// introduces a capture name that is not covered yet.
+    private static let captureColors: [String: KeyPath<SyntaxHighlighter.Theme, NSColor>] = [
+        "keyword": \.keyword,
+        "conditional": \.keyword,
+        "repeat": \.keyword,
+        "include": \.keyword,
+        "import": \.keyword,
+        "storageclass": \.keyword,
+        "define": \.keyword,
+        "operator": \.operator,
+        "string": \.string,
+        "character": \.string,
+        "escape": \.string,
+        "comment": \.comment,
+        "number": \.number,
+        "float": \.number,
+        "boolean": \.number,
+        "constant": \.number,
+        "function": \.function,
+        "method": \.function,
+        "constructor": \.function,
+        "type": \.type,
+        "namespace": \.type,
+        "module": \.type,
+        "variable": \.variable,
+        "parameter": \.variable,
+        "property": \.variable,
+        "field": \.variable,
+        "label": \.variable,
+        "attribute": \.attribute,
+        "tag": \.tag
+    ]
+
     /// Longest-prefix match on dotted capture names; returns nil for captures with
     /// no themed color (caller substitutes the base foreground).
     private static func color(forCapture capture: String, theme: SyntaxHighlighter.Theme) -> NSColor? {
         let root = capture.split(separator: ".").first.map(String.init) ?? capture
-        switch root {
-        case "keyword", "conditional", "repeat", "include", "import", "storageclass", "define":
-            return theme.keyword
-        case "operator":
-            return theme.operator
-        case "string", "character", "escape":
-            return theme.string
-        case "comment":
-            return theme.comment
-        case "number", "float", "boolean", "constant":
-            return theme.number
-        case "function", "method", "constructor":
-            return theme.function
-        case "type", "namespace", "module":
-            return theme.type
-        case "variable", "parameter", "property", "field", "label":
-            return theme.variable
-        case "attribute":
-            return theme.attribute
-        case "tag":
-            return theme.tag
-        default:
-            return nil
-        }
+        guard let keyPath = captureColors[root] else { return nil }
+        return theme[keyPath: keyPath]
     }
 }
 
@@ -74,7 +86,7 @@ enum TreeSitterTheme {
 enum TreeSitterLanguageResolver {
     /// Languages currently driven by tree-sitter. Kept in sync with ``setup(for:)``.
     static let migratedLanguages: Set<SyntaxLanguage> = [
-        .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php,
+        .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php
     ]
 
     /// A resolved tree-sitter setup: the root language plus a provider for embedded
@@ -124,23 +136,25 @@ enum TreeSitterLanguageResolver {
 
     /// Builds the tree-sitter setup for a migrated language, or nil if the language is
     /// not migrated or its grammar/queries failed to load (caller falls back to regex).
+    /// Root configuration per migrated language. The values are closures so the map
+    /// itself does not force every grammar to load; only the requested one is touched.
+    /// Keep the keys in sync with ``migratedLanguages``.
+    private static let rootConfigurations: [SyntaxLanguage: () -> LanguageConfiguration?] = [
+        .html: { htmlConfiguration },
+        .javascript: { javascriptConfiguration },
+        .css: { cssConfiguration },
+        .python: { pythonConfiguration },
+        .json: { jsonConfiguration },
+        .shell: { bashConfiguration },
+        .yaml: { yamlConfiguration },
+        .xml: { xmlConfiguration },
+        .swift: { swiftConfiguration },
+        .sql: { sqlConfiguration },
+        .php: { phpConfiguration }
+    ]
+
     static func setup(for language: SyntaxLanguage) -> Setup? {
-        let root: LanguageConfiguration?
-        switch language {
-        case .html: root = htmlConfiguration
-        case .javascript: root = javascriptConfiguration
-        case .css: root = cssConfiguration
-        case .python: root = pythonConfiguration
-        case .json: root = jsonConfiguration
-        case .shell: root = bashConfiguration
-        case .yaml: root = yamlConfiguration
-        case .xml: root = xmlConfiguration
-        case .swift: root = swiftConfiguration
-        case .sql: root = sqlConfiguration
-        case .php: root = phpConfiguration
-        default: root = nil
-        }
-        guard let root else { return nil }
+        guard let root = rootConfigurations[language]?() else { return nil }
         return Setup(root: root, languageProvider: injectionProvider)
     }
 }

@@ -9,7 +9,7 @@ struct EditorView: View {
     let isWordWrapEnabled: Bool
     let fontSize: CGFloat
     let fontName: String
-    var goToPosition: Int? = nil
+    var goToPosition: Int?
     var showInvisibleCharacters: Bool = false
 
     @Environment(\.colorScheme) private var colorScheme
@@ -352,7 +352,7 @@ class TamgaTextView: NSTextView {
         let glyphRange = layoutManager.glyphRange(forBoundingRect: rect, in: textContainer)
 
         // Draw invisible characters
-        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { [weak self] (_, usedRect, _, charRange, _) in
+        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { [weak self] (_, _, _, charRange, _) in
             guard let self = self else { return }
 
             let lineString = (text as NSString).substring(with: charRange)

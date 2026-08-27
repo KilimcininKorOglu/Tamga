@@ -99,35 +99,26 @@ class SyntaxHighlighter {
 
     // MARK: - Language Patterns
 
+    /// Pattern set per language. `plainText` is absent on purpose: it has no patterns.
+    /// Add an entry here when adding a `SyntaxLanguage` case to the regex path.
+    private static let patternKeyPaths: [SyntaxLanguage: KeyPath<SyntaxHighlighter, [(String, (Theme) -> NSColor)]>] = [
+        .swift: \.swiftPatterns,
+        .python: \.pythonPatterns,
+        .javascript: \.javascriptPatterns,
+        .php: \.phpPatterns,
+        .json: \.jsonPatterns,
+        .html: \.htmlPatterns,
+        .css: \.cssPatterns,
+        .markdown: \.markdownPatterns,
+        .xml: \.xmlPatterns,
+        .sql: \.sqlPatterns,
+        .shell: \.shellPatterns,
+        .yaml: \.yamlPatterns
+    ]
+
     private func getPatterns(for language: SyntaxLanguage) -> [(String, (Theme) -> NSColor)] {
-        switch language {
-        case .swift:
-            return swiftPatterns
-        case .python:
-            return pythonPatterns
-        case .javascript:
-            return javascriptPatterns
-        case .php:
-            return phpPatterns
-        case .json:
-            return jsonPatterns
-        case .html:
-            return htmlPatterns
-        case .css:
-            return cssPatterns
-        case .markdown:
-            return markdownPatterns
-        case .xml:
-            return xmlPatterns
-        case .sql:
-            return sqlPatterns
-        case .shell:
-            return shellPatterns
-        case .yaml:
-            return yamlPatterns
-        case .plainText:
-            return []
-        }
+        guard let keyPath = Self.patternKeyPaths[language] else { return [] }
+        return self[keyPath: keyPath]
     }
 
     // MARK: - Swift Patterns
@@ -152,7 +143,7 @@ class SyntaxHighlighter {
             (#"\b\d+\.?\d*\b"#, { $0.number }),
 
             // Attributes
-            (#"@[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.attribute }),
+            (#"@[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.attribute })
         ]
     }
 
@@ -176,7 +167,7 @@ class SyntaxHighlighter {
             (#"\b\d+\.?\d*\b"#, { $0.number }),
 
             // Decorators
-            (#"@[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.attribute }),
+            (#"@[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.attribute })
         ]
     }
 
@@ -197,7 +188,7 @@ class SyntaxHighlighter {
             (#"\b(break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|function|if|import|in|instanceof|let|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|async|await|of|true|false|null|undefined)\b"#, { $0.keyword }),
 
             // Numbers
-            (#"\b\d+\.?\d*\b"#, { $0.number }),
+            (#"\b\d+\.?\d*\b"#, { $0.number })
         ]
     }
 
@@ -231,7 +222,7 @@ class SyntaxHighlighter {
             (#"\b\d+\.?\d*\b"#, { $0.number }),
 
             // Functions
-            (#"\b[a-zA-Z_][a-zA-Z0-9_]*\s*\("#, { $0.function }),
+            (#"\b[a-zA-Z_][a-zA-Z0-9_]*\s*\("#, { $0.function })
         ]
     }
 
@@ -249,7 +240,7 @@ class SyntaxHighlighter {
             (#":\s*-?\d+\.?\d*"#, { $0.number }),
 
             // Booleans and null
-            (#"\b(true|false|null)\b"#, { $0.keyword }),
+            (#"\b(true|false|null)\b"#, { $0.keyword })
         ]
     }
 
@@ -269,7 +260,7 @@ class SyntaxHighlighter {
 
             // Strings
             (#"\"[^\"]*\""#, { $0.string }),
-            (#"'[^']*'"#, { $0.string }),
+            (#"'[^']*'"#, { $0.string })
         ]
     }
 
@@ -293,7 +284,7 @@ class SyntaxHighlighter {
             (#"\d+\.?\d*(px|em|rem|%|vh|vw|pt|cm|mm|in)?"#, { $0.number }),
 
             // Colors
-            (#"#[a-fA-F0-9]{3,8}\b"#, { $0.number }),
+            (#"#[a-fA-F0-9]{3,8}\b"#, { $0.number })
         ]
     }
 
@@ -321,7 +312,7 @@ class SyntaxHighlighter {
 
             // Lists
             (#"^[\s]*[-*+]\s"#, { $0.keyword }),
-            (#"^\s*\d+\.\s"#, { $0.keyword }),
+            (#"^\s*\d+\.\s"#, { $0.keyword })
         ]
     }
 
@@ -344,7 +335,7 @@ class SyntaxHighlighter {
             (#"'[^']*'"#, { $0.string }),
 
             // CDATA
-            (#"<!\[CDATA\[[\s\S]*?\]\]>"#, { $0.comment }),
+            (#"<!\[CDATA\[[\s\S]*?\]\]>"#, { $0.comment })
         ]
     }
 
@@ -363,7 +354,7 @@ class SyntaxHighlighter {
             (#"\b(SELECT|FROM|WHERE|AND|OR|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|VIEW|DROP|ALTER|ADD|COLUMN|PRIMARY|KEY|FOREIGN|REFERENCES|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AS|ORDER|BY|GROUP|HAVING|LIMIT|OFFSET|UNION|ALL|DISTINCT|NULL|NOT|IN|LIKE|BETWEEN|EXISTS|CASE|WHEN|THEN|ELSE|END|COUNT|SUM|AVG|MIN|MAX)\b"#, { $0.keyword }),
 
             // Numbers
-            (#"\b\d+\.?\d*\b"#, { $0.number }),
+            (#"\b\d+\.?\d*\b"#, { $0.number })
         ]
     }
 
@@ -386,7 +377,7 @@ class SyntaxHighlighter {
             (#"\$\{[^}]+\}"#, { $0.variable }),
 
             // Numbers
-            (#"\b\d+\b"#, { $0.number }),
+            (#"\b\d+\b"#, { $0.number })
         ]
     }
 
@@ -409,7 +400,7 @@ class SyntaxHighlighter {
             (#"\b(true|false|yes|no|null|~)\b"#, { $0.keyword }),
 
             // Numbers
-            (#"\b\d+\.?\d*\b"#, { $0.number }),
+            (#"\b\d+\.?\d*\b"#, { $0.number })
         ]
     }
 }

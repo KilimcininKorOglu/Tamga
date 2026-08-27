@@ -125,35 +125,26 @@ struct SidebarView: View {
 
     // MARK: - Helpers
 
+    /// SF Symbol shown next to a tab, per language. Add an entry here when adding a
+    /// `SyntaxLanguage` case.
+    private static let languageIcons: [SyntaxLanguage: String] = [
+        .swift: "swift",
+        .python: "text.word.spacing",
+        .javascript: "curlybraces",
+        .json: "curlybraces.square",
+        .html: "chevron.left.forwardslash.chevron.right",
+        .css: "paintbrush",
+        .markdown: "text.justify",
+        .plainText: "doc.text",
+        .php: "p.square",
+        .sql: "cylinder",
+        .shell: "terminal",
+        .yaml: "list.bullet.indent",
+        .xml: "doc.richtext"
+    ]
+
     private func fileIcon(for language: SyntaxLanguage) -> String {
-        switch language {
-        case .swift:
-            return "swift"
-        case .python:
-            return "text.word.spacing"
-        case .javascript:
-            return "curlybraces"
-        case .json:
-            return "curlybraces.square"
-        case .html:
-            return "chevron.left.forwardslash.chevron.right"
-        case .css:
-            return "paintbrush"
-        case .markdown:
-            return "text.justify"
-        case .plainText:
-            return "doc.text"
-        case .php:
-            return "p.square"
-        case .sql:
-            return "cylinder"
-        case .shell:
-            return "terminal"
-        case .yaml:
-            return "list.bullet.indent"
-        case .xml:
-            return "doc.richtext"
-        }
+        Self.languageIcons[language] ?? "doc.text"
     }
 
     private func fileIcon(for url: URL) -> String {
