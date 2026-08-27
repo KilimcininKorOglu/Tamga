@@ -19,6 +19,15 @@ struct TamgaApp: App {
         .windowStyle(.automatic)
         .windowToolbarStyle(.unified)
         .commands {
+            // MARK: - App Menu
+            // Replaces the built-in item so the app menu and the Help menu open the
+            // same about panel; the default one carries no credits.
+            CommandGroup(replacing: .appInfo) {
+                Button(String(localized: "about.tamga")) {
+                    showAboutPanel()
+                }
+            }
+
             // MARK: - File Menu
             CommandGroup(replacing: .newItem) {
                 Button(String(localized: "new.tab")) {
