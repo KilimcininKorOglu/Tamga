@@ -1,0 +1,56 @@
+# SwiftLint configuration for Tamga.
+#
+# Thresholds describe the code this project actually writes: AppKit bridging
+# classes are large, syntax patterns are wide, and numeric algorithms use short
+# index names. Rules that catch real defects keep their strict limits.
+
+included:
+  - Tamga/Tamga
+
+excluded:
+  - Tamga/Vendor          # vendored tree-sitter grammars, not our code
+  - .build
+  - DerivedData
+
+disabled_rules:
+  # SwiftUI's Button(action:label:) is two closures by design; the rule fights
+  # the framework's own idiom.
+  - multiple_closures_with_trailing_closure
+
+# Project rule: no function may exceed a cyclomatic complexity of 10.
+cyclomatic_complexity:
+  warning: 10
+  error: 11
+
+identifier_name:
+  # Loop indices (i, j), geometry (x, y) and colour components (r, g, b) are
+  # clearer as single letters than as invented words.
+  min_length: 1
+
+type_name:
+  min_length: 2           # Constants.UI
+
+line_length:
+  warning: 150
+  error: 700              # the widest syntax-pattern literal is 634 characters
+  ignores_comments: true
+  ignores_urls: true
+
+file_length:
+  warning: 600
+  error: 1200
+
+type_body_length:
+  warning: 400
+  error: 800
+
+function_body_length:
+  warning: 60
+  error: 120
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
+nesting:
+  type_level: 2           # Constants nests one level deeper than the default
