@@ -464,35 +464,35 @@ struct TamgaApp: App {
         printOperation.run()
     }
 
-    private func installCLITool() {
-        let cliScript = """
-            #!/bin/bash
-            # Tamga CLI - Terminal'den dosya açma aracı
+    /// Launcher written to /usr/local/bin/tamga. It forwards every argument to the
+    /// app as an absolute path, because the app is opened out of the caller's
+    /// working directory.
+    private static let cliLauncherScript = """
+        #!/bin/bash
+        # Tamga CLI - opens files from the terminal
 
-            APP_PATH="/Applications/Tamga.app"
+        APP_PATH="/Applications/Tamga.app"
 
-            if [ $# -eq 0 ]; then
-                # Argüman yoksa sadece uygulamayı aç
-                open "$APP_PATH"
-                exit 0
+        if [ $# -eq 0 ]; then
+            # No arguments: just launch the app
+            open "$APP_PATH"
+            exit 0
+        fi
+
+        # Resolve every argument to an absolute path
+        args=()
+        for file in "$@"; do
+            if [[ "$file" = /* ]]; then
+                args+=("$file")
+            else
+                args+=("$(pwd)/$file")
             fi
+        done
 
-            # Her dosya için tam yol oluştur
-            args=()
-            for file in "$@"; do
-                if [[ "$file" = /* ]]; then
-                    # Zaten tam yol
-                    args+=("$file")
-                else
-                    # Göreceli yolu tam yola çevir
-                    args+=("$(pwd)/$file")
-                fi
-            done
+        open "$APP_PATH" --args "${args[@]}"
+        """
 
-            # Uygulamayı dosyalarla aç
-            open "$APP_PATH" --args "${args[@]}"
-            """
-
+    private func installCLITool() {
         let alert = NSAlert()
         alert.messageText = String(localized: "install.cli.title")
         alert.informativeText = String(localized: "install.cli.message")
@@ -500,54 +500,57 @@ struct TamgaApp: App {
         alert.addButton(withTitle: String(localized: "install"))
         alert.addButton(withTitle: String(localized: "cancel"))
 
-        let response = alert.runModal()
-        guard response == .alertFirstButtonReturn else { return }
-
-        let destinationPath = "/usr/local/bin/tamga"
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
 
         do {
-            // Create /usr/local/bin if it doesn't exist
-            let fileManager = FileManager.default
-            let binPath = "/usr/local/bin"
-            if !fileManager.fileExists(atPath: binPath) {
-                let createDirScript = "mkdir -p '\(binPath)'"
-                let createProcess = Process()
-                createProcess.launchPath = "/usr/bin/osascript"
-                createProcess.arguments = ["-e", "do shell script \"\(createDirScript)\" with administrator privileges"]
-                try createProcess.run()
-                createProcess.waitUntilExit()
-            }
-
-            // Write the script using admin privileges
-            let tempPath = NSTemporaryDirectory() + "tamga-cli.sh"
-            try cliScript.write(toFile: tempPath, atomically: true, encoding: .utf8)
-
-            let installScript = "cp '\(tempPath)' '\(destinationPath)' && chmod +x '\(destinationPath)'"
-            let process = Process()
-            process.launchPath = "/usr/bin/osascript"
-            process.arguments = ["-e", "do shell script \"\(installScript)\" with administrator privileges"]
-            try process.run()
-            process.waitUntilExit()
-
-            // Clean up temp file
-            try? fileManager.removeItem(atPath: tempPath)
-
-            if process.terminationStatus == 0 {
-                let successAlert = NSAlert()
-                successAlert.messageText = String(localized: "install.cli.success.title")
-                successAlert.informativeText = String(localized: "install.cli.success.message")
-                successAlert.alertStyle = .informational
-                successAlert.addButton(withTitle: "OK")
-                successAlert.runModal()
-            }
+            try writeCLILauncher()
+            showAlert(
+                title: String(localized: "install.cli.success.title"),
+                message: String(localized: "install.cli.success.message"),
+                style: .informational
+            )
         } catch {
-            let errorAlert = NSAlert()
-            errorAlert.messageText = String(localized: "install.cli.error.title")
-            errorAlert.informativeText = error.localizedDescription
-            errorAlert.alertStyle = .critical
-            errorAlert.addButton(withTitle: "OK")
-            errorAlert.runModal()
+            showAlert(
+                title: String(localized: "install.cli.error.title"),
+                message: error.localizedDescription,
+                style: .critical
+            )
         }
+    }
+
+    /// Copies the launcher into /usr/local/bin with administrator privileges,
+    /// creating the directory first when the system does not ship it.
+    private func writeCLILauncher() throws {
+        let fileManager = FileManager.default
+        let binPath = "/usr/local/bin"
+        let destinationPath = "\(binPath)/tamga"
+
+        if !fileManager.fileExists(atPath: binPath) {
+            try runAsAdministrator("mkdir -p '\(binPath)'")
+        }
+
+        let tempPath = NSTemporaryDirectory() + "tamga-cli.sh"
+        try Self.cliLauncherScript.write(toFile: tempPath, atomically: true, encoding: .utf8)
+        defer { try? fileManager.removeItem(atPath: tempPath) }
+
+        try runAsAdministrator("cp '\(tempPath)' '\(destinationPath)' && chmod +x '\(destinationPath)'")
+    }
+
+    private func runAsAdministrator(_ shellCommand: String) throws {
+        let process = Process()
+        process.launchPath = "/usr/bin/osascript"
+        process.arguments = ["-e", "do shell script \"\(shellCommand)\" with administrator privileges"]
+        try process.run()
+        process.waitUntilExit()
+    }
+
+    private func showAlert(title: String, message: String, style: NSAlert.Style) {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = style
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 }
 
