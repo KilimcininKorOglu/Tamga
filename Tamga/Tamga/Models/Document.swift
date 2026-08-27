@@ -32,18 +32,22 @@ struct DocumentInfo {
         return text.components(separatedBy: .newlines).count
     }
 
+    /// Line and column for a caret offset.
+    ///
+    /// Works in UTF-16 units because the offset comes from `NSTextView.selectedRange`,
+    /// which counts the same way; using Character offsets would drift on emoji.
     private static func calculateLineColumn(content: String, position: Int) -> (line: Int, column: Int) {
-        guard !content.isEmpty, position > 0 else {
+        let text = content as NSString
+        guard text.length > 0, position > 0 else {
             return (1, 1)
         }
 
-        let safePosition = min(position, content.count)
-        let index = content.index(content.startIndex, offsetBy: safePosition)
-        let substring = String(content[..<index])
-        let lines = substring.components(separatedBy: .newlines)
+        let safePosition = min(position, text.length)
+        let prefix = text.substring(to: safePosition)
+        let lines = prefix.components(separatedBy: .newlines)
 
         let line = lines.count
-        let column = (lines.last?.count ?? 0) + 1
+        let column = (lines.last.map { ($0 as NSString).length } ?? 0) + 1
 
         return (line, column)
     }

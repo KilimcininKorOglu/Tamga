@@ -11,6 +11,7 @@ struct EditorView: View {
     let fontName: String
     var goToPosition: Int?
     var showInvisibleCharacters: Bool = false
+    var onCursorPositionChange: (Int) -> Void = { _ in }
 
     @Environment(\.colorScheme) private var colorScheme
     @State private var lineCount: Int = 1
@@ -31,7 +32,8 @@ struct EditorView: View {
             goToPosition: goToPosition,
             onLineCountChange: { count in
                 lineCount = count
-            }
+            },
+            onCursorPositionChange: onCursorPositionChange
         )
     }
 }
@@ -49,6 +51,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
     let showLineNumbers: Bool
     let goToPosition: Int?
     let onLineCountChange: (Int) -> Void
+    let onCursorPositionChange: (Int) -> Void
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -220,6 +223,12 @@ struct HighlightedTextEditor: NSViewRepresentable {
             updateLineCount()
             refreshLineNumbers()
             applySyntaxHighlighting(language: parent.language, isDarkMode: parent.isDarkMode)
+        }
+
+        /// Reports the caret offset so the status bar can show line and column.
+        func textViewDidChangeSelection(_ notification: Notification) {
+            guard let textView = textView else { return }
+            parent.onCursorPositionChange(textView.selectedRange().location)
         }
 
         /// Repaints the gutter and widens it when the line count grows a digit.

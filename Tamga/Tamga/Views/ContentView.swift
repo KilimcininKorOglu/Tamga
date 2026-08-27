@@ -9,6 +9,8 @@ struct ContentView: View {
 
     @State private var currentDocumentInfo = DocumentInfo()
     @State private var isDropTargeted = false
+    /// Caret offset reported by the editor, in UTF-16 units.
+    @State private var cursorPosition = 0
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -47,7 +49,11 @@ struct ContentView: View {
                                     fontSize: appState.fontSize,
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
-                                    showInvisibleCharacters: appState.showInvisibleCharacters
+                                    showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    onCursorPositionChange: { position in
+                                        cursorPosition = position
+                                        updateDocumentInfo(content: activeTab.content)
+                                    }
                                 )
                                 .id("\(activeTab.id)-left")
 
@@ -66,7 +72,11 @@ struct ContentView: View {
                                     fontSize: appState.fontSize,
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
-                                    showInvisibleCharacters: appState.showInvisibleCharacters
+                                    showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    onCursorPositionChange: { position in
+                                        cursorPosition = position
+                                        updateDocumentInfo(content: activeTab.content)
+                                    }
                                 )
                                 .id("\(activeTab.id)-right")
                             }
@@ -87,7 +97,11 @@ struct ContentView: View {
                                     fontSize: appState.fontSize,
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
-                                    showInvisibleCharacters: appState.showInvisibleCharacters
+                                    showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    onCursorPositionChange: { position in
+                                        cursorPosition = position
+                                        updateDocumentInfo(content: activeTab.content)
+                                    }
                                 )
                                 .id("\(activeTab.id)-editor")
 
@@ -110,7 +124,11 @@ struct ContentView: View {
                                 fontSize: appState.fontSize,
                                 fontName: appState.fontName,
                                 goToPosition: activeTab.cursorPosition,
-                                showInvisibleCharacters: appState.showInvisibleCharacters
+                                showInvisibleCharacters: appState.showInvisibleCharacters,
+                                onCursorPositionChange: { position in
+                                    cursorPosition = position
+                                    updateDocumentInfo(content: activeTab.content)
+                                }
                             )
                             .id(activeTab.id)
                         }
@@ -392,7 +410,7 @@ struct ContentView: View {
     private func updateDocumentInfo(content: String) {
         currentDocumentInfo = DocumentInfo(
             content: content,
-            cursorPosition: 0  // TODO: Get actual cursor position
+            cursorPosition: cursorPosition
         )
     }
 
