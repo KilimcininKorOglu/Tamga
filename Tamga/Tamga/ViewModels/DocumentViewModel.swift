@@ -207,7 +207,10 @@ class DocumentViewModel: ObservableObject {
         }
     }
 
-    func saveFile(content: String, existingPath: URL?) async -> URL? {
+    /// Saves to `existingPath` when the tab is file-backed, otherwise opens the save
+    /// panel. `suggestedName` is required so a never-saved tab proposes its own title
+    /// instead of a generic name.
+    func saveFile(content: String, existingPath: URL?, suggestedName: String) async -> URL? {
         if let path = existingPath {
             do {
                 try fileService.writeFile(content: content, to: path)
@@ -217,11 +220,11 @@ class DocumentViewModel: ObservableObject {
                 return nil
             }
         } else {
-            return await saveFileAs(content: content)
+            return await saveFileAs(content: content, suggestedName: suggestedName)
         }
     }
 
-    func saveFileAs(content: String, suggestedName: String = "untitled.txt") async -> URL? {
+    func saveFileAs(content: String, suggestedName: String) async -> URL? {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.text, .sourceCode, .json, .xml, .html, .plainText]
         panel.canCreateDirectories = true

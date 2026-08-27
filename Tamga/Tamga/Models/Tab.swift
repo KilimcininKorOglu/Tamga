@@ -46,6 +46,23 @@ struct Tab: Identifiable, Codable, Equatable {
         Tab(title: "\(String(localized: "untitled")) \(number)")
     }
 
+    /// File name proposed in the save panel.
+    ///
+    /// Uses the tab's own title so a never-saved tab keeps its identity, and appends the
+    /// language's primary extension when the title carries none.
+    var suggestedFileName: String {
+        if let path = filePath {
+            return path.lastPathComponent
+        }
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = trimmed.isEmpty ? String(localized: "untitled") : trimmed
+        guard (name as NSString).pathExtension.isEmpty,
+              let fileExtension = language.fileExtensions.first else {
+            return name
+        }
+        return "\(name).\(fileExtension)"
+    }
+
     /// Updates the title based on file path
     mutating func updateTitleFromPath() {
         if let path = filePath {
