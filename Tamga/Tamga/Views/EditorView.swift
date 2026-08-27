@@ -399,97 +399,30 @@ class TamgaTextView: NSTextView {
         }
     }
 
+    /// Menu commands reach the text view through NotificationCenter. Each entry pairs
+    /// the posted name with the handler that carries it out.
+    private static let menuCommandHandlers: [(Notification.Name, Selector)] = [
+        (.duplicateLine, #selector(handleDuplicateLine)),
+        (.moveLineUp, #selector(handleMoveLineUp)),
+        (.moveLineDown, #selector(handleMoveLineDown)),
+        (.sortLinesAscending, #selector(handleSortLinesAscending)),
+        (.sortLinesDescending, #selector(handleSortLinesDescending)),
+        (.removeDuplicateLines, #selector(handleRemoveDuplicateLines)),
+        (.uppercaseSelection, #selector(handleUppercase)),
+        (.lowercaseSelection, #selector(handleLowercase)),
+        (.capitalizeSelection, #selector(handleCapitalize)),
+        (.formatJSON, #selector(handleFormatJSON)),
+        (.minifyJSON, #selector(handleMinifyJSON)),
+        (.foldCode, #selector(handleFoldCode)),
+        (.unfoldCode, #selector(handleUnfoldCode)),
+        (.foldAll, #selector(handleFoldAll)),
+        (.unfoldAll, #selector(handleUnfoldAll))
+    ]
+
     private func setupNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleDuplicateLine),
-            name: .duplicateLine,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleMoveLineUp),
-            name: .moveLineUp,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleMoveLineDown),
-            name: .moveLineDown,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleSortLinesAscending),
-            name: .sortLinesAscending,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleSortLinesDescending),
-            name: .sortLinesDescending,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleRemoveDuplicateLines),
-            name: .removeDuplicateLines,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUppercase),
-            name: .uppercaseSelection,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleLowercase),
-            name: .lowercaseSelection,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleCapitalize),
-            name: .capitalizeSelection,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleFormatJSON),
-            name: .formatJSON,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleMinifyJSON),
-            name: .minifyJSON,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleFoldCode),
-            name: .foldCode,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUnfoldCode),
-            name: .unfoldCode,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleFoldAll),
-            name: .foldAll,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUnfoldAll),
-            name: .unfoldAll,
-            object: nil
-        )
+        for (name, selector) in Self.menuCommandHandlers {
+            NotificationCenter.default.addObserver(self, selector: selector, name: name, object: nil)
+        }
     }
 
     deinit {
