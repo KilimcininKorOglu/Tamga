@@ -7,6 +7,8 @@ class DocumentViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var replaceText: String = ""
     @Published var isSearchVisible: Bool = false
+    /// Whether the replace row of the find panel is expanded.
+    @Published var isReplaceVisible: Bool = false
     @Published var searchResults: [Range<String.Index>] = []
     @Published var currentSearchIndex: Int = 0
     @Published var isGoToLineVisible: Bool = false
@@ -62,15 +64,33 @@ class DocumentViewModel: ObservableObject {
         return true
     }
 
+    /// Replaces every match in a single forward pass.
+    ///
+    /// The result is built into a separate string, so a replacement that contains the
+    /// search text (`foo` -> `foobar`) is never rescanned.
     func replaceAll(in content: inout String) -> Int {
         guard !searchText.isEmpty else { return 0 }
+
+        var result = ""
         var count = 0
-        while content.contains(searchText) {
-            if let range = content.range(of: searchText, options: .caseInsensitive) {
-                content.replaceSubrange(range, with: replaceText)
-                count += 1
-            }
+        var cursor = content.startIndex
+
+        while cursor < content.endIndex,
+              let range = content.range(
+                  of: searchText,
+                  options: .caseInsensitive,
+                  range: cursor..<content.endIndex
+              ) {
+            result += content[cursor..<range.lowerBound]
+            result += replaceText
+            count += 1
+            cursor = range.upperBound
         }
+
+        guard count > 0 else { return 0 }
+
+        result += content[cursor...]
+        content = result
         searchResults = []
         return count
     }
@@ -78,10 +98,21 @@ class DocumentViewModel: ObservableObject {
     func toggleSearch() {
         isSearchVisible.toggle()
         if !isSearchVisible {
-            searchText = ""
-            replaceText = ""
-            searchResults = []
+            closeSearch()
         }
+    }
+
+    /// Opens the find panel with the replace row already expanded.
+    func showReplace() {
+        isReplaceVisible = true
+        isSearchVisible = true
+    }
+
+    private func closeSearch() {
+        searchText = ""
+        replaceText = ""
+        searchResults = []
+        isReplaceVisible = false
     }
 
     func toggleGoToLine() {
