@@ -26,11 +26,13 @@ struct TabBarView: View {
                             draggedTabId = tab.id
                             return NSItemProvider(object: tab.id.uuidString as NSString)
                         }
-                        .onDrop(of: [.text], delegate: TabDropDelegate(
-                            tabId: tab.id,
-                            draggedTabId: $draggedTabId,
-                            tabManager: tabManager
-                        ))
+                        .onDrop(
+                            of: [.text],
+                            delegate: TabDropDelegate(
+                                tabId: tab.id,
+                                draggedTabId: $draggedTabId,
+                                tabManager: tabManager
+                            ))
                     }
 
                     // New tab button
@@ -149,15 +151,17 @@ struct MouseWheelHorizontalScroller: NSViewRepresentable {
         /// scrolling, or the original event when it does not belong to the tab bar.
         private func handle(_ event: NSEvent) -> NSEvent? {
             guard let scrollView,
-                  event.window === scrollView.window,
-                  event.scrollingDeltaX == 0,
-                  event.scrollingDeltaY != 0,
-                  isPointerOverTabBar(event, in: scrollView),
-                  let maximumOffset = maximumHorizontalOffset(of: scrollView) else {
+                event.window === scrollView.window,
+                event.scrollingDeltaX == 0,
+                event.scrollingDeltaY != 0,
+                isPointerOverTabBar(event, in: scrollView),
+                let maximumOffset = maximumHorizontalOffset(of: scrollView)
+            else {
                 return event
             }
 
-            let distance = event.hasPreciseScrollingDeltas
+            let distance =
+                event.hasPreciseScrollingDeltas
                 ? event.scrollingDeltaY
                 : event.scrollingDeltaY * lineScrollDistance
 
@@ -196,9 +200,10 @@ struct TabDropDelegate: DropDelegate {
 
     func dropEntered(info: DropInfo) {
         guard let draggedId = draggedTabId,
-              draggedId != tabId,
-              let fromIndex = tabManager.tabs.firstIndex(where: { $0.id == draggedId }),
-              let toIndex = tabManager.tabs.firstIndex(where: { $0.id == tabId }) else {
+            draggedId != tabId,
+            let fromIndex = tabManager.tabs.firstIndex(where: { $0.id == draggedId }),
+            let toIndex = tabManager.tabs.firstIndex(where: { $0.id == tabId })
+        else {
             return
         }
 

@@ -16,12 +16,14 @@ extension TamgaTextView: NSLayoutManagerDelegate {
     /// Replaces glyphs for characters inside a folded range with the null glyph
     /// (invisible, zero advancement). Returns 0 for ranges with nothing folded so the
     /// layout manager performs its default glyph generation.
-    public func layoutManager(_ layoutManager: NSLayoutManager,
-                              shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>,
-                              properties props: UnsafePointer<NSLayoutManager.GlyphProperty>,
-                              characterIndexes charIndexes: UnsafePointer<Int>,
-                              font: NSFont,
-                              forGlyphRange glyphRange: NSRange) -> Int {
+    public func layoutManager(
+        _ layoutManager: NSLayoutManager,
+        shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>,
+        properties props: UnsafePointer<NSLayoutManager.GlyphProperty>,
+        characterIndexes charIndexes: UnsafePointer<Int>,
+        font: NSFont,
+        forGlyphRange glyphRange: NSRange
+    ) -> Int {
         guard !foldedRanges.isEmpty else { return 0 }
 
         var containsHidden = false
@@ -36,19 +38,22 @@ extension TamgaTextView: NSLayoutManagerDelegate {
         for i in 0..<glyphRange.length {
             newProps[i] = isFolded(charIndexes[i]) ? .null : props[i]
         }
-        layoutManager.setGlyphs(glyphs,
-                                properties: newProps,
-                                characterIndexes: charIndexes,
-                                font: font,
-                                forGlyphRange: glyphRange)
+        layoutManager.setGlyphs(
+            glyphs,
+            properties: newProps,
+            characterIndexes: charIndexes,
+            font: font,
+            forGlyphRange: glyphRange)
         return glyphRange.length
     }
 
     /// Collapses control characters (newlines, tabs) inside a folded range to zero
     /// advancement so the hidden lines do not break onto new rows or reserve width.
-    public func layoutManager(_ layoutManager: NSLayoutManager,
-                              shouldUse action: NSLayoutManager.ControlCharacterAction,
-                              forControlCharacterAt charIndex: Int) -> NSLayoutManager.ControlCharacterAction {
+    public func layoutManager(
+        _ layoutManager: NSLayoutManager,
+        shouldUse action: NSLayoutManager.ControlCharacterAction,
+        forControlCharacterAt charIndex: Int
+    ) -> NSLayoutManager.ControlCharacterAction {
         isFolded(charIndex) ? .zeroAdvancement : action
     }
 
@@ -225,8 +230,9 @@ extension TamgaTextView: NSLayoutManagerDelegate {
     /// simple and correct; documents in this editor are small enough for it to be cheap.
     func invalidateFoldLayout() {
         guard let layoutManager = layoutManager,
-              let textContainer = textContainer,
-              let textStorage = textStorage else { return }
+            let textContainer = textContainer,
+            let textStorage = textStorage
+        else { return }
         let full = NSRange(location: 0, length: textStorage.length)
         layoutManager.invalidateGlyphs(forCharacterRange: full, changeInLength: 0, actualCharacterRange: nil)
         layoutManager.invalidateLayout(forCharacterRange: full, actualCharacterRange: nil)
@@ -248,8 +254,9 @@ extension TamgaTextView: NSLayoutManagerDelegate {
     /// Draws a "⋯" badge just after each folded block's opening brace.
     func drawFoldIndicators() {
         guard !foldedRanges.isEmpty,
-              let layoutManager = layoutManager,
-              let textContainer = textContainer else { return }
+            let layoutManager = layoutManager,
+            let textContainer = textContainer
+        else { return }
 
         let text = string as NSString
         let baseFont = self.font ?? NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)

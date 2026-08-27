@@ -1,5 +1,5 @@
-import SwiftUI
 import AppKit
+import SwiftUI
 
 /// Main text editor view with line numbers and syntax highlighting
 struct EditorView: View {
@@ -232,10 +232,12 @@ struct HighlightedTextEditor: NSViewRepresentable {
         func updateRulerAppearance(fontSize: CGFloat, isDarkMode: Bool) {
             guard let lineNumberRuler else { return }
             lineNumberRuler.numberFont = .monospacedSystemFont(ofSize: max(fontSize - 2, 9), weight: .regular)
-            lineNumberRuler.numberColor = isDarkMode
+            lineNumberRuler.numberColor =
+                isDarkMode
                 ? NSColor(red: 0.5, green: 0.5, blue: 0.55, alpha: 1)
                 : NSColor.secondaryLabelColor
-            lineNumberRuler.gutterColor = isDarkMode
+            lineNumberRuler.gutterColor =
+                isDarkMode
                 ? NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1)
                 : NSColor.controlBackgroundColor
         }
@@ -249,7 +251,8 @@ struct HighlightedTextEditor: NSViewRepresentable {
         func applySyntaxHighlighting(language: SyntaxLanguage, isDarkMode: Bool) {
             guard let textView = textView else { return }
 
-            let font = NSFont(name: parent.fontName, size: parent.fontSize)
+            let font =
+                NSFont(name: parent.fontName, size: parent.fontSize)
                 ?? NSFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular)
 
             // Tree-sitter path for migrated languages: Neon styles incrementally via
@@ -337,8 +340,9 @@ class TamgaTextView: NSTextView {
 
     private func drawInvisibleCharacters(in rect: NSRect) {
         guard let layoutManager = layoutManager,
-              let textContainer = textContainer,
-              let textStorage = textStorage else { return }
+            let textContainer = textContainer,
+            let textStorage = textStorage
+        else { return }
 
         let text = string
         let invisibleColor = NSColor.tertiaryLabelColor
@@ -577,7 +581,7 @@ class TamgaTextView: NSTextView {
                 lineContent = String(line[line.startIndex..<endIndex])
                 break
             }
-            currentPos = lineEnd + 1 // +1 for newline
+            currentPos = lineEnd + 1  // +1 for newline
         }
 
         // Calculate current indentation
@@ -592,10 +596,8 @@ class TamgaTextView: NSTextView {
 
         // Check if line ends with opening bracket or colon (for languages like Python)
         let trimmedLine = lineContent.trimmingCharacters(in: CharacterSet.whitespaces)
-        let shouldAddExtraIndent = trimmedLine.hasSuffix("{") ||
-                                   trimmedLine.hasSuffix(":") ||
-                                   trimmedLine.hasSuffix("(") ||
-                                   trimmedLine.hasSuffix("[")
+        let shouldAddExtraIndent =
+            trimmedLine.hasSuffix("{") || trimmedLine.hasSuffix(":") || trimmedLine.hasSuffix("(") || trimmedLine.hasSuffix("[")
 
         if shouldAddExtraIndent {
             // Use tabs or 4 spaces based on existing indentation style
@@ -619,16 +621,16 @@ class TamgaTextView: NSTextView {
             let hasOption = event.modifierFlags.contains(.option)
 
             switch event.charactersIgnoringModifiers {
-            case "a": // Select All
+            case "a":  // Select All
                 selectAll(nil)
                 return true
-            case "z" where event.modifierFlags.contains(.shift): // Redo
+            case "z" where event.modifierFlags.contains(.shift):  // Redo
                 undoManager?.redo()
                 return true
-            case "z": // Undo
+            case "z":  // Undo
                 undoManager?.undo()
                 return true
-            case "d" where !hasOption: // Duplicate Line
+            case "d" where !hasOption:  // Duplicate Line
                 duplicateCurrentLine()
                 return true
             default:
@@ -639,10 +641,10 @@ class TamgaTextView: NSTextView {
         // Move line up/down with Option+Up/Down
         if event.modifierFlags.contains(.option) {
             switch event.keyCode {
-            case 126: // Up arrow
+            case 126:  // Up arrow
                 moveCurrentLineUp()
                 return true
-            case 125: // Down arrow
+            case 125:  // Down arrow
                 moveCurrentLineDown()
                 return true
             default:
@@ -803,11 +805,9 @@ class TamgaTextView: NSTextView {
         var seen = Set<String>()
         var uniqueLines: [String] = []
 
-        for line in lines {
-            if !seen.contains(line) {
-                seen.insert(line)
-                uniqueLines.append(line)
-            }
+        for line in lines where !seen.contains(line) {
+            seen.insert(line)
+            uniqueLines.append(line)
         }
 
         let newContent = uniqueLines.joined(separator: "\n")
@@ -873,7 +873,8 @@ class TamgaTextView: NSTextView {
 
         // Try to parse and format JSON
         guard let jsonData = textToFormat.data(using: .utf8),
-              let jsonObject = try? JSONSerialization.jsonObject(with: jsonData, options: .fragmentsAllowed) else {
+            let jsonObject = try? JSONSerialization.jsonObject(with: jsonData, options: .fragmentsAllowed)
+        else {
             // Invalid JSON - beep
             NSSound.beep()
             return
@@ -887,7 +888,8 @@ class TamgaTextView: NSTextView {
         }
 
         guard let data = formattedData,
-              let formattedString = String(data: data, encoding: .utf8) else {
+            let formattedString = String(data: data, encoding: .utf8)
+        else {
             NSSound.beep()
             return
         }
@@ -967,11 +969,13 @@ class TamgaTextView: NSTextView {
     /// A click on a folded block's brace or indicator unfolds it.
     override func mouseDown(with event: NSEvent) {
         if !foldedRanges.isEmpty,
-           let layoutManager = layoutManager,
-           let textContainer = textContainer {
+            let layoutManager = layoutManager,
+            let textContainer = textContainer
+        {
             let viewPoint = convert(event.locationInWindow, from: nil)
-            let containerPoint = NSPoint(x: viewPoint.x - textContainerInset.width,
-                                         y: viewPoint.y - textContainerInset.height)
+            let containerPoint = NSPoint(
+                x: viewPoint.x - textContainerInset.width,
+                y: viewPoint.y - textContainerInset.height)
             let glyphIndex = layoutManager.glyphIndex(for: containerPoint, in: textContainer)
             let charIndex = layoutManager.characterIndexForGlyph(at: glyphIndex)
             if let index = foldedRanges.firstIndex(where: { charIndex == $0.location - 1 || charIndex == $0.location }) {
@@ -1014,7 +1018,8 @@ class TamgaTextView: NSTextView {
             }
         }
 
-        let changed = updated.count != foldedRanges.count
+        let changed =
+            updated.count != foldedRanges.count
             || zip(updated, foldedRanges).contains { !NSEqualRanges($0, $1) }
         foldedRanges = updated
         if changed { invalidateFoldLayout() }

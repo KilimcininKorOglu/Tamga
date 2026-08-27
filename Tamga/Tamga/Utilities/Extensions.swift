@@ -1,6 +1,6 @@
+import AppKit
 import Foundation
 import SwiftUI
-import AppKit
 
 // MARK: - String Extensions
 
@@ -58,9 +58,9 @@ extension View {
     @ViewBuilder
     func macOS<Transform: View>(_ transform: (Self) -> Transform) -> some View {
         #if os(macOS)
-        transform(self)
+            transform(self)
         #else
-        self
+            self
         #endif
     }
 }
@@ -74,13 +74,16 @@ extension Color {
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
 
-        let a, r, g, b: UInt64
+        let a: UInt64
+        let r: UInt64
+        let g: UInt64
+        let b: UInt64
         switch hex.count {
-        case 3: // RGB (12-bit)
+        case 3:  // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
+        case 6:  // RGB (24-bit)
             (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
+        case 8:  // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
             (a, r, g, b) = (255, 0, 0, 0)
@@ -105,7 +108,10 @@ extension NSColor {
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
 
-        let a, r, g, b: UInt64
+        let a: UInt64
+        let r: UInt64
+        let g: UInt64
+        let b: UInt64
         switch hex.count {
         case 3:
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
@@ -151,8 +157,9 @@ extension Array where Element: Equatable {
     /// Moves an element from one index to another
     mutating func move(from oldIndex: Int, to newIndex: Int) {
         guard oldIndex != newIndex,
-              oldIndex >= 0, oldIndex < count,
-              newIndex >= 0, newIndex < count else { return }
+            oldIndex >= 0, oldIndex < count,
+            newIndex >= 0, newIndex < count
+        else { return }
 
         let element = remove(at: oldIndex)
         insert(element, at: newIndex)

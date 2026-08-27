@@ -42,8 +42,9 @@ final class LineNumberRulerView: NSRulerView {
         rect.fill()
 
         guard let textView,
-              let layoutManager = textView.layoutManager,
-              let textContainer = textView.textContainer else { return }
+            let layoutManager = textView.layoutManager,
+            let textContainer = textView.textContainer
+        else { return }
 
         let text = textView.string as NSString
         let visibleRect = scrollView?.contentView.bounds ?? textView.visibleRect
@@ -83,17 +84,20 @@ final class LineNumberRulerView: NSRulerView {
             characterIndex = nextIndex
         }
 
-        drawTrailingLineNumber(lineNumber, layoutManager: layoutManager, text: text, verticalOffset: verticalOffset, rect: rect, attributes: attributes)
+        drawTrailingLineNumber(
+            lineNumber, layoutManager: layoutManager, text: text, verticalOffset: verticalOffset, rect: rect, attributes: attributes)
     }
 
     /// Draws the number of the empty line that follows a trailing newline, which owns
     /// no glyphs and therefore lives in the layout manager's extra line fragment.
-    private func drawTrailingLineNumber(_ lineNumber: Int,
-                                        layoutManager: NSLayoutManager,
-                                        text: NSString,
-                                        verticalOffset: CGFloat,
-                                        rect: NSRect,
-                                        attributes: [NSAttributedString.Key: Any]) {
+    private func drawTrailingLineNumber(
+        _ lineNumber: Int,
+        layoutManager: NSLayoutManager,
+        text: NSString,
+        verticalOffset: CGFloat,
+        rect: NSRect,
+        attributes: [NSAttributedString.Key: Any]
+    ) {
         guard text.length > 0, text.character(at: text.length - 1) == 0x0A else { return }
         let fragmentRect = layoutManager.extraLineFragmentRect
         guard fragmentRect.height > 0 else { return }

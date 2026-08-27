@@ -31,11 +31,12 @@ class DocumentViewModel: ObservableObject {
         var searchStartIndex = content.startIndex
 
         while searchStartIndex < content.endIndex,
-              let range = content.range(
-                  of: searchText,
-                  options: .caseInsensitive,
-                  range: searchStartIndex..<content.endIndex
-              ) {
+            let range = content.range(
+                of: searchText,
+                options: .caseInsensitive,
+                range: searchStartIndex..<content.endIndex
+            )
+        {
             results.append(range)
             searchStartIndex = range.upperBound
         }
@@ -76,11 +77,12 @@ class DocumentViewModel: ObservableObject {
         var cursor = content.startIndex
 
         while cursor < content.endIndex,
-              let range = content.range(
-                  of: searchText,
-                  options: .caseInsensitive,
-                  range: cursor..<content.endIndex
-              ) {
+            let range = content.range(
+                of: searchText,
+                options: .caseInsensitive,
+                range: cursor..<content.endIndex
+            )
+        {
             result += content[cursor..<range.lowerBound]
             result += replaceText
             count += 1
@@ -125,7 +127,7 @@ class DocumentViewModel: ObservableObject {
 
         var position = 0
         for i in 0..<(lineNumber - 1) {
-            position += lines[i].count + 1 // +1 for newline
+            position += lines[i].count + 1  // +1 for newline
         }
         targetLineNumber = lineNumber
         return position
@@ -146,7 +148,7 @@ class DocumentViewModel: ObservableObject {
                 lineIndex = index
                 break
             }
-            currentPos = lineEnd + 1 // +1 for newline
+            currentPos = lineEnd + 1  // +1 for newline
         }
 
         // Duplicate the line

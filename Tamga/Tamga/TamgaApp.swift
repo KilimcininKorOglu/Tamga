@@ -361,7 +361,8 @@ struct TamgaApp: App {
 
     private func saveCurrentTab() async {
         guard let tabManager = tabManager,
-              let tab = tabManager.activeTab else { return }
+            let tab = tabManager.activeTab
+        else { return }
 
         if let url = await documentViewModel?.saveFile(
             content: tab.content,
@@ -374,7 +375,8 @@ struct TamgaApp: App {
 
     private func saveCurrentTabAs() async {
         guard let tabManager = tabManager,
-              let tab = tabManager.activeTab else { return }
+            let tab = tabManager.activeTab
+        else { return }
 
         if let url = await documentViewModel?.saveFileAs(content: tab.content, suggestedName: tab.suggestedFileName) {
             tabManager.markAsSaved(id: tab.id, filePath: url)
@@ -427,11 +429,12 @@ struct TamgaApp: App {
     private func printCurrentTab() {
         guard let tab = tabManager?.activeTab else { return }
 
-        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 612, height: 792)) // US Letter size in points
+        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 612, height: 792))  // US Letter size in points
         textView.string = tab.content
 
         // Configure font
-        let font = NSFont(name: appState.fontName, size: appState.fontSize) ?? NSFont.monospacedSystemFont(ofSize: appState.fontSize, weight: .regular)
+        let font =
+            NSFont(name: appState.fontName, size: appState.fontSize) ?? NSFont.monospacedSystemFont(ofSize: appState.fontSize, weight: .regular)
         textView.font = font
         textView.textColor = NSColor.textColor
 
@@ -463,32 +466,32 @@ struct TamgaApp: App {
 
     private func installCLITool() {
         let cliScript = """
-#!/bin/bash
-# Tamga CLI - Terminal'den dosya açma aracı
+            #!/bin/bash
+            # Tamga CLI - Terminal'den dosya açma aracı
 
-APP_PATH="/Applications/Tamga.app"
+            APP_PATH="/Applications/Tamga.app"
 
-if [ $# -eq 0 ]; then
-    # Argüman yoksa sadece uygulamayı aç
-    open "$APP_PATH"
-    exit 0
-fi
+            if [ $# -eq 0 ]; then
+                # Argüman yoksa sadece uygulamayı aç
+                open "$APP_PATH"
+                exit 0
+            fi
 
-# Her dosya için tam yol oluştur
-args=()
-for file in "$@"; do
-    if [[ "$file" = /* ]]; then
-        # Zaten tam yol
-        args+=("$file")
-    else
-        # Göreceli yolu tam yola çevir
-        args+=("$(pwd)/$file")
-    fi
-done
+            # Her dosya için tam yol oluştur
+            args=()
+            for file in "$@"; do
+                if [[ "$file" = /* ]]; then
+                    # Zaten tam yol
+                    args+=("$file")
+                else
+                    # Göreceli yolu tam yola çevir
+                    args+=("$(pwd)/$file")
+                fi
+            done
 
-# Uygulamayı dosyalarla aç
-open "$APP_PATH" --args "${args[@]}"
-"""
+            # Uygulamayı dosyalarla aç
+            open "$APP_PATH" --args "${args[@]}"
+            """
 
         let alert = NSAlert()
         alert.messageText = String(localized: "install.cli.title")

@@ -1,3 +1,8 @@
+// swift-format-ignore-file
+// The HTML and CSS template below lives in a multi-line string literal. The
+// formatter reindents that literal's contents and breaks the markup, so this
+// file stays out of its reach.
+
 import SwiftUI
 import WebKit
 

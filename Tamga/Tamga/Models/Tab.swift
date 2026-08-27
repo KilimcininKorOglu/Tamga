@@ -57,7 +57,8 @@ struct Tab: Identifiable, Codable, Equatable {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let name = trimmed.isEmpty ? String(localized: "untitled") : trimmed
         guard (name as NSString).pathExtension.isEmpty,
-              let fileExtension = language.fileExtensions.first else {
+            let fileExtension = language.fileExtensions.first
+        else {
             return name
         }
         return "\(name).\(fileExtension)"
@@ -124,10 +125,8 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
 
     static func detect(from url: URL) -> SyntaxLanguage {
         let ext = url.pathExtension.lowercased()
-        for language in SyntaxLanguage.allCases {
-            if language.fileExtensions.contains(ext) {
-                return language
-            }
+        for language in SyntaxLanguage.allCases where language.fileExtensions.contains(ext) {
+            return language
         }
         return .plainText
     }

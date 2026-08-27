@@ -2,17 +2,17 @@ import AppKit
 import Neon
 import SwiftTreeSitter
 import SwiftTreeSitterLayer
-import TreeSitterHTML
-import TreeSitterJavaScript
-import TreeSitterCSS
-import TreeSitterPython
-import TreeSitterJSON
 import TreeSitterBash
-import TreeSitterYAML
-import TreeSitterXML
-import TreeSitterSwift
-import TreeSitterSQL
+import TreeSitterCSS
+import TreeSitterHTML
+import TreeSitterJSON
+import TreeSitterJavaScript
 import TreeSitterPHP
+import TreeSitterPython
+import TreeSitterSQL
+import TreeSitterSwift
+import TreeSitterXML
+import TreeSitterYAML
 
 // MARK: - Capture → Theme mapping
 
@@ -188,7 +188,8 @@ final class TreeSitterHighlightController {
         }
 
         let fontKey = "\(font.fontName):\(font.pointSize)"
-        let alreadyConfigured = highlighter != nil
+        let alreadyConfigured =
+            highlighter != nil
             && self.textView === textView
             && configuredLanguage == language
             && configuredDarkMode == isDarkMode

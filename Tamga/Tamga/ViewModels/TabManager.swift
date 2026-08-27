@@ -179,8 +179,9 @@ class TabManager: ObservableObject {
 
     func moveTab(from sourceIndex: Int, to destinationIndex: Int) {
         guard sourceIndex != destinationIndex,
-              sourceIndex >= 0, sourceIndex < tabs.count,
-              destinationIndex >= 0, destinationIndex < tabs.count else { return }
+            sourceIndex >= 0, sourceIndex < tabs.count,
+            destinationIndex >= 0, destinationIndex < tabs.count
+        else { return }
 
         let tab = tabs.remove(at: sourceIndex)
         tabs.insert(tab, at: destinationIndex)

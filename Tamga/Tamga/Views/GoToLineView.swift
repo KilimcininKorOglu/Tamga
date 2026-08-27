@@ -66,7 +66,8 @@ struct GoToLineView: View {
 
     private func goToLine() {
         guard let lineNumber = Int(lineNumberText),
-              lineNumber >= 1 && lineNumber <= totalLines else { return }
+            lineNumber >= 1 && lineNumber <= totalLines
+        else { return }
         onGoToLine(lineNumber)
         isVisible = false
     }

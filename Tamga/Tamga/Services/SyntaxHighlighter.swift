@@ -1,5 +1,9 @@
-import Foundation
+// swiftlint:disable line_length
+// The keyword alternations below are single regex literals; splitting them would
+// break the pattern rather than improve it.
+
 import AppKit
+import Foundation
 import SwiftUI
 
 /// Service for syntax highlighting code
@@ -134,7 +138,10 @@ class SyntaxHighlighter {
             (#"\"\"\"[\s\S]*?\"\"\""#, { $0.string }),
 
             // Keywords
-            (#"\b(func|var|let|if|else|guard|switch|case|default|for|while|repeat|return|break|continue|import|class|struct|enum|protocol|extension|init|deinit|self|Self|super|true|false|nil|throws|throw|try|catch|async|await|actor|some|any|where|typealias|associatedtype|inout|static|final|override|private|public|internal|fileprivate|open|lazy|weak|unowned|mutating|nonmutating|convenience|required|optional|dynamic|indirect|precedencegroup|infix|prefix|postfix|operator|subscript|get|set|willSet|didSet|is|as|in)\b"#, { $0.keyword }),
+            (
+                #"\b(func|var|let|if|else|guard|switch|case|default|for|while|repeat|return|break|continue|import|class|struct|enum|protocol|extension|init|deinit|self|Self|super|true|false|nil|throws|throw|try|catch|async|await|actor|some|any|where|typealias|associatedtype|inout|static|final|override|private|public|internal|fileprivate|open|lazy|weak|unowned|mutating|nonmutating|convenience|required|optional|dynamic|indirect|precedencegroup|infix|prefix|postfix|operator|subscript|get|set|willSet|didSet|is|as|in)\b"#,
+                { $0.keyword }
+            ),
 
             // Types
             (#"\b[A-Z][a-zA-Z0-9_]*\b"#, { $0.type }),
@@ -161,7 +168,10 @@ class SyntaxHighlighter {
             (#"'[^'\\]*(?:\\.[^'\\]*)*'"#, { $0.string }),
 
             // Keywords
-            (#"\b(and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|True|False|None)\b"#, { $0.keyword }),
+            (
+                #"\b(and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|True|False|None)\b"#,
+                { $0.keyword }
+            ),
 
             // Numbers
             (#"\b\d+\.?\d*\b"#, { $0.number }),
@@ -185,7 +195,10 @@ class SyntaxHighlighter {
             (#"`[^`]*`"#, { $0.string }),
 
             // Keywords
-            (#"\b(break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|function|if|import|in|instanceof|let|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|async|await|of|true|false|null|undefined)\b"#, { $0.keyword }),
+            (
+                #"\b(break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|function|if|import|in|instanceof|let|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|async|await|of|true|false|null|undefined)\b"#,
+                { $0.keyword }
+            ),
 
             // Numbers
             (#"\b\d+\.?\d*\b"#, { $0.number })
@@ -213,7 +226,10 @@ class SyntaxHighlighter {
             (#"\$[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.variable }),
 
             // Keywords
-            (#"\b(abstract|and|array|as|break|callable|case|catch|class|clone|const|continue|declare|default|die|do|echo|else|elseif|empty|enddeclare|endfor|endforeach|endif|endswitch|endwhile|eval|exit|extends|final|finally|fn|for|foreach|function|global|goto|if|implements|include|include_once|instanceof|insteadof|interface|isset|list|match|namespace|new|or|print|private|protected|public|readonly|require|require_once|return|static|switch|throw|trait|try|unset|use|var|while|xor|yield|yield from|true|false|null|self|parent|__CLASS__|__DIR__|__FILE__|__FUNCTION__|__LINE__|__METHOD__|__NAMESPACE__|__TRAIT__)\b"#, { $0.keyword }),
+            (
+                #"\b(abstract|and|array|as|break|callable|case|catch|class|clone|const|continue|declare|default|die|do|echo|else|elseif|empty|enddeclare|endfor|endforeach|endif|endswitch|endwhile|eval|exit|extends|final|finally|fn|for|foreach|function|global|goto|if|implements|include|include_once|instanceof|insteadof|interface|isset|list|match|namespace|new|or|print|private|protected|public|readonly|require|require_once|return|static|switch|throw|trait|try|unset|use|var|while|xor|yield|yield from|true|false|null|self|parent|__CLASS__|__DIR__|__FILE__|__FUNCTION__|__LINE__|__METHOD__|__NAMESPACE__|__TRAIT__)\b"#,
+                { $0.keyword }
+            ),
 
             // Types
             (#"\b(int|float|bool|string|array|object|callable|iterable|void|mixed|never|null)\b"#, { $0.type }),
@@ -351,7 +367,10 @@ class SyntaxHighlighter {
             (#"'[^']*'"#, { $0.string }),
 
             // Keywords
-            (#"\b(SELECT|FROM|WHERE|AND|OR|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|VIEW|DROP|ALTER|ADD|COLUMN|PRIMARY|KEY|FOREIGN|REFERENCES|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AS|ORDER|BY|GROUP|HAVING|LIMIT|OFFSET|UNION|ALL|DISTINCT|NULL|NOT|IN|LIKE|BETWEEN|EXISTS|CASE|WHEN|THEN|ELSE|END|COUNT|SUM|AVG|MIN|MAX)\b"#, { $0.keyword }),
+            (
+                #"\b(SELECT|FROM|WHERE|AND|OR|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|VIEW|DROP|ALTER|ADD|COLUMN|PRIMARY|KEY|FOREIGN|REFERENCES|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AS|ORDER|BY|GROUP|HAVING|LIMIT|OFFSET|UNION|ALL|DISTINCT|NULL|NOT|IN|LIKE|BETWEEN|EXISTS|CASE|WHEN|THEN|ELSE|END|COUNT|SUM|AVG|MIN|MAX)\b"#,
+                { $0.keyword }
+            ),
 
             // Numbers
             (#"\b\d+\.?\d*\b"#, { $0.number })
@@ -370,7 +389,10 @@ class SyntaxHighlighter {
             (#"'[^']*'"#, { $0.string }),
 
             // Keywords
-            (#"\b(if|then|else|elif|fi|for|while|do|done|case|esac|in|function|return|exit|local|export|source|alias|unalias|cd|pwd|echo|printf|read|test|true|false)\b"#, { $0.keyword }),
+            (
+                #"\b(if|then|else|elif|fi|for|while|do|done|case|esac|in|function|return|exit|local|export|source|alias|unalias|cd|pwd|echo|printf|read|test|true|false)\b"#,
+                { $0.keyword }
+            ),
 
             // Variables
             (#"\$[a-zA-Z_][a-zA-Z0-9_]*"#, { $0.variable }),
@@ -404,3 +426,5 @@ class SyntaxHighlighter {
         ]
     }
 }
+
+// swiftlint:enable line_length

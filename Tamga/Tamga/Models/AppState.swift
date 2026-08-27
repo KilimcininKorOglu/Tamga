@@ -14,7 +14,7 @@ class AppState: ObservableObject {
     @Published var showLineNumbers: Bool = true
     @Published var recentFiles: [URL] = []
     @Published var isAutoSaveEnabled: Bool = false
-    @Published var autoSaveInterval: TimeInterval = 60 // seconds
+    @Published var autoSaveInterval: TimeInterval = 60  // seconds
     @Published var isSplitViewEnabled: Bool = false
     @Published var isSidebarVisible: Bool = false
     @Published var isMarkdownPreviewEnabled: Bool = false
@@ -62,17 +62,20 @@ class AppState: ObservableObject {
         autoSaveInterval = userDefaults.object(forKey: "autoSaveInterval") as? TimeInterval ?? 60
 
         if let themeRaw = userDefaults.string(forKey: "theme"),
-           let theme = AppTheme(rawValue: themeRaw) {
+            let theme = AppTheme(rawValue: themeRaw)
+        {
             currentTheme = theme
         }
 
         if let recentData = userDefaults.data(forKey: recentFilesKey),
-           let urls = try? JSONDecoder().decode([URL].self, from: recentData) {
+            let urls = try? JSONDecoder().decode([URL].self, from: recentData)
+        {
             recentFiles = urls.filter { FileManager.default.fileExists(atPath: $0.path) }
         }
 
         if let langRaw = userDefaults.string(forKey: "appLanguage"),
-           let lang = AppLanguage(rawValue: langRaw) {
+            let lang = AppLanguage(rawValue: langRaw)
+        {
             appLanguage = lang
             applyLanguage()
         }

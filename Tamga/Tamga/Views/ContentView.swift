@@ -140,7 +140,7 @@ struct ContentView: View {
             // Find & Replace Panel
             if documentViewModel.isSearchVisible {
                 VStack {
-                    Spacer().frame(height: 44) // Below tab bar
+                    Spacer().frame(height: 44)  // Below tab bar
                     FindReplaceView(
                         searchText: $documentViewModel.searchText,
                         replaceText: $documentViewModel.replaceText,
@@ -255,18 +255,18 @@ struct ContentView: View {
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
-        for provider in providers {
-            if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
-                    guard error == nil,
-                          let data = item as? Data,
-                          let url = URL(dataRepresentation: data, relativeTo: nil) else {
-                        return
-                    }
+        for provider in providers
+        where provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
+                guard error == nil,
+                    let data = item as? Data,
+                    let url = URL(dataRepresentation: data, relativeTo: nil)
+                else {
+                    return
+                }
 
-                    Task { @MainActor in
-                        openDroppedFile(url)
-                    }
+                Task { @MainActor in
+                    openDroppedFile(url)
                 }
             }
         }
@@ -392,7 +392,7 @@ struct ContentView: View {
     private func updateDocumentInfo(content: String) {
         currentDocumentInfo = DocumentInfo(
             content: content,
-            cursorPosition: 0 // TODO: Get actual cursor position
+            cursorPosition: 0  // TODO: Get actual cursor position
         )
     }
 
