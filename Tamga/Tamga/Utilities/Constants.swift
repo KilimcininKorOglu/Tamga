@@ -10,6 +10,13 @@ enum Constants {
         static let minMacOSVersion = "13.0"
     }
 
+    /// Author credit shown in the about panel
+    enum Author {
+        static let name = "Abdullah Kerem Gök"
+        static let handle = "x.com/KorOglan"
+        static let profileURL = "https://x.com/KorOglan"
+    }
+
     /// Default values
     enum Defaults {
         static let fontSize: CGFloat = 14
