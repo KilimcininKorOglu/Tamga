@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A1000001AAAAAAAA00000001 /* TamgaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001AAAAAAAA00000001 /* TamgaApp.swift */; };
+		A1000030AAAAAAAA00000030 /* TamgaCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000030AAAAAAAA00000030 /* TamgaCommands.swift */; };
+		A1000031AAAAAAAA00000031 /* AboutPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031AAAAAAAA00000031 /* AboutPanel.swift */; };
+		A1000032AAAAAAAA00000032 /* CLIInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032AAAAAAAA00000032 /* CLIInstaller.swift */; };
+		A1000033AAAAAAAA00000033 /* PrintService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033AAAAAAAA00000033 /* PrintService.swift */; };
 		A1000002AAAAAAAA00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002AAAAAAAA00000002 /* ContentView.swift */; };
 		A1000003AAAAAAAA00000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000003AAAAAAAA00000003 /* Assets.xcassets */; };
 		A1000004AAAAAAAA00000004 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000004AAAAAAAA00000004 /* Tab.swift */; };
@@ -44,6 +48,10 @@
 /* Begin PBXFileReference section */
 		A2000000AAAAAAAA00000000 /* Tamga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tamga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000001AAAAAAAA00000001 /* TamgaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamgaApp.swift; sourceTree = "<group>"; };
+		A2000030AAAAAAAA00000030 /* TamgaCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TamgaCommands.swift; sourceTree = "<group>"; };
+		A2000031AAAAAAAA00000031 /* AboutPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPanel.swift; sourceTree = "<group>"; };
+		A2000032AAAAAAAA00000032 /* CLIInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIInstaller.swift; sourceTree = "<group>"; };
+		A2000033AAAAAAAA00000033 /* PrintService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintService.swift; sourceTree = "<group>"; };
 		A2000002AAAAAAAA00000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A2000003AAAAAAAA00000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000004AAAAAAAA00000004 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
@@ -120,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000001AAAAAAAA00000001 /* TamgaApp.swift */,
+				A2000030AAAAAAAA00000030 /* TamgaCommands.swift */,
 				A2000019AAAAAAAA00000019 /* Info.plist */,
 				A2000003AAAAAAAA00000003 /* Assets.xcassets */,
 				A4000004AAAAAAAA00000004 /* Models */,
@@ -167,6 +176,7 @@
 				A2000027AAAAAAAA00000027 /* LineNumberRulerView.swift */,
 				A2000028AAAAAAAA00000028 /* TamgaTextView.swift */,
 				A2000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift */,
+				A2000031AAAAAAAA00000031 /* AboutPanel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,6 +197,8 @@
 				A2000014AAAAAAAA00000014 /* SessionService.swift */,
 				A2000015AAAAAAAA00000015 /* SyntaxHighlighter.swift */,
 				A2000025AAAAAAAA00000025 /* TreeSitterHighlighting.swift */,
+				A2000033AAAAAAAA00000033 /* PrintService.swift */,
+				A2000032AAAAAAAA00000032 /* CLIInstaller.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -309,6 +321,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000001AAAAAAAA00000001 /* TamgaApp.swift in Sources */,
+				A1000030AAAAAAAA00000030 /* TamgaCommands.swift in Sources */,
+				A1000031AAAAAAAA00000031 /* AboutPanel.swift in Sources */,
+				A1000032AAAAAAAA00000032 /* CLIInstaller.swift in Sources */,
+				A1000033AAAAAAAA00000033 /* PrintService.swift in Sources */,
 				A1000002AAAAAAAA00000002 /* ContentView.swift in Sources */,
 				A1000004AAAAAAAA00000004 /* Tab.swift in Sources */,
 				A1000005AAAAAAAA00000005 /* Document.swift in Sources */,
