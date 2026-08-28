@@ -14,9 +14,6 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            WindowConfigurator()
-                .frame(width: 0, height: 0)
-
             HStack(spacing: 0) {
                 // Sidebar
                 if appState.isSidebarVisible {

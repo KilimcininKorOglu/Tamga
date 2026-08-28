@@ -14,7 +14,8 @@ struct TamgaApp: App {
             ContentView()
                 .preferredColorScheme(appState.currentTheme.colorScheme)
         }
-        .windowStyle(.titleBar)
+        .windowStyle(.automatic)
+        .windowToolbarStyle(.unified)
         .commands {
             TamgaCommands()
         }
