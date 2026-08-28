@@ -14,91 +14,20 @@ struct EditorView: View {
     var onCursorPositionChange: (Int) -> Void = { _ in }
 
     @Environment(\.colorScheme) private var colorScheme
-    @State private var scrollOffset: CGFloat = 0
-
-    /// Logical line count, derived straight from the text so the gutter never lags.
-    private var lineCount: Int {
-        text.isEmpty ? 1 : text.components(separatedBy: .newlines).count
-    }
 
     var body: some View {
-        HStack(spacing: 0) {
-            if showLineNumbers {
-                LineNumbersView(
-                    lineCount: lineCount,
-                    fontSize: fontSize,
-                    scrollOffset: scrollOffset
-                )
-                .frame(width: lineNumberWidth)
-
-                Divider()
-            }
-
-            HighlightedTextEditor(
-                text: $text,
-                language: language,
-                isDarkMode: colorScheme == .dark,
-                fontSize: fontSize,
-                fontName: fontName,
-                isWordWrapEnabled: isWordWrapEnabled,
-                showInvisibleCharacters: showInvisibleCharacters,
-                goToPosition: goToPosition,
-                onScrollChange: { offset in
-                    scrollOffset = offset
-                },
-                onCursorPositionChange: onCursorPositionChange
-            )
-        }
-    }
-
-    private var lineNumberWidth: CGFloat {
-        let digits = String(lineCount).count
-        return CGFloat(max(digits, 3)) * 10 + 20
-    }
-}
-
-// MARK: - Line Numbers View
-
-/// Vertical gutter that mirrors the editor's scroll offset.
-///
-/// Each logical line gets one row of `fontSize * 1.4`, matching the editor's default
-/// line height. A soft-wrapped line still gets one number, so the numbers can drift
-/// against wrapped rows; that is the trade-off for a gutter that never disturbs the
-/// text view's own rendering.
-struct LineNumbersView: View {
-    let lineCount: Int
-    let fontSize: CGFloat
-    let scrollOffset: CGFloat
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var backgroundColor: Color {
-        colorScheme == .dark
-            ? Color(nsColor: NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1))
-            : Color(nsColor: .controlBackgroundColor).opacity(0.5)
-    }
-
-    private var textColor: Color {
-        colorScheme == .dark
-            ? Color(nsColor: NSColor(red: 0.5, green: 0.5, blue: 0.55, alpha: 1))
-            : Color.secondary
-    }
-
-    var body: some View {
-        VStack(alignment: .trailing, spacing: 0) {
-            ForEach(1...max(lineCount, 1), id: \.self) { lineNumber in
-                Text("\(lineNumber)")
-                    .font(.system(size: fontSize, design: .monospaced))
-                    .foregroundColor(textColor)
-                    .frame(height: fontSize * 1.4)
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.top, 8)
-        .offset(y: -scrollOffset)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(backgroundColor)
-        .clipped()
+        HighlightedTextEditor(
+            text: $text,
+            language: language,
+            isDarkMode: colorScheme == .dark,
+            fontSize: fontSize,
+            fontName: fontName,
+            isWordWrapEnabled: isWordWrapEnabled,
+            showInvisibleCharacters: showInvisibleCharacters,
+            showLineNumbers: showLineNumbers,
+            goToPosition: goToPosition,
+            onCursorPositionChange: onCursorPositionChange
+        )
     }
 }
 
@@ -112,8 +41,8 @@ struct HighlightedTextEditor: NSViewRepresentable {
     let fontName: String
     let isWordWrapEnabled: Bool
     let showInvisibleCharacters: Bool
+    let showLineNumbers: Bool
     let goToPosition: Int?
-    let onScrollChange: (CGFloat) -> Void
     let onCursorPositionChange: (Int) -> Void
 
     func makeNSView(context: Context) -> NSScrollView {
@@ -162,20 +91,34 @@ struct HighlightedTextEditor: NSViewRepresentable {
         context.coordinator.textView = textView
         context.coordinator.scrollView = scrollView
 
-        // Report vertical scroll so the SwiftUI line-number gutter tracks the text.
+        // Line numbers: a plain left-pinned overlay driven by the layout manager, so a
+        // soft-wrapped line keeps one number aligned with its first visual row.
+        let gutter = GutterView(textView: textView, scrollView: scrollView)
+        scrollView.addSubview(gutter)
+        context.coordinator.gutterView = gutter
+        context.coordinator.updateGutterAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
+        context.coordinator.applyGutter(visible: showLineNumbers)
+
+        // Redraw the gutter and keep it pinned as the text scrolls or the view resizes.
         NotificationCenter.default.addObserver(
             context.coordinator,
             selector: #selector(Coordinator.scrollViewDidScroll(_:)),
             name: NSView.boundsDidChangeNotification,
             object: scrollView.contentView
         )
+        NotificationCenter.default.addObserver(
+            context.coordinator,
+            selector: #selector(Coordinator.scrollViewDidScroll(_:)),
+            name: NSView.frameDidChangeNotification,
+            object: scrollView.contentView
+        )
         scrollView.contentView.postsBoundsChangedNotifications = true
+        scrollView.contentView.postsFrameChangedNotifications = true
 
         return scrollView
     }
 
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        // Refresh the captured bindings so the gutter callbacks target the current view.
         context.coordinator.parent = self
         guard let textView = scrollView.documentView as? TamgaTextView else { return }
 
@@ -219,6 +162,10 @@ struct HighlightedTextEditor: NSViewRepresentable {
         // Update colors for dark mode
         updateColors(textView: textView, isDarkMode: isDarkMode)
 
+        // Update the line number gutter
+        context.coordinator.updateGutterAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
+        context.coordinator.applyGutter(visible: showLineNumbers)
+
         // Apply syntax highlighting
         context.coordinator.applySyntaxHighlighting(language: language, isDarkMode: isDarkMode)
 
@@ -248,11 +195,13 @@ struct HighlightedTextEditor: NSViewRepresentable {
         var parent: HighlightedTextEditor
         weak var textView: NSTextView?
         weak var scrollView: NSScrollView?
+        weak var gutterView: GutterView?
         var lastGoToPosition: Int?
 
         private let highlighter = SyntaxHighlighter.shared
         private let treeSitterController = TreeSitterHighlightController()
         private var isUpdating = false
+        private var gutterVisible = true
 
         init(_ parent: HighlightedTextEditor) {
             self.parent = parent
@@ -270,6 +219,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         func textDidChange(_ notification: Notification) {
             guard let textView = textView, !isUpdating else { return }
             parent.text = textView.string
+            layoutGutter()
             applySyntaxHighlighting(language: parent.language, isDarkMode: parent.isDarkMode)
         }
 
@@ -277,6 +227,50 @@ struct HighlightedTextEditor: NSViewRepresentable {
         func textViewDidChangeSelection(_ notification: Notification) {
             guard let textView = textView else { return }
             parent.onCursorPositionChange(textView.selectedRange().location)
+        }
+
+        // MARK: - Gutter
+
+        /// Shows or hides the gutter and reserves the matching left inset for the text.
+        func applyGutter(visible: Bool) {
+            gutterVisible = visible
+            gutterView?.isHidden = !visible
+            layoutGutter()
+        }
+
+        func updateGutterAppearance(fontSize: CGFloat, isDarkMode: Bool) {
+            guard let gutterView else { return }
+            gutterView.numberFont = .monospacedSystemFont(ofSize: max(fontSize - 2, 9), weight: .regular)
+            gutterView.numberColor =
+                isDarkMode
+                ? NSColor(red: 0.5, green: 0.5, blue: 0.55, alpha: 1)
+                : NSColor.secondaryLabelColor
+            gutterView.gutterColor =
+                isDarkMode
+                ? NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1)
+                : NSColor.controlBackgroundColor
+            layoutGutter()
+        }
+
+        /// Pins the gutter to the left of the clip view and insets the text past it.
+        private func layoutGutter() {
+            guard let textView = textView, let scrollView = scrollView, let gutterView else { return }
+            let width = gutterVisible ? gutterView.width(forLineCount: currentLineCount()) : 0
+
+            let clip = scrollView.contentView.frame
+            gutterView.frame = NSRect(x: clip.minX, y: clip.minY, width: width, height: clip.height)
+
+            let inset = gutterVisible ? width + 4 : 8
+            if abs(textView.textContainerInset.width - inset) > 0.5 {
+                textView.textContainerInset = NSSize(width: inset, height: 8)
+            }
+            gutterView.needsDisplay = true
+        }
+
+        private func currentLineCount() -> Int {
+            guard let textView = textView else { return 1 }
+            let text = textView.string
+            return text.isEmpty ? 1 : text.components(separatedBy: .newlines).count
         }
 
         func applySyntaxHighlighting(language: SyntaxLanguage, isDarkMode: Bool) {
@@ -317,8 +311,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         }
 
         @objc func scrollViewDidScroll(_ notification: Notification) {
-            guard let scrollView = scrollView else { return }
-            parent.onScrollChange(scrollView.contentView.bounds.origin.y)
+            layoutGutter()
         }
     }
 }
