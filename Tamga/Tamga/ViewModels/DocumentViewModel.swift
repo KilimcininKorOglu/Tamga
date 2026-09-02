@@ -271,7 +271,7 @@ class DocumentViewModel: ObservableObject {
             try fileService.writeFile(content: content, to: url)
             return url
         } catch {
-            print("Error saving file: \(error)")
+            NSAlert(error: error).runModal()
             return nil
         }
     }
