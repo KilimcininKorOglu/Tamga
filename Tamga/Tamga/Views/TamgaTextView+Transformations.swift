@@ -63,6 +63,16 @@ extension TamgaTextView {
         moveCurrentLineDown()
     }
 
+    /// Applies an edit through the text view's own editing pipeline so it registers
+    /// undo and notifies the delegate. Returns false when the edit is disallowed.
+    @discardableResult
+    func replaceCharactersUndoable(in range: NSRange, with replacement: String) -> Bool {
+        guard shouldChangeText(in: range, replacementString: replacement) else { return false }
+        textStorage?.replaceCharacters(in: range, with: replacement)
+        didChangeText()
+        return true
+    }
+
     func duplicateCurrentLine() {
         clearAllFolds()
         let text = string
@@ -93,12 +103,11 @@ extension TamgaTextView {
             newCursorPos += lines[i].count + 1
         }
 
-        // Update text
-        string = newContent
-        setSelectedRange(NSRange(location: newCursorPos, length: 0))
-
-        // Notify delegate of change
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
+        // Update text through the undo-aware pipeline so Cmd-Z can revert it.
+        let fullRange = NSRange(location: 0, length: (string as NSString).length)
+        if replaceCharactersUndoable(in: fullRange, with: newContent) {
+            setSelectedRange(NSRange(location: newCursorPos, length: 0))
+        }
     }
 
     func moveCurrentLineUp() {
@@ -155,12 +164,11 @@ extension TamgaTextView {
         }
         newCursorPos += min(cursorOffsetInLine, newLines[targetIndex].count)
 
-        // Update text
-        string = newContent
-        setSelectedRange(NSRange(location: newCursorPos, length: 0))
-
-        // Notify delegate of change
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
+        // Update text through the undo-aware pipeline so Cmd-Z can revert it.
+        let fullRange = NSRange(location: 0, length: (string as NSString).length)
+        if replaceCharactersUndoable(in: fullRange, with: newContent) {
+            setSelectedRange(NSRange(location: newCursorPos, length: 0))
+        }
     }
 
     private enum MoveDirection {
@@ -186,9 +194,8 @@ extension TamgaTextView {
             let sortedText = lines.joined(separator: "\n")
 
             // Replace selected text
-            if let textStorage = self.textStorage {
-                textStorage.replaceCharacters(in: selectedRange, with: sortedText)
-                setSelectedRange(NSRange(location: selectedRange.location, length: sortedText.count))
+            if replaceCharactersUndoable(in: selectedRange, with: sortedText) {
+                setSelectedRange(NSRange(location: selectedRange.location, length: (sortedText as NSString).length))
             }
         } else {
             // Sort all lines
@@ -196,11 +203,11 @@ extension TamgaTextView {
             lines = ascending ? lines.sorted() : lines.sorted().reversed()
             let newContent = lines.joined(separator: "\n")
 
-            string = newContent
-            setSelectedRange(NSRange(location: 0, length: 0))
+            let fullRange = NSRange(location: 0, length: (string as NSString).length)
+            if replaceCharactersUndoable(in: fullRange, with: newContent) {
+                setSelectedRange(NSRange(location: 0, length: 0))
+            }
         }
-
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
     }
 
     // MARK: - Remove Duplicate Lines
@@ -219,10 +226,10 @@ extension TamgaTextView {
         }
 
         let newContent = uniqueLines.joined(separator: "\n")
-        string = newContent
-        setSelectedRange(NSRange(location: 0, length: 0))
-
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
+        let fullRange = NSRange(location: 0, length: (string as NSString).length)
+        if replaceCharactersUndoable(in: fullRange, with: newContent) {
+            setSelectedRange(NSRange(location: 0, length: 0))
+        }
     }
 
     // MARK: - Change Case
@@ -252,12 +259,9 @@ extension TamgaTextView {
             transformedText = selectedText.capitalized
         }
 
-        if let textStorage = self.textStorage {
-            textStorage.replaceCharacters(in: selectedRange, with: transformedText)
-            setSelectedRange(NSRange(location: selectedRange.location, length: transformedText.count))
+        if replaceCharactersUndoable(in: selectedRange, with: transformedText) {
+            setSelectedRange(NSRange(location: selectedRange.location, length: (transformedText as NSString).length))
         }
-
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
     }
 
     // MARK: - JSON Formatting
@@ -302,17 +306,14 @@ extension TamgaTextView {
             return
         }
 
-        // Replace text
+        // Replace text through the undo-aware pipeline.
         clearAllFolds()
-        if let textStorage = self.textStorage {
-            textStorage.replaceCharacters(in: rangeToReplace, with: formattedString)
+        if replaceCharactersUndoable(in: rangeToReplace, with: formattedString) {
             if selectedRange.length > 0 {
-                setSelectedRange(NSRange(location: rangeToReplace.location, length: formattedString.count))
+                setSelectedRange(NSRange(location: rangeToReplace.location, length: (formattedString as NSString).length))
             } else {
                 setSelectedRange(NSRange(location: 0, length: 0))
             }
         }
-
-        delegate?.textDidChange?(Notification(name: NSText.didChangeNotification, object: self))
     }
 }
