@@ -226,6 +226,11 @@ struct ContentView: View {
                 updateDocumentInfo(content: tab.content)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .saveAndCloseTab)) { notification in
+            if let tabId = notification.object as? UUID {
+                saveThenCloseTab(id: tabId)
+            }
+        }
         .focusedSceneValue(\.tabManager, tabManager)
         .focusedSceneValue(\.documentViewModel, documentViewModel)
         .onChange(of: documentViewModel.searchText) { _ in
@@ -328,6 +333,24 @@ struct ContentView: View {
             alert.informativeText = url.lastPathComponent
             alert.alertStyle = .warning
             alert.runModal()
+        }
+    }
+
+    /// Saves the tab, then closes it once the write succeeds. Used by the Save action
+    /// of the unsaved-changes alert, which may target a tab that is not the active one.
+    private func saveThenCloseTab(id: UUID) {
+        guard let tab = tabManager.getTab(by: id) else { return }
+        Task {
+            let url = await documentViewModel.saveFile(
+                content: tab.content,
+                existingPath: tab.filePath,
+                suggestedName: tab.suggestedFileName,
+                encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+            )
+            if let url {
+                tabManager.markAsSaved(id: tab.id, filePath: url)
+                tabManager.closeTab(id: tab.id)
+            }
         }
     }
 

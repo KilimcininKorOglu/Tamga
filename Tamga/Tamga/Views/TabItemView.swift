@@ -62,6 +62,9 @@ struct TabItemView: View {
             isHovering = hovering
         }
         .alert(String(localized: "unsaved.changes"), isPresented: $showCloseAlert) {
+            Button(String(localized: "save")) {
+                NotificationCenter.default.post(name: .saveAndCloseTab, object: tab.id)
+            }
             Button(String(localized: "dont.save"), role: .destructive) {
                 onClose()
             }
@@ -116,6 +119,7 @@ struct TabItemView: View {
 
 extension Notification.Name {
     static let closeOtherTabs = Notification.Name("closeOtherTabs")
+    static let saveAndCloseTab = Notification.Name("saveAndCloseTab")
 }
 
 #Preview {
