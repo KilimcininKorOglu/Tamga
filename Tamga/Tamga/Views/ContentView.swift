@@ -51,6 +51,8 @@ struct ContentView: View {
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
                                     showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    searchMatches: activeSearchMatches,
+                                    currentMatchIndex: documentViewModel.currentSearchIndex,
                                     onCursorPositionChange: { position in
                                         cursorPosition = position
                                         updateDocumentInfo(content: activeTab.content)
@@ -74,6 +76,8 @@ struct ContentView: View {
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
                                     showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    searchMatches: activeSearchMatches,
+                                    currentMatchIndex: documentViewModel.currentSearchIndex,
                                     onCursorPositionChange: { position in
                                         cursorPosition = position
                                         updateDocumentInfo(content: activeTab.content)
@@ -99,6 +103,8 @@ struct ContentView: View {
                                     fontName: appState.fontName,
                                     goToPosition: activeTab.cursorPosition,
                                     showInvisibleCharacters: appState.showInvisibleCharacters,
+                                    searchMatches: activeSearchMatches,
+                                    currentMatchIndex: documentViewModel.currentSearchIndex,
                                     onCursorPositionChange: { position in
                                         cursorPosition = position
                                         updateDocumentInfo(content: activeTab.content)
@@ -126,6 +132,8 @@ struct ContentView: View {
                                 fontName: appState.fontName,
                                 goToPosition: activeTab.cursorPosition,
                                 showInvisibleCharacters: appState.showInvisibleCharacters,
+                                searchMatches: activeSearchMatches,
+                                currentMatchIndex: documentViewModel.currentSearchIndex,
                                 onCursorPositionChange: { position in
                                     cursorPosition = position
                                     updateDocumentInfo(content: activeTab.content)
@@ -451,6 +459,14 @@ struct ContentView: View {
     }
 
     // MARK: - Search & Replace
+
+    /// Match ranges for the active tab, only while the find panel is open. The four
+    /// editors all render the active tab, so they share one match set; an empty list
+    /// clears the search backgrounds when the panel closes.
+    private var activeSearchMatches: [NSRange] {
+        guard documentViewModel.isSearchVisible, let tab = tabManager.activeTab else { return [] }
+        return documentViewModel.matchRanges(in: tab.content)
+    }
 
     private func replaceCurrentMatch() {
         guard let activeTab = tabManager.activeTab else { return }

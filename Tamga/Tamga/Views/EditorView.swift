@@ -11,6 +11,8 @@ struct EditorView: View {
     let fontName: String
     var goToPosition: Int?
     var showInvisibleCharacters: Bool = false
+    var searchMatches: [NSRange] = []
+    var currentMatchIndex: Int = 0
     var onCursorPositionChange: (Int) -> Void = { _ in }
 
     @Environment(\.colorScheme) private var colorScheme
@@ -26,6 +28,8 @@ struct EditorView: View {
             showInvisibleCharacters: showInvisibleCharacters,
             showLineNumbers: showLineNumbers,
             goToPosition: goToPosition,
+            searchMatches: searchMatches,
+            currentMatchIndex: currentMatchIndex,
             onCursorPositionChange: onCursorPositionChange
         )
     }
@@ -43,6 +47,8 @@ struct HighlightedTextEditor: NSViewRepresentable {
     let showInvisibleCharacters: Bool
     let showLineNumbers: Bool
     let goToPosition: Int?
+    let searchMatches: [NSRange]
+    let currentMatchIndex: Int
     let onCursorPositionChange: (Int) -> Void
 
     func makeNSView(context: Context) -> NSScrollView {
@@ -174,6 +180,13 @@ struct HighlightedTextEditor: NSViewRepresentable {
             context.coordinator.lastGoToPosition = position
             context.coordinator.scrollToPosition(position)
         }
+
+        // Paint search-match backgrounds on top and select the current match.
+        context.coordinator.applySearchHighlights(
+            matches: searchMatches,
+            current: currentMatchIndex,
+            isDarkMode: isDarkMode
+        )
     }
 
     private func updateColors(textView: NSTextView, isDarkMode: Bool) {
@@ -197,6 +210,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         weak var scrollView: NSScrollView?
         weak var gutterView: GutterView?
         var lastGoToPosition: Int?
+        private var lastAppliedMatchCurrent = -1
 
         private let highlighter = SyntaxHighlighter.shared
         private let treeSitterController = TreeSitterHighlightController()
@@ -312,6 +326,46 @@ struct HighlightedTextEditor: NSViewRepresentable {
                 }
             }
             textStorage.endEditing()
+        }
+
+        /// Paints a background behind every search match (stronger for the current one)
+        /// via layout-manager temporary attributes, so it layers over both highlighting
+        /// engines without touching text storage. Selects and scrolls to the current match
+        /// only when the index changes, so typing in the editor does not hijack the caret.
+        func applySearchHighlights(matches: [NSRange], current: Int, isDarkMode: Bool) {
+            guard let textView = textView, let layoutManager = textView.layoutManager else { return }
+
+            let length = (textView.string as NSString).length
+            layoutManager.removeTemporaryAttribute(
+                .backgroundColor,
+                forCharacterRange: NSRange(location: 0, length: length)
+            )
+
+            let matchColor = NSColor.systemYellow.withAlphaComponent(isDarkMode ? 0.35 : 0.5)
+            let currentColor = NSColor.systemOrange.withAlphaComponent(isDarkMode ? 0.55 : 0.6)
+
+            for (index, range) in matches.enumerated() where NSMaxRange(range) <= length {
+                layoutManager.addTemporaryAttribute(
+                    .backgroundColor,
+                    value: index == current ? currentColor : matchColor,
+                    forCharacterRange: range
+                )
+            }
+
+            guard !matches.isEmpty else {
+                lastAppliedMatchCurrent = -1
+                return
+            }
+
+            // Only move the selection on an index change (find navigation or panel open).
+            guard current != lastAppliedMatchCurrent else { return }
+            lastAppliedMatchCurrent = current
+
+            guard current >= 0, current < matches.count else { return }
+            let currentRange = matches[current]
+            guard NSMaxRange(currentRange) <= length else { return }
+            textView.setSelectedRange(currentRange)
+            textView.scrollRangeToVisible(currentRange)
         }
 
         @objc func scrollViewDidScroll(_ notification: Notification) {

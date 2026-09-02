@@ -47,6 +47,12 @@ class DocumentViewModel: ObservableObject {
         }
     }
 
+    /// Current matches as UTF-16 `NSRange`s for the editor to select and highlight.
+    /// `searchResults` indexes into the same `content`, so the conversion stays valid.
+    func matchRanges(in content: String) -> [NSRange] {
+        searchResults.map { NSRange($0, in: content) }
+    }
+
     func findNext() {
         guard !searchResults.isEmpty else { return }
         currentSearchIndex = (currentSearchIndex + 1) % searchResults.count
