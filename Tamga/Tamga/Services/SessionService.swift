@@ -51,7 +51,16 @@ class SessionService {
 
     // MARK: - Save Session
 
+    /// Terminal-event save (onDisappear, willTerminate). Runs synchronously on the
+    /// serial queue so it waits for any in-flight background save and writes last,
+    /// making the newest snapshot the one that survives.
     func saveSession(tabs: [Tab], activeTabId: UUID?) {
+        saveQueue.sync {
+            performSave(tabs: tabs, activeTabId: activeTabId)
+        }
+    }
+
+    private func performSave(tabs: [Tab], activeTabId: UUID?) {
         let tabData = tabs.map { tab in
             SessionData.TabData(
                 id: tab.id,
@@ -89,7 +98,7 @@ class SessionService {
     /// saves must stay synchronous so the write completes before the process exits.
     func saveSessionInBackground(tabs: [Tab], activeTabId: UUID?) {
         saveQueue.async { [weak self] in
-            self?.saveSession(tabs: tabs, activeTabId: activeTabId)
+            self?.performSave(tabs: tabs, activeTabId: activeTabId)
         }
     }
 
