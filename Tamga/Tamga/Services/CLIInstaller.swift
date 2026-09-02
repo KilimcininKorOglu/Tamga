@@ -71,6 +71,13 @@ enum CLIInstaller {
             try runAsAdministrator("mkdir -p \(shellQuote(binPath))")
         }
 
+        // Refuse to write through a pre-existing symlink at the destination, which could
+        // redirect the privileged copy to another location.
+        if let attributes = try? fileManager.attributesOfItem(atPath: destinationPath),
+            attributes[.type] as? FileAttributeType == .typeSymbolicLink {
+            throw CLIInstallerError.commandFailed(String(localized: "install.cli.error.title"))
+        }
+
         let tempPath = NSTemporaryDirectory() + "tamga-cli.sh"
         try launcherScript.write(toFile: tempPath, atomically: true, encoding: .utf8)
         defer { try? fileManager.removeItem(atPath: tempPath) }

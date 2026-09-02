@@ -315,9 +315,12 @@ struct ContentView: View {
     private func openFileFromPath(_ path: String) {
         let url = URL(fileURLWithPath: path).standardized
 
-        // Create the file if it does not exist
-        if !FileManager.default.fileExists(atPath: url.path) {
-            FileManager.default.createFile(atPath: url.path, contents: nil)
+        // A path that does not exist yet opens as a new empty buffer instead of eagerly
+        // creating a stray file on disk for a possible typo. The file is written only
+        // if the user saves.
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            tabManager.openTab(with: url, content: "")
+            return
         }
 
         // Open the file. If it cannot be decoded, warn the user instead of opening a
