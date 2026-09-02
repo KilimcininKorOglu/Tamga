@@ -107,18 +107,18 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
 
     var fileExtensions: [String] {
         switch self {
-        case .plainText: return ["txt", "text"]
+        case .plainText: return ["txt", "text", "log", "conf", "cfg", "ini", "toml"]
         case .swift: return ["swift"]
-        case .python: return ["py", "pyw"]
-        case .javascript: return ["js", "jsx", "ts", "tsx"]
+        case .python: return ["py", "pyw", "pyi"]
+        case .javascript: return ["js", "jsx", "ts", "tsx", "mjs", "cjs"]
         case .php: return ["php", "phtml", "php3", "php4", "php5", "phps"]
-        case .json: return ["json"]
-        case .html: return ["html", "htm"]
-        case .css: return ["css", "scss", "sass", "less"]
-        case .markdown: return ["md", "markdown"]
-        case .xml: return ["xml", "plist"]
+        case .json: return ["json", "jsonc", "geojson"]
+        case .html: return ["html", "htm", "xhtml"]
+        case .css: return ["css", "scss", "sass", "less", "pcss"]
+        case .markdown: return ["md", "markdown", "mdown", "mkd", "mdwn"]
+        case .xml: return ["xml", "plist", "svg", "xsd", "xsl", "xslt"]
         case .sql: return ["sql"]
-        case .shell: return ["sh", "bash", "zsh"]
+        case .shell: return ["sh", "bash", "zsh", "ksh", "fish"]
         case .yaml: return ["yml", "yaml"]
         }
     }
