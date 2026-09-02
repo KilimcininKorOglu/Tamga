@@ -13,7 +13,14 @@ class AppState: ObservableObject {
     @Published var fontName: String = "SF Mono"
     @Published var showLineNumbers: Bool = true
     @Published var recentFiles: [URL] = []
-    @Published var isAutoSaveEnabled: Bool = false
+    @Published var isAutoSaveEnabled: Bool = false {
+        didSet {
+            // Reschedule the timer when the menu toggle flips, so enabling Auto Save
+            // starts the periodic save in the same session instead of only after relaunch.
+            guard isAutoSaveEnabled != oldValue else { return }
+            setupAutoSaveTimer()
+        }
+    }
     @Published var autoSaveInterval: TimeInterval = 60  // seconds
     @Published var isSplitViewEnabled: Bool = false
     @Published var isSidebarVisible: Bool = false
@@ -40,12 +47,6 @@ class AppState: ObservableObject {
                 }
             }
         }
-    }
-
-    func toggleAutoSave() {
-        isAutoSaveEnabled.toggle()
-        saveSettings()
-        setupAutoSaveTimer()
     }
 
     private func triggerAutoSave() {
