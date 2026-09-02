@@ -99,3 +99,9 @@
 "whole.word" = "Nguyên từ";
 "regex" = "Biểu thức chính quy";
 "invalid.regex" = "Mẫu không hợp lệ";
+
+// External file changes
+"file.changed.title" = "Tệp đã thay đổi trên đĩa";
+"file.changed.reload.prompt" = "Tải lại và bỏ các thay đổi chưa lưu?";
+"reload" = "Tải lại";
+"keep.mine" = "Giữ thay đổi của tôi";

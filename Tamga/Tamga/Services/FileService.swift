@@ -58,6 +58,66 @@ class FileService {
 
 }
 
+// MARK: - File Change Monitor
+
+/// Watches a set of file URLs and reports when any of them changes on disk.
+///
+/// Each URL gets a `DispatchSource` vnode watcher. An atomic save replaces the file's
+/// inode, so the watcher re-arms itself after every event; the caller compares content
+/// to ignore a change the app made itself.
+@MainActor
+final class FileChangeMonitor: ObservableObject {
+    /// Called on the main queue with the URL whose file changed.
+    var onChange: ((URL) -> Void)?
+
+    private var sources: [URL: DispatchSourceFileSystemObject] = [:]
+
+    /// Starts watching any new URL and stops watching any dropped URL, so the watched
+    /// set always mirrors the open file-backed tabs.
+    func sync(with urls: Set<URL>) {
+        for url in sources.keys where !urls.contains(url) {
+            unwatch(url)
+        }
+        for url in urls where sources[url] == nil {
+            watch(url)
+        }
+    }
+
+    private func watch(_ url: URL) {
+        let descriptor = open(url.path, O_EVTONLY)
+        guard descriptor >= 0 else { return }
+
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: descriptor,
+            eventMask: [.write, .delete, .rename, .extend],
+            queue: .main
+        )
+        source.setEventHandler { [weak self] in
+            guard let self else { return }
+            self.onChange?(url)
+            self.rearm(url)
+        }
+        source.setCancelHandler { close(descriptor) }
+        sources[url] = source
+        source.resume()
+    }
+
+    /// Re-opens the watch after an event, because an atomic save leaves the old
+    /// descriptor pointing at a replaced inode that never fires again.
+    private func rearm(_ url: URL) {
+        guard sources[url] != nil else { return }
+        unwatch(url)
+        if FileManager.default.fileExists(atPath: url.path) {
+            watch(url)
+        }
+    }
+
+    private func unwatch(_ url: URL) {
+        sources[url]?.cancel()
+        sources[url] = nil
+    }
+}
+
 // MARK: - Errors
 
 enum FileServiceError: LocalizedError {

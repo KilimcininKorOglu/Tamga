@@ -99,3 +99,9 @@
 "whole.word" = "Ganzes Wort";
 "regex" = "Regulärer Ausdruck";
 "invalid.regex" = "Ungültiges Muster";
+
+// External file changes
+"file.changed.title" = "Datei auf Datenträger geändert";
+"file.changed.reload.prompt" = "Neu laden und ungespeicherte Änderungen verwerfen?";
+"reload" = "Neu laden";
+"keep.mine" = "Meine behalten";

@@ -99,3 +99,9 @@
 "whole.word" = "كلمة كاملة";
 "regex" = "تعبير نمطي";
 "invalid.regex" = "نمط غير صالح";
+
+// External file changes
+"file.changed.title" = "تغيّر الملف على القرص";
+"file.changed.reload.prompt" = "إعادة التحميل وتجاهل تغييراتك غير المحفوظة؟";
+"reload" = "إعادة التحميل";
+"keep.mine" = "الاحتفاظ بتغييراتي";

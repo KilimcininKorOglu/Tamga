@@ -99,3 +99,9 @@
 "whole.word" = "Heel woord";
 "regex" = "Reguliere expressie";
 "invalid.regex" = "Ongeldig patroon";
+
+// External file changes
+"file.changed.title" = "Bestand op schijf gewijzigd";
+"file.changed.reload.prompt" = "Herladen en niet-opgeslagen wijzigingen negeren?";
+"reload" = "Herladen";
+"keep.mine" = "Mijn wijzigingen behouden";

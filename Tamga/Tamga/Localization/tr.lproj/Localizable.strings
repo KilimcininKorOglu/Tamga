@@ -99,3 +99,9 @@
 "whole.word" = "Tam sözcük";
 "regex" = "Düzenli ifade";
 "invalid.regex" = "Geçersiz desen";
+
+// External file changes
+"file.changed.title" = "Dosya diskte değişti";
+"file.changed.reload.prompt" = "Yeniden yükleyip kaydedilmemiş değişiklikleri atmak istiyor musunuz?";
+"reload" = "Yeniden yükle";
+"keep.mine" = "Benimkini koru";

@@ -99,3 +99,9 @@
 "whole.word" = "Seluruh Kata";
 "regex" = "Ekspresi Reguler";
 "invalid.regex" = "Pola tidak valid";
+
+// External file changes
+"file.changed.title" = "File berubah di disk";
+"file.changed.reload.prompt" = "Muat ulang dan buang perubahan yang belum disimpan?";
+"reload" = "Muat Ulang";
+"keep.mine" = "Simpan Perubahan Saya";

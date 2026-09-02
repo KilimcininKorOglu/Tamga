@@ -99,3 +99,9 @@
 "whole.word" = "Mot entier";
 "regex" = "Expression régulière";
 "invalid.regex" = "Motif invalide";
+
+// External file changes
+"file.changed.title" = "Le fichier a changé sur le disque";
+"file.changed.reload.prompt" = "Recharger et abandonner vos modifications non enregistrées ?";
+"reload" = "Recharger";
+"keep.mine" = "Conserver mes modifications";

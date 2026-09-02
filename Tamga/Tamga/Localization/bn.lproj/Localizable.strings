@@ -99,3 +99,9 @@
 "whole.word" = "সম্পূর্ণ শব্দ";
 "regex" = "রেগুলার এক্সপ্রেশন";
 "invalid.regex" = "অবৈধ প্যাটার্ন";
+
+// External file changes
+"file.changed.title" = "ফাইল ডিস্কে পরিবর্তিত হয়েছে";
+"file.changed.reload.prompt" = "পুনরায় লোড করে আপনার অসংরক্ষিত পরিবর্তন বাতিল করবেন?";
+"reload" = "পুনরায় লোড";
+"keep.mine" = "আমার পরিবর্তন রাখুন";

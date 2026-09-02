@@ -99,3 +99,9 @@
 "whole.word" = "Parola intera";
 "regex" = "Espressione regolare";
 "invalid.regex" = "Pattern non valido";
+
+// External file changes
+"file.changed.title" = "File modificato su disco";
+"file.changed.reload.prompt" = "Ricaricare e ignorare le modifiche non salvate?";
+"reload" = "Ricarica";
+"keep.mine" = "Mantieni le mie modifiche";

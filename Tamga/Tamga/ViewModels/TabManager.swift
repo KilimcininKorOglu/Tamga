@@ -156,6 +156,16 @@ class TabManager: ObservableObject {
         AppState.shared.addRecentFile(filePath)
     }
 
+    /// Replaces a tab's content with a fresh read from disk and clears its dirty flag,
+    /// used when the file changed underneath an unmodified tab.
+    func reloadTab(id: UUID, content: String, lineEnding: LineEnding) {
+        guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
+        tabs[index].content = content
+        tabs[index].lineEnding = lineEnding
+        tabs[index].isDirty = false
+        tabs[index].lastModifiedAt = Date()
+    }
+
     func setLanguage(_ language: SyntaxLanguage, for id: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
         tabs[index].language = language

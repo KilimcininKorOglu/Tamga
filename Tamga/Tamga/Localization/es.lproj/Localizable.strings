@@ -99,3 +99,9 @@
 "whole.word" = "Palabra completa";
 "regex" = "Expresión regular";
 "invalid.regex" = "Patrón no válido";
+
+// External file changes
+"file.changed.title" = "El archivo cambió en el disco";
+"file.changed.reload.prompt" = "¿Recargar y descartar los cambios no guardados?";
+"reload" = "Recargar";
+"keep.mine" = "Conservar mis cambios";

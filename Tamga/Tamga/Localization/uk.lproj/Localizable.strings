@@ -99,3 +99,9 @@
 "whole.word" = "Слово цілком";
 "regex" = "Регулярний вираз";
 "invalid.regex" = "Неправильний шаблон";
+
+// External file changes
+"file.changed.title" = "Файл змінено на диску";
+"file.changed.reload.prompt" = "Перезавантажити й відхилити незбережені зміни?";
+"reload" = "Перезавантажити";
+"keep.mine" = "Залишити мої зміни";

@@ -99,3 +99,9 @@
 "whole.word" = "単語単位";
 "regex" = "正規表現";
 "invalid.regex" = "無効なパターン";
+
+// External file changes
+"file.changed.title" = "ディスク上のファイルが変更されました";
+"file.changed.reload.prompt" = "再読み込みして未保存の変更を破棄しますか？";
+"reload" = "再読み込み";
+"keep.mine" = "自分の変更を保持";

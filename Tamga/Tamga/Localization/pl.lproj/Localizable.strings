@@ -99,3 +99,9 @@
 "whole.word" = "Całe słowo";
 "regex" = "Wyrażenie regularne";
 "invalid.regex" = "Nieprawidłowy wzorzec";
+
+// External file changes
+"file.changed.title" = "Plik zmieniony na dysku";
+"file.changed.reload.prompt" = "Wczytać ponownie i odrzucić niezapisane zmiany?";
+"reload" = "Wczytaj ponownie";
+"keep.mine" = "Zachowaj moje zmiany";

@@ -99,3 +99,9 @@
 "whole.word" = "全字匹配";
 "regex" = "正则表达式";
 "invalid.regex" = "无效的模式";
+
+// External file changes
+"file.changed.title" = "磁盘上的文件已更改";
+"file.changed.reload.prompt" = "重新加载并放弃未保存的更改？";
+"reload" = "重新加载";
+"keep.mine" = "保留我的更改";

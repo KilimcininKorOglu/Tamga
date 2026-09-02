@@ -99,3 +99,9 @@
 "whole.word" = "Whole Word";
 "regex" = "Regular Expression";
 "invalid.regex" = "Invalid pattern";
+
+// External file changes
+"file.changed.title" = "File changed on disk";
+"file.changed.reload.prompt" = "Reload and discard your unsaved changes?";
+"reload" = "Reload";
+"keep.mine" = "Keep My Changes";

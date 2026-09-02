@@ -99,3 +99,9 @@
 "whole.word" = "पूरा शब्द";
 "regex" = "रेगुलर एक्सप्रेशन";
 "invalid.regex" = "अमान्य पैटर्न";
+
+// External file changes
+"file.changed.title" = "डिस्क पर फ़ाइल बदल गई";
+"file.changed.reload.prompt" = "पुनः लोड करें और असहेजे बदलाव छोड़ें?";
+"reload" = "पुनः लोड करें";
+"keep.mine" = "मेरे बदलाव रखें";

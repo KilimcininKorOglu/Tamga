@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @StateObject private var tabManager = TabManager()
     @StateObject private var documentViewModel = DocumentViewModel()
+    @StateObject private var fileMonitor = FileChangeMonitor()
     @ObservedObject private var appState = AppState.shared
 
     @State private var currentDocumentInfo = DocumentInfo()
@@ -223,6 +224,11 @@ struct ContentView: View {
         .frame(minWidth: 600, minHeight: 400)
         .onAppear {
             restoreSession()
+            fileMonitor.onChange = { url in reloadIfChanged(url) }
+            fileMonitor.sync(with: watchedURLs)
+        }
+        .onChange(of: tabManager.tabs.compactMap { $0.filePath }) { _ in
+            fileMonitor.sync(with: watchedURLs)
         }
         .onDisappear {
             saveSession()
@@ -376,6 +382,41 @@ struct ContentView: View {
                 tabManager.markAsSaved(id: tab.id, filePath: url)
                 tabManager.closeTab(id: tab.id)
             }
+        }
+    }
+
+    // MARK: - External File Changes
+
+    /// File paths of every open tab, the set the monitor should watch.
+    private var watchedURLs: Set<URL> {
+        Set(tabManager.tabs.compactMap { $0.filePath })
+    }
+
+    /// Handles a disk change for `url`. Reads the new content once and, for each tab on
+    /// that path, ignores an identical change (our own save), silently reloads a clean
+    /// tab, or asks before discarding unsaved edits.
+    private func reloadIfChanged(_ url: URL) {
+        guard let (content, lineEnding) = try? FileService.shared.readFileWithLineEnding(at: url) else {
+            return
+        }
+        for tab in tabManager.tabs where tab.filePath == url && tab.content != content {
+            if tab.isDirty {
+                promptReload(tabId: tab.id, name: tab.title, content: content, lineEnding: lineEnding)
+            } else {
+                tabManager.reloadTab(id: tab.id, content: content, lineEnding: lineEnding)
+            }
+        }
+    }
+
+    private func promptReload(tabId: UUID, name: String, content: String, lineEnding: LineEnding) {
+        let alert = NSAlert()
+        alert.messageText = String(localized: "file.changed.title")
+        alert.informativeText = "\(name)\n\(String(localized: "file.changed.reload.prompt"))"
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: String(localized: "reload"))
+        alert.addButton(withTitle: String(localized: "keep.mine"))
+        if alert.runModal() == .alertFirstButtonReturn {
+            tabManager.reloadTab(id: tabId, content: content, lineEnding: lineEnding)
         }
     }
 

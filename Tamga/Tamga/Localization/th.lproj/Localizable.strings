@@ -99,3 +99,9 @@
 "whole.word" = "ทั้งคำ";
 "regex" = "นิพจน์ทั่วไป";
 "invalid.regex" = "รูปแบบไม่ถูกต้อง";
+
+// External file changes
+"file.changed.title" = "ไฟล์เปลี่ยนแปลงบนดิสก์";
+"file.changed.reload.prompt" = "โหลดใหม่และละทิ้งการเปลี่ยนแปลงที่ยังไม่บันทึกหรือไม่?";
+"reload" = "โหลดใหม่";
+"keep.mine" = "เก็บการเปลี่ยนแปลงของฉัน";
