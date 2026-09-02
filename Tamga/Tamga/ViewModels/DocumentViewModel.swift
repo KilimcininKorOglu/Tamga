@@ -249,7 +249,7 @@ class DocumentViewModel: ObservableObject {
                 try fileService.writeFile(content: content, to: path)
                 return path
             } catch {
-                print("Error saving file: \(error)")
+                NSAlert(error: error).runModal()
                 return nil
             }
         } else {
