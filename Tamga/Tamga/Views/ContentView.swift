@@ -393,9 +393,8 @@ struct ContentView: View {
     private func restoreSession() {
         if let session = SessionService.shared.restoreSession() {
             if !session.tabs.isEmpty {
-                // Clear default tab and restore session
-                tabManager.tabs = session.tabs
-                tabManager.activeTabId = session.activeTabId ?? session.tabs.first?.id
+                // Replace the default tab and restore the untitled counter alongside.
+                tabManager.restoreTabs(session.tabs, activeTabId: session.activeTabId)
             }
         }
 

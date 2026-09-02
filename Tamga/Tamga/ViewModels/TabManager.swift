@@ -39,6 +39,22 @@ class TabManager: ObservableObject {
         activeTabId = newTab.id
     }
 
+    /// Replaces the tab list with a restored session and recomputes the untitled
+    /// counter, so the next new tab continues past the highest restored "Untitled N"
+    /// instead of colliding with an existing number.
+    func restoreTabs(_ restoredTabs: [Tab], activeTabId: UUID?) {
+        tabs = restoredTabs
+        self.activeTabId = activeTabId ?? restoredTabs.first?.id
+
+        let untitledPrefix = "\(String(localized: "untitled")) "
+        let highestNumber =
+            restoredTabs
+            .filter { $0.filePath == nil && $0.title.hasPrefix(untitledPrefix) }
+            .compactMap { Int($0.title.dropFirst(untitledPrefix.count)) }
+            .max() ?? 0
+        untitledCounter = highestNumber + 1
+    }
+
     func openTab(with url: URL, content: String) {
         // Check if file is already open
         if let existingTab = tabs.first(where: { $0.filePath == url }) {
