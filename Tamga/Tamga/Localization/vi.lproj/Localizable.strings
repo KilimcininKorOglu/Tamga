@@ -64,6 +64,7 @@
 "print" = "In...";
 "recent.files" = "Tệp gần đây";
 "remove.duplicate.lines" = "Xóa dòng trùng";
+"remove.empty.lines" = "Xóa dòng trống";
 "replace" = "Thay thế";
 "replace.menu" = "Thay thế...";
 "replace.all" = "Thay tất cả";

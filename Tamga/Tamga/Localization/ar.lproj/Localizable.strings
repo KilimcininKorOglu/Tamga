@@ -64,6 +64,7 @@
 "print" = "طباعة...";
 "recent.files" = "الملفات الأخيرة";
 "remove.duplicate.lines" = "إزالة السطور المكررة";
+"remove.empty.lines" = "إزالة الأسطر الفارغة";
 "replace" = "استبدال";
 "replace.menu" = "استبدال...";
 "replace.all" = "استبدال الكل";

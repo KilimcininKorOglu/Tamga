@@ -64,6 +64,7 @@
 "print" = "প্রিন্ট করুন...";
 "recent.files" = "সাম্প্রতিক ফাইল";
 "remove.duplicate.lines" = "ডুপ্লিকেট লাইন মুছুন";
+"remove.empty.lines" = "খালি লাইন মুছুন";
 "replace" = "প্রতিস্থাপন করুন";
 "replace.menu" = "প্রতিস্থাপন করুন...";
 "replace.all" = "সব প্রতিস্থাপন করুন";

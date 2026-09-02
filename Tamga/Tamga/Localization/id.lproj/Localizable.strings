@@ -64,6 +64,7 @@
 "print" = "Cetak...";
 "recent.files" = "File Terbaru";
 "remove.duplicate.lines" = "Hapus Baris Duplikat";
+"remove.empty.lines" = "Hapus Baris Kosong";
 "replace" = "Ganti";
 "replace.menu" = "Ganti...";
 "replace.all" = "Ganti Semua";

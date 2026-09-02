@@ -64,6 +64,7 @@
 "print" = "พิมพ์...";
 "recent.files" = "ไฟล์ล่าสุด";
 "remove.duplicate.lines" = "ลบบรรทัดซ้ำ";
+"remove.empty.lines" = "ลบบรรทัดว่าง";
 "replace" = "แทนที่";
 "replace.menu" = "แทนที่...";
 "replace.all" = "แทนที่ทั้งหมด";

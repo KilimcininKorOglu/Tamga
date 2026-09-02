@@ -172,6 +172,10 @@ struct TamgaCommands: Commands {
                 NotificationCenter.default.post(name: .removeDuplicateLines, object: nil)
             }
 
+            Button(String(localized: "remove.empty.lines")) {
+                NotificationCenter.default.post(name: .removeEmptyLines, object: nil)
+            }
+
             // Change Case submenu
             Menu(String(localized: "change.case")) {
                 Button(String(localized: "uppercase")) {

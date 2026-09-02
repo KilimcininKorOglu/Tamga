@@ -64,6 +64,7 @@
 "print" = "Print...";
 "recent.files" = "Recent Files";
 "remove.duplicate.lines" = "Remove Duplicate Lines";
+"remove.empty.lines" = "Remove Empty Lines";
 "replace" = "Replace";
 "replace.menu" = "Replace...";
 "replace.all" = "Replace All";

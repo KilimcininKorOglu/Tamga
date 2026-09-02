@@ -64,6 +64,7 @@
 "print" = "印刷...";
 "recent.files" = "最近使った項目";
 "remove.duplicate.lines" = "重複行を削除";
+"remove.empty.lines" = "空行を削除";
 "replace" = "置換";
 "replace.menu" = "置換...";
 "replace.all" = "すべて置換";

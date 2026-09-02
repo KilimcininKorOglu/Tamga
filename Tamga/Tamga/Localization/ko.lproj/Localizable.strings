@@ -64,6 +64,7 @@
 "print" = "인쇄...";
 "recent.files" = "최근 파일";
 "remove.duplicate.lines" = "중복 줄 제거";
+"remove.empty.lines" = "빈 줄 제거";
 "replace" = "바꾸기";
 "replace.menu" = "바꾸기...";
 "replace.all" = "모두 바꾸기";

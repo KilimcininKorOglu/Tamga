@@ -64,6 +64,7 @@
 "print" = "Yazdır...";
 "recent.files" = "Son Dosyalar";
 "remove.duplicate.lines" = "Tekrar Eden Satırları Kaldır";
+"remove.empty.lines" = "Boş Satırları Kaldır";
 "replace" = "Değiştir";
 "replace.menu" = "Değiştir...";
 "replace.all" = "Tümünü Değiştir";

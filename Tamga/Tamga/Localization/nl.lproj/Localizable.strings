@@ -64,6 +64,7 @@
 "print" = "Afdrukken...";
 "recent.files" = "Recente bestanden";
 "remove.duplicate.lines" = "Verwijder duplicaten";
+"remove.empty.lines" = "Verwijder lege regels";
 "replace" = "Vervang";
 "replace.menu" = "Vervang...";
 "replace.all" = "Vervang alles";

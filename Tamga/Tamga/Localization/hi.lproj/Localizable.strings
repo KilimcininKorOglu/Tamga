@@ -64,6 +64,7 @@
 "print" = "प्रिंट करें...";
 "recent.files" = "हाल की फ़ाइलें";
 "remove.duplicate.lines" = "डुप्लिकेट पंक्तियां हटाएं";
+"remove.empty.lines" = "खाली पंक्तियां हटाएं";
 "replace" = "बदलें";
 "replace.menu" = "बदलें...";
 "replace.all" = "सभी बदलें";

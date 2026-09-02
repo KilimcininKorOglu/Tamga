@@ -23,6 +23,11 @@ extension TamgaTextView {
         removeDuplicateLines()
     }
 
+    @objc func handleRemoveEmptyLines() {
+        guard window?.firstResponder === self else { return }
+        removeEmptyLines()
+    }
+
     @objc func handleUppercase() {
         guard window?.firstResponder === self else { return }
         changeCase(.uppercase)
@@ -226,6 +231,20 @@ extension TamgaTextView {
         }
 
         let newContent = uniqueLines.joined(separator: "\n")
+        let fullRange = NSRange(location: 0, length: (string as NSString).length)
+        if replaceCharactersUndoable(in: fullRange, with: newContent) {
+            setSelectedRange(NSRange(location: 0, length: 0))
+        }
+    }
+
+    // MARK: - Remove Empty Lines
+
+    private func removeEmptyLines() {
+        clearAllFolds()
+        let lines = string.components(separatedBy: "\n")
+        let keptLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+        let newContent = keptLines.joined(separator: "\n")
         let fullRange = NSRange(location: 0, length: (string as NSString).length)
         if replaceCharactersUndoable(in: fullRange, with: newContent) {
             setSelectedRange(NSRange(location: 0, length: 0))

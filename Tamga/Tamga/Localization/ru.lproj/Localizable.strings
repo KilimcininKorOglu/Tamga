@@ -64,6 +64,7 @@
 "print" = "Печать...";
 "recent.files" = "Недавние файлы";
 "remove.duplicate.lines" = "Удалить дубликаты строк";
+"remove.empty.lines" = "Удалить пустые строки";
 "replace" = "Заменить";
 "replace.menu" = "Заменить...";
 "replace.all" = "Заменить все";

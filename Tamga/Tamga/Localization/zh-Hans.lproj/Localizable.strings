@@ -64,6 +64,7 @@
 "print" = "打印...";
 "recent.files" = "最近文件";
 "remove.duplicate.lines" = "删除重复行";
+"remove.empty.lines" = "删除空行";
 "replace" = "替换";
 "replace.menu" = "替换...";
 "replace.all" = "全部替换";
