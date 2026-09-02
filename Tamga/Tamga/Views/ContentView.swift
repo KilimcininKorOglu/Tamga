@@ -338,7 +338,11 @@ struct ContentView: View {
         for tab in dirtyTabs {
             if let filePath = tab.filePath {
                 do {
-                    try FileService.shared.writeFile(content: tab.content, to: filePath)
+                    try FileService.shared.writeFile(
+                    content: tab.content,
+                    to: filePath,
+                    encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+                )
                     tabManager.markAsSaved(id: tab.id, filePath: filePath)
                 } catch {
                     print("Auto-save failed for \(filePath.lastPathComponent): \(error)")

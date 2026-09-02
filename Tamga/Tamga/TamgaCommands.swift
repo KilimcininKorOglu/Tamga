@@ -357,7 +357,8 @@ struct TamgaCommands: Commands {
         if let url = await documentViewModel?.saveFile(
             content: tab.content,
             existingPath: tab.filePath,
-            suggestedName: tab.suggestedFileName
+            suggestedName: tab.suggestedFileName,
+            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
         ) {
             tabManager.markAsSaved(id: tab.id, filePath: url)
         }
@@ -368,7 +369,11 @@ struct TamgaCommands: Commands {
             let tab = tabManager.activeTab
         else { return }
 
-        if let url = await documentViewModel?.saveFileAs(content: tab.content, suggestedName: tab.suggestedFileName) {
+        if let url = await documentViewModel?.saveFileAs(
+            content: tab.content,
+            suggestedName: tab.suggestedFileName,
+            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+        ) {
             tabManager.markAsSaved(id: tab.id, filePath: url)
         }
     }
