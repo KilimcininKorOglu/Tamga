@@ -148,24 +148,8 @@ struct SidebarView: View {
     }
 
     private func fileIcon(for url: URL) -> String {
-        let ext = url.pathExtension.lowercased()
-        switch ext {
-        case "swift":
-            return "swift"
-        case "py":
-            return "text.word.spacing"
-        case "js", "ts":
-            return "curlybraces"
-        case "json":
-            return "curlybraces.square"
-        case "html", "htm":
-            return "chevron.left.forwardslash.chevron.right"
-        case "css":
-            return "paintbrush"
-        case "md", "markdown":
-            return "text.justify"
-        default:
-            return "doc.text"
-        }
+        // Derive the icon from the detected language so recent-file rows use the same
+        // table as open tabs, covering php, sql, shell, yaml, and xml too.
+        fileIcon(for: SyntaxLanguage.detect(from: url))
     }
 }
