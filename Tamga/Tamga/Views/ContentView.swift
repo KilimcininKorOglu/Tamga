@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -313,14 +314,19 @@ struct ContentView: View {
             FileManager.default.createFile(atPath: url.path, contents: nil)
         }
 
-        // Dosyayı aç
+        // Open the file. If it cannot be decoded, warn the user instead of opening a
+        // blank tab bound to the path, because saving that blank tab would overwrite
+        // the real file content.
         do {
             let content = try FileService.shared.readFile(at: url)
             tabManager.openTab(with: url, content: content)
             appState.addRecentFile(url)
         } catch {
-            // Boş dosya olarak aç
-            tabManager.openTab(with: url, content: "")
+            let alert = NSAlert()
+            alert.messageText = String(localized: "error.decoding.failed")
+            alert.informativeText = url.lastPathComponent
+            alert.alertStyle = .warning
+            alert.runModal()
         }
     }
 
