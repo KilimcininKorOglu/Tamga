@@ -123,8 +123,20 @@ class SessionService {
             return (tabs, sessionData.activeTabId)
         } catch {
             print("Failed to restore session: \(error)")
+            // Move the unreadable file aside so the next save does not overwrite it.
+            // The preserved copy keeps the previous tabs available for manual recovery.
+            quarantineCorruptSession()
             return nil
         }
+    }
+
+    /// Renames an unreadable session file so a fresh session can be written without
+    /// destroying the corrupt one, which may still hold recoverable tab content.
+    private func quarantineCorruptSession() {
+        let backupURL = applicationSupportDirectory.appendingPathComponent(
+            "session-corrupt-\(Int(Date().timeIntervalSince1970)).json"
+        )
+        try? fileManager.moveItem(at: sessionFileURL, to: backupURL)
     }
 
     // MARK: - Clear Session
