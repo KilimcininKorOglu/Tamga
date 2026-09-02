@@ -68,22 +68,42 @@ enum CLIInstaller {
         let destinationPath = "\(binPath)/tamga"
 
         if !fileManager.fileExists(atPath: binPath) {
-            try runAsAdministrator("mkdir -p '\(binPath)'")
+            try runAsAdministrator("mkdir -p \(shellQuote(binPath))")
         }
 
         let tempPath = NSTemporaryDirectory() + "tamga-cli.sh"
         try launcherScript.write(toFile: tempPath, atomically: true, encoding: .utf8)
         defer { try? fileManager.removeItem(atPath: tempPath) }
 
-        try runAsAdministrator("cp '\(tempPath)' '\(destinationPath)' && chmod +x '\(destinationPath)'")
+        try runAsAdministrator(
+            "cp \(shellQuote(tempPath)) \(shellQuote(destinationPath)) "
+                + "&& chmod +x \(shellQuote(destinationPath))"
+        )
     }
 
     private static func runAsAdministrator(_ shellCommand: String) throws {
         let process = Process()
         process.launchPath = "/usr/bin/osascript"
-        process.arguments = ["-e", "do shell script \"\(shellCommand)\" with administrator privileges"]
+        let appleScript = "do shell script \(appleScriptString(shellCommand)) with administrator privileges"
+        process.arguments = ["-e", appleScript]
         try process.run()
         process.waitUntilExit()
+    }
+
+    /// Wraps a string in single quotes so the shell treats it as one literal word,
+    /// escaping any embedded single quote. Prevents path text from breaking the command.
+    private static func shellQuote(_ value: String) -> String {
+        "'" + value.replacingOccurrences(of: "'", with: "'\\''") + "'"
+    }
+
+    /// Encodes a string as an AppleScript string literal, escaping backslashes and
+    /// double quotes so the shell command cannot break out of the `do shell script` argument.
+    private static func appleScriptString(_ value: String) -> String {
+        let escaped =
+            value
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        return "\"\(escaped)\""
     }
 
     private static func showAlert(title: String, message: String, style: NSAlert.Style) {
