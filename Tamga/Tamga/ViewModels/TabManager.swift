@@ -7,9 +7,15 @@ class TabManager: ObservableObject {
     @Published var tabs: [Tab] = []
     @Published var activeTabId: UUID?
     @Published var draggedTab: Tab?
+    /// Recently closed tabs, newest last, for Reopen Closed Tab. Published so the menu
+    /// item can enable itself as soon as the first tab is closed.
+    @Published private(set) var closedTabs: [Tab] = []
 
     private var untitledCounter: Int = 1
     private var sessionSaveTimer: Timer?
+    private let maxClosedTabs = 20
+
+    var canReopenClosedTab: Bool { !closedTabs.isEmpty }
 
     var activeTab: Tab? {
         guard let id = activeTabId else { return nil }
@@ -80,6 +86,7 @@ class TabManager: ObservableObject {
     func closeTab(id: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
 
+        rememberClosedTab(tabs[index])
         tabs.remove(at: index)
 
         if tabs.isEmpty {
@@ -95,6 +102,23 @@ class TabManager: ObservableObject {
     func closeActiveTab() {
         guard let id = activeTabId else { return }
         closeTab(id: id)
+    }
+
+    /// Pushes a closed tab onto the reopen stack, skipping an empty untitled tab because
+    /// reopening a blank buffer has no value. Caps the stack so it cannot grow forever.
+    private func rememberClosedTab(_ tab: Tab) {
+        guard tab.filePath != nil || !tab.content.isEmpty else { return }
+        closedTabs.append(tab)
+        if closedTabs.count > maxClosedTabs {
+            closedTabs.removeFirst()
+        }
+    }
+
+    /// Reopens the most recently closed tab and makes it active.
+    func reopenLastClosedTab() {
+        guard let tab = closedTabs.popLast() else { return }
+        tabs.append(tab)
+        activeTabId = tab.id
     }
 
     func closeAllTabs() {
@@ -171,9 +195,13 @@ class TabManager: ObservableObject {
         tabs[index].language = language
     }
 
+    /// Changes the encoding and marks the tab dirty, because the new encoding is written
+    /// only on the next save (an encoding conversion).
     func setEncoding(_ encoding: String, for id: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
+        guard tabs[index].encoding != encoding else { return }
         tabs[index].encoding = encoding
+        tabs[index].isDirty = true
     }
 
     /// Changes the line-ending style and marks the tab dirty, because the choice only

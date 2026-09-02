@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Yeniden yükleyip kaydedilmemiş değişiklikleri atmak istiyor musunuz?";
 "reload" = "Yeniden yükle";
 "keep.mine" = "Benimkini koru";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Kapatılan sekmeyi yeniden aç";

@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "再読み込みして未保存の変更を破棄しますか？";
 "reload" = "再読み込み";
 "keep.mine" = "自分の変更を保持";
+
+// Reopen closed tab
+"reopen.closed.tab" = "閉じたタブを再度開く";

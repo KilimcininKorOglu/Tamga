@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Ricaricare e ignorare le modifiche non salvate?";
 "reload" = "Ricarica";
 "keep.mine" = "Mantieni le mie modifiche";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Riapri scheda chiusa";

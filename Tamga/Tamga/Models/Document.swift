@@ -83,20 +83,48 @@ enum LineEnding: String, Codable, CaseIterable {
     }
 }
 
-/// File encoding options
+/// File encoding options. Raw values double as the status-bar labels, so the selector
+/// lists exactly the encodings the app can write.
 enum FileEncoding: String, CaseIterable {
     case utf8 = "UTF-8"
     case utf16 = "UTF-16"
+    case utf16LE = "UTF-16 LE"
+    case utf16BE = "UTF-16 BE"
     case ascii = "ASCII"
     case isoLatin1 = "ISO-8859-1"
+    case isoLatin2 = "ISO-8859-2"
+    case windows1252 = "Windows-1252"
+    case windows1250 = "Windows-1250"
+    case shiftJIS = "Shift JIS"
+    case eucJP = "EUC-JP"
+    case gb18030 = "GB18030"
+    case big5 = "Big5"
+
+    /// A `CFStringEncodings` value bridged into a `String.Encoding`, for encodings with
+    /// no direct `String.Encoding` constant.
+    private static func cf(_ value: CFStringEncodings) -> String.Encoding {
+        String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(value.rawValue)))
+    }
+
+    /// Static map instead of a `switch`, to stay under the complexity limit as the list grows.
+    private static let encodings: [FileEncoding: String.Encoding] = [
+        .utf8: .utf8,
+        .utf16: .utf16,
+        .utf16LE: .utf16LittleEndian,
+        .utf16BE: .utf16BigEndian,
+        .ascii: .ascii,
+        .isoLatin1: .isoLatin1,
+        .isoLatin2: .isoLatin2,
+        .windows1252: .windowsCP1252,
+        .windows1250: .windowsCP1250,
+        .shiftJIS: .shiftJIS,
+        .eucJP: .japaneseEUC,
+        .gb18030: cf(.GB_18030_2000),
+        .big5: cf(.big5)
+    ]
 
     var encoding: String.Encoding {
-        switch self {
-        case .utf8: return .utf8
-        case .utf16: return .utf16
-        case .ascii: return .ascii
-        case .isoLatin1: return .isoLatin1
-        }
+        Self.encodings[self] ?? .utf8
     }
 
     static func detect(from data: Data) -> FileEncoding {

@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "পুনরায় লোড করে আপনার অসংরক্ষিত পরিবর্তন বাতিল করবেন?";
 "reload" = "পুনরায় লোড";
 "keep.mine" = "আমার পরিবর্তন রাখুন";
+
+// Reopen closed tab
+"reopen.closed.tab" = "বন্ধ করা ট্যাব পুনরায় খুলুন";

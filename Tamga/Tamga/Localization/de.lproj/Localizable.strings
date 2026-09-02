@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Neu laden und ungespeicherte Änderungen verwerfen?";
 "reload" = "Neu laden";
 "keep.mine" = "Meine behalten";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Geschlossenen Tab erneut öffnen";

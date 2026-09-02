@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Tải lại và bỏ các thay đổi chưa lưu?";
 "reload" = "Tải lại";
 "keep.mine" = "Giữ thay đổi của tôi";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Mở lại thẻ đã đóng";

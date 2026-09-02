@@ -10,21 +10,8 @@ struct StatusBarView: View {
     let onEncodingChange: (String) -> Void
     let onLineEndingChange: (LineEnding) -> Void
 
-    private static let availableEncodings = [
-        "UTF-8",
-        "UTF-16",
-        "UTF-16 LE",
-        "UTF-16 BE",
-        "ASCII",
-        "ISO-8859-1",
-        "ISO-8859-2",
-        "Windows-1252",
-        "Windows-1250",
-        "Shift JIS",
-        "EUC-JP",
-        "GB2312",
-        "Big5"
-    ]
+    // Sourced from FileEncoding so the selector only lists encodings the app can write.
+    private static let availableEncodings = FileEncoding.allCases.map(\.rawValue)
 
     var body: some View {
         HStack(spacing: 16) {

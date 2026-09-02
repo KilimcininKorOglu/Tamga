@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "다시 불러오고 저장하지 않은 변경 사항을 취소할까요?";
 "reload" = "다시 불러오기";
 "keep.mine" = "내 변경 사항 유지";
+
+// Reopen closed tab
+"reopen.closed.tab" = "닫은 탭 다시 열기";

@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "重新加载并放弃未保存的更改？";
 "reload" = "重新加载";
 "keep.mine" = "保留我的更改";
+
+// Reopen closed tab
+"reopen.closed.tab" = "重新打开已关闭的标签页";

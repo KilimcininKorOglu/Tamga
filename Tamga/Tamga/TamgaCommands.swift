@@ -85,6 +85,12 @@ struct TamgaCommands: Commands {
             }
             .keyboardShortcut("w", modifiers: [.command, .shift, .option])
 
+            Button(String(localized: "reopen.closed.tab")) {
+                tabManager?.reopenLastClosedTab()
+            }
+            .keyboardShortcut("t", modifiers: [.command, .shift])
+            .disabled(!(tabManager?.canReopenClosedTab ?? false))
+
             Divider()
 
             // Recent files submenu

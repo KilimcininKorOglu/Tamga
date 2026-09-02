@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Wczytać ponownie i odrzucić niezapisane zmiany?";
 "reload" = "Wczytaj ponownie";
 "keep.mine" = "Zachowaj moje zmiany";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Otwórz ponownie zamkniętą kartę";

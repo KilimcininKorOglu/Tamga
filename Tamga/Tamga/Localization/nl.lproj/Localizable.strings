@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Herladen en niet-opgeslagen wijzigingen negeren?";
 "reload" = "Herladen";
 "keep.mine" = "Mijn wijzigingen behouden";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Gesloten tabblad opnieuw openen";

@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Muat ulang dan buang perubahan yang belum disimpan?";
 "reload" = "Muat Ulang";
 "keep.mine" = "Simpan Perubahan Saya";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Buka Kembali Tab yang Ditutup";

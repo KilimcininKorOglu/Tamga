@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "पुनः लोड करें और असहेजे बदलाव छोड़ें?";
 "reload" = "पुनः लोड करें";
 "keep.mine" = "मेरे बदलाव रखें";
+
+// Reopen closed tab
+"reopen.closed.tab" = "बंद टैब फिर से खोलें";

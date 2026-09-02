@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Reload and discard your unsaved changes?";
 "reload" = "Reload";
 "keep.mine" = "Keep My Changes";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Reopen Closed Tab";

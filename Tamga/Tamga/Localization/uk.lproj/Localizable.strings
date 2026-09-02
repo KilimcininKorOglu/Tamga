@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Перезавантажити й відхилити незбережені зміни?";
 "reload" = "Перезавантажити";
 "keep.mine" = "Залишити мої зміни";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Знову відкрити закриту вкладку";

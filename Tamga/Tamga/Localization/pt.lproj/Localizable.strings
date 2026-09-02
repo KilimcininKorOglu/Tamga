@@ -105,3 +105,6 @@
 "file.changed.reload.prompt" = "Recarregar e descartar as alterações não salvas?";
 "reload" = "Recarregar";
 "keep.mine" = "Manter minhas alterações";
+
+// Reopen closed tab
+"reopen.closed.tab" = "Reabrir aba fechada";
