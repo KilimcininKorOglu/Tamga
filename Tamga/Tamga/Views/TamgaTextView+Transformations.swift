@@ -280,7 +280,7 @@ extension TamgaTextView {
             rangeToReplace = selectedRange
         } else {
             textToFormat = text
-            rangeToReplace = NSRange(location: 0, length: text.count)
+            rangeToReplace = NSRange(location: 0, length: (text as NSString).length)
         }
 
         // Try to parse and format JSON
