@@ -213,12 +213,13 @@ struct ContentView: View {
             saveSession()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
-            if appState.isAutoSaveEnabled {
-                SessionService.shared.saveSessionInBackground(
-                    tabs: tabManager.tabs,
-                    activeTabId: tabManager.activeTabId
-                )
-            }
+            // Persist the session on every focus loss, not only when Auto Save is on, so
+            // unsaved and untitled tabs survive a crash or force-quit that fires neither
+            // onDisappear nor willTerminate.
+            SessionService.shared.saveSessionInBackground(
+                tabs: tabManager.tabs,
+                activeTabId: tabManager.activeTabId
+            )
         }
         .onChange(of: tabManager.activeTabId) { _ in
             if let tab = tabManager.activeTab {
