@@ -86,8 +86,20 @@ enum CLIInstaller {
         process.launchPath = "/usr/bin/osascript"
         let appleScript = "do shell script \(appleScriptString(shellCommand)) with administrator privileges"
         process.arguments = ["-e", appleScript]
+
+        let errorPipe = Pipe()
+        process.standardError = errorPipe
         try process.run()
         process.waitUntilExit()
+
+        // A cancelled password prompt or a failed command exits non-zero. Surface it
+        // as an error so install() does not report a success that never happened.
+        guard process.terminationStatus == 0 else {
+            let data = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            let detail = String(data: data, encoding: .utf8)?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            throw CLIInstallerError.commandFailed(detail)
+        }
     }
 
     /// Wraps a string in single quotes so the shell treats it as one literal word,
@@ -104,6 +116,18 @@ enum CLIInstaller {
             .replacingOccurrences(of: "\\", with: "\\\\")
             .replacingOccurrences(of: "\"", with: "\\\"")
         return "\"\(escaped)\""
+    }
+
+    /// Failure of the privileged install command, carrying the osascript error text.
+    private enum CLIInstallerError: LocalizedError {
+        case commandFailed(String)
+
+        var errorDescription: String? {
+            switch self {
+            case .commandFailed(let detail):
+                return detail.isEmpty ? String(localized: "install.cli.error.title") : detail
+            }
+        }
     }
 
     private static func showAlert(title: String, message: String, style: NSAlert.Style) {
