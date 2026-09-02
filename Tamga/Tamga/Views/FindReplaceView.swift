@@ -16,7 +16,7 @@ struct FindReplaceView: View {
     @FocusState private var isSearchFocused: Bool
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             // Search row
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
@@ -25,16 +25,20 @@ struct FindReplaceView: View {
 
                 TextField(String(localized: "find.placeholder"), text: $searchText)
                     .textFieldStyle(.plain)
+                    .frame(width: 220)
                     .focused($isSearchFocused)
                     .onSubmit {
                         onFindNext()
                     }
 
+                // Match counter next to the field, so the count stays beside the query
+                // instead of being pushed to the far window edge.
                 if !searchText.isEmpty {
                     Text(matchCount > 0 ? "\(currentMatch + 1)/\(matchCount)" : String(localized: "no.results"))
                         .font(.caption)
                         .foregroundColor(matchCount > 0 ? .secondary : .red)
-                        .frame(minWidth: 50)
+                        .frame(minWidth: 44, alignment: .trailing)
+                        .monospacedDigit()
                 }
 
                 Button(action: onFindPrevious) {
@@ -50,6 +54,9 @@ struct FindReplaceView: View {
                 .buttonStyle(.borderless)
                 .disabled(matchCount == 0)
                 .help(String(localized: "find.next"))
+
+                Divider()
+                    .frame(height: 16)
 
                 Button(action: { showReplace.toggle() }) {
                     HStack(spacing: 4) {
@@ -77,6 +84,7 @@ struct FindReplaceView: View {
 
                     TextField(String(localized: "replace.placeholder"), text: $replaceText)
                         .textFieldStyle(.plain)
+                        .frame(width: 220)
                         .onSubmit {
                             onReplace()
                         }

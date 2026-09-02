@@ -164,9 +164,9 @@ struct ContentView: View {
                 }
             }
 
-            // Find & Replace Panel
+            // Find & Replace Panel, centered horizontally below the tab bar.
             if documentViewModel.isSearchVisible {
-                VStack {
+                VStack(spacing: 0) {
                     Spacer().frame(height: 44)  // Below tab bar
                     FindReplaceView(
                         searchText: $documentViewModel.searchText,
@@ -180,8 +180,10 @@ struct ContentView: View {
                         onReplace: { replaceCurrentMatch() },
                         onReplaceAll: { replaceAllMatches() }
                     )
+                    .fixedSize()
                     Spacer()
                 }
+                .frame(maxWidth: .infinity)
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
