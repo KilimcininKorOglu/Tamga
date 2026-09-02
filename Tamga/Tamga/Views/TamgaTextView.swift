@@ -63,20 +63,21 @@ class TamgaTextView: NSTextView {
         layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { [weak self] (_, _, _, charRange, _) in
             guard let self = self else { return }
 
-            let lineString = (text as NSString).substring(with: charRange)
+            let lineString = (text as NSString).substring(with: charRange) as NSString
 
-            for (index, char) in lineString.enumerated() {
-                let charIndex = charRange.location + index
-                guard charIndex < text.count else { continue }
+            // Walk UTF-16 units so the character index matches the layout manager's
+            // NSRange semantics; the invisible characters below are all single-unit ASCII.
+            for offset in 0..<lineString.length {
+                let charIndex = charRange.location + offset
+                guard charIndex < textStorage.length else { continue }
                 if isFolded(charIndex) { continue }
 
                 var symbol: String?
-                if char == " " {
-                    symbol = self.spaceSymbol
-                } else if char == "\t" {
-                    symbol = self.tabSymbol
-                } else if char == "\n" {
-                    symbol = self.newlineSymbol
+                switch lineString.character(at: offset) {
+                case 0x20: symbol = self.spaceSymbol
+                case 0x09: symbol = self.tabSymbol
+                case 0x0A: symbol = self.newlineSymbol
+                default: break
                 }
 
                 if let symbol = symbol {
