@@ -93,3 +93,9 @@
 "words" = "palabras";
 "zoom.in" = "Acercar";
 "zoom.out" = "Alejar";
+
+// Find options
+"case.sensitive" = "Coincidir mayúsculas";
+"whole.word" = "Palabra completa";
+"regex" = "Expresión regular";
+"invalid.regex" = "Patrón no válido";

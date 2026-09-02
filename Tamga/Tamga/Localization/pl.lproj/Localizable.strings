@@ -93,3 +93,9 @@
 "words" = "słów";
 "zoom.in" = "Powiększ";
 "zoom.out" = "Pomniejsz";
+
+// Find options
+"case.sensitive" = "Uwzględnij wielkość liter";
+"whole.word" = "Całe słowo";
+"regex" = "Wyrażenie regularne";
+"invalid.regex" = "Nieprawidłowy wzorzec";

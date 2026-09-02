@@ -93,3 +93,9 @@
 "words" = "단어";
 "zoom.in" = "확대";
 "zoom.out" = "축소";
+
+// Find options
+"case.sensitive" = "대소문자 구분";
+"whole.word" = "단어 단위";
+"regex" = "정규 표현식";
+"invalid.regex" = "잘못된 패턴";

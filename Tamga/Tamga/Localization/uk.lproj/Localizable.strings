@@ -93,3 +93,9 @@
 "words" = "слів";
 "zoom.in" = "Збільшити";
 "zoom.out" = "Зменшити";
+
+// Find options
+"case.sensitive" = "Враховувати регістр";
+"whole.word" = "Слово цілком";
+"regex" = "Регулярний вираз";
+"invalid.regex" = "Неправильний шаблон";

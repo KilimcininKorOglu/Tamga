@@ -93,3 +93,9 @@
 "words" = "كلمات";
 "zoom.in" = "تكبير";
 "zoom.out" = "تصغير";
+
+// Find options
+"case.sensitive" = "مطابقة حالة الأحرف";
+"whole.word" = "كلمة كاملة";
+"regex" = "تعبير نمطي";
+"invalid.regex" = "نمط غير صالح";

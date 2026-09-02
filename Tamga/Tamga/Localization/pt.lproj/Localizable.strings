@@ -93,3 +93,9 @@
 "words" = "palavras";
 "zoom.in" = "Aumentar zoom";
 "zoom.out" = "Diminuir zoom";
+
+// Find options
+"case.sensitive" = "Diferenciar maiúsculas";
+"whole.word" = "Palavra inteira";
+"regex" = "Expressão regular";
+"invalid.regex" = "Padrão inválido";

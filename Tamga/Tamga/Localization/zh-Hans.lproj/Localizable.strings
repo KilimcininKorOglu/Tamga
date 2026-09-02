@@ -93,3 +93,9 @@
 "words" = "词";
 "zoom.in" = "放大";
 "zoom.out" = "缩小";
+
+// Find options
+"case.sensitive" = "区分大小写";
+"whole.word" = "全字匹配";
+"regex" = "正则表达式";
+"invalid.regex" = "无效的模式";

@@ -93,3 +93,9 @@
 "words" = "слов";
 "zoom.in" = "Увеличить";
 "zoom.out" = "Уменьшить";
+
+// Find options
+"case.sensitive" = "Учитывать регистр";
+"whole.word" = "Слово целиком";
+"regex" = "Регулярное выражение";
+"invalid.regex" = "Неверный шаблон";

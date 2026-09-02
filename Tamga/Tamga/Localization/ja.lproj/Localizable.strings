@@ -93,3 +93,9 @@
 "words" = "単語";
 "zoom.in" = "拡大";
 "zoom.out" = "縮小";
+
+// Find options
+"case.sensitive" = "大文字と小文字を区別";
+"whole.word" = "単語単位";
+"regex" = "正規表現";
+"invalid.regex" = "無効なパターン";

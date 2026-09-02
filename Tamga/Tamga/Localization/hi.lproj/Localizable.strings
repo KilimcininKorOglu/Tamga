@@ -93,3 +93,9 @@
 "words" = "शब्द";
 "zoom.in" = "ज़ूम इन";
 "zoom.out" = "ज़ूम आउट";
+
+// Find options
+"case.sensitive" = "केस मिलाएँ";
+"whole.word" = "पूरा शब्द";
+"regex" = "रेगुलर एक्सप्रेशन";
+"invalid.regex" = "अमान्य पैटर्न";

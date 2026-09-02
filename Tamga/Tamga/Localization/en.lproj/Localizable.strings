@@ -93,3 +93,9 @@
 "words" = "words";
 "zoom.in" = "Zoom In";
 "zoom.out" = "Zoom Out";
+
+// Find options
+"case.sensitive" = "Match Case";
+"whole.word" = "Whole Word";
+"regex" = "Regular Expression";
+"invalid.regex" = "Invalid pattern";

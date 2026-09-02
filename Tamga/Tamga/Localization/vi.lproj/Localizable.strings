@@ -93,3 +93,9 @@
 "words" = "từ";
 "zoom.in" = "Phóng to";
 "zoom.out" = "Thu nhỏ";
+
+// Find options
+"case.sensitive" = "Phân biệt hoa thường";
+"whole.word" = "Nguyên từ";
+"regex" = "Biểu thức chính quy";
+"invalid.regex" = "Mẫu không hợp lệ";

@@ -93,3 +93,9 @@
 "words" = "kelime";
 "zoom.in" = "Yakınlaştır";
 "zoom.out" = "Uzaklaştır";
+
+// Find options
+"case.sensitive" = "Büyük/küçük harf duyarlı";
+"whole.word" = "Tam sözcük";
+"regex" = "Düzenli ifade";
+"invalid.regex" = "Geçersiz desen";

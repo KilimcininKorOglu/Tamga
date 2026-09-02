@@ -6,14 +6,44 @@ struct FindReplaceView: View {
     @Binding var replaceText: String
     @Binding var isVisible: Bool
     @Binding var showReplace: Bool
+    @Binding var isRegexEnabled: Bool
+    @Binding var isCaseSensitive: Bool
+    @Binding var isWholeWord: Bool
     let matchCount: Int
     let currentMatch: Int
+    let isSearchInvalid: Bool
     let onFindNext: () -> Void
     let onFindPrevious: () -> Void
     let onReplace: () -> Void
     let onReplaceAll: () -> Void
 
     @FocusState private var isSearchFocused: Bool
+
+    /// Counter text: an invalid-regex notice, the match position, or a no-results notice.
+    private var counterLabel: String {
+        if isSearchInvalid { return String(localized: "invalid.regex") }
+        if matchCount > 0 { return "\(currentMatch + 1)/\(matchCount)" }
+        return String(localized: "no.results")
+    }
+
+    private var counterColor: Color {
+        (isSearchInvalid || matchCount == 0) ? .red : .secondary
+    }
+
+    /// A small toggle button for a search option (case, whole word, regex). Tints its
+    /// background when active, so the enabled options read at a glance.
+    private func optionToggle(symbol: String, isOn: Binding<Bool>, help: String) -> some View {
+        Button {
+            isOn.wrappedValue.toggle()
+        } label: {
+            Image(systemName: symbol)
+                .frame(width: 20, height: 18)
+                .background(isOn.wrappedValue ? Color.accentColor.opacity(0.3) : Color.clear)
+                .cornerRadius(4)
+        }
+        .buttonStyle(.borderless)
+        .help(String(localized: String.LocalizationValue(help)))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -31,12 +61,17 @@ struct FindReplaceView: View {
                         onFindNext()
                     }
 
+                // Search option toggles: case, whole word, regex.
+                optionToggle(symbol: "textformat", isOn: $isCaseSensitive, help: "case.sensitive")
+                optionToggle(symbol: "textformat.abc", isOn: $isWholeWord, help: "whole.word")
+                optionToggle(symbol: "asterisk", isOn: $isRegexEnabled, help: "regex")
+
                 // Match counter next to the field, so the count stays beside the query
                 // instead of being pushed to the far window edge.
                 if !searchText.isEmpty {
-                    Text(matchCount > 0 ? "\(currentMatch + 1)/\(matchCount)" : String(localized: "no.results"))
+                    Text(counterLabel)
                         .font(.caption)
-                        .foregroundColor(matchCount > 0 ? .secondary : .red)
+                        .foregroundColor(counterColor)
                         .frame(minWidth: 44, alignment: .trailing)
                         .monospacedDigit()
                 }
@@ -122,8 +157,12 @@ struct FindReplaceView: View {
             replaceText: .constant(""),
             isVisible: .constant(true),
             showReplace: .constant(true),
+            isRegexEnabled: .constant(false),
+            isCaseSensitive: .constant(false),
+            isWholeWord: .constant(false),
             matchCount: 5,
             currentMatch: 2,
+            isSearchInvalid: false,
             onFindNext: {},
             onFindPrevious: {},
             onReplace: {},

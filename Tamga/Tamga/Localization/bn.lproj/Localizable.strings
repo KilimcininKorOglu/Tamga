@@ -93,3 +93,9 @@
 "words" = "শব্দ";
 "zoom.in" = "জুম ইন";
 "zoom.out" = "জুম আউট";
+
+// Find options
+"case.sensitive" = "অক্ষরের ছোট-বড় মিল";
+"whole.word" = "সম্পূর্ণ শব্দ";
+"regex" = "রেগুলার এক্সপ্রেশন";
+"invalid.regex" = "অবৈধ প্যাটার্ন";

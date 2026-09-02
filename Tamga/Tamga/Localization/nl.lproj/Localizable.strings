@@ -93,3 +93,9 @@
 "words" = "woorden";
 "zoom.in" = "Zoom in";
 "zoom.out" = "Zoom uit";
+
+// Find options
+"case.sensitive" = "Hoofdlettergevoelig";
+"whole.word" = "Heel woord";
+"regex" = "Reguliere expressie";
+"invalid.regex" = "Ongeldig patroon";

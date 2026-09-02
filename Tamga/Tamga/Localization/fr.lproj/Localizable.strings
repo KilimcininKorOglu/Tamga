@@ -93,3 +93,9 @@
 "words" = "mots";
 "zoom.in" = "Zoom avant";
 "zoom.out" = "Zoom arrière";
+
+// Find options
+"case.sensitive" = "Respecter la casse";
+"whole.word" = "Mot entier";
+"regex" = "Expression régulière";
+"invalid.regex" = "Motif invalide";

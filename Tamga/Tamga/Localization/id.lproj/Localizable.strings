@@ -93,3 +93,9 @@
 "words" = "kata";
 "zoom.in" = "Perbesar";
 "zoom.out" = "Perkecil";
+
+// Find options
+"case.sensitive" = "Cocokkan Huruf";
+"whole.word" = "Seluruh Kata";
+"regex" = "Ekspresi Reguler";
+"invalid.regex" = "Pola tidak valid";

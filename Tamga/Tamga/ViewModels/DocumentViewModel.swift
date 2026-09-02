@@ -9,6 +9,14 @@ class DocumentViewModel: ObservableObject {
     @Published var isSearchVisible: Bool = false
     /// Whether the replace row of the find panel is expanded.
     @Published var isReplaceVisible: Bool = false
+    /// Treat `searchText` as an `NSRegularExpression` pattern.
+    @Published var isRegexEnabled: Bool = false
+    /// Match case exactly instead of the default case-insensitive scan.
+    @Published var isCaseSensitive: Bool = false
+    /// Match whole words only (ignored in regex mode, where the pattern owns its boundaries).
+    @Published var isWholeWord: Bool = false
+    /// True when a regex pattern fails to compile, so the panel can flag it.
+    @Published var isSearchInvalid: Bool = false
     @Published var searchResults: [Range<String.Index>] = []
     @Published var currentSearchIndex: Int = 0
     @Published var isGoToLineVisible: Bool = false
@@ -22,29 +30,38 @@ class DocumentViewModel: ObservableObject {
     // MARK: - Search Operations
 
     func search(in content: String) {
+        searchResults = computeMatches(in: content)
+        currentSearchIndex = 0
+    }
+
+    /// Finds every match with the current toggles, through one `NSRegularExpression`.
+    /// Non-regex terms are escaped first, so a literal search never triggers pattern
+    /// syntax. Returns an empty list and sets `isSearchInvalid` when a regex fails to
+    /// compile, so a half-typed pattern never throws.
+    private func computeMatches(in content: String) -> [Range<String.Index>] {
         guard !searchText.isEmpty else {
-            searchResults = []
-            return
+            isSearchInvalid = false
+            return []
         }
-
-        var results: [Range<String.Index>] = []
-        var searchStartIndex = content.startIndex
-
-        while searchStartIndex < content.endIndex,
-            let range = content.range(
-                of: searchText,
-                options: .caseInsensitive,
-                range: searchStartIndex..<content.endIndex
-            )
-        {
-            results.append(range)
-            searchStartIndex = range.upperBound
+        guard let regex = makeSearchRegex() else {
+            isSearchInvalid = true
+            return []
         }
+        isSearchInvalid = false
+        let fullRange = NSRange(content.startIndex..., in: content)
+        return regex.matches(in: content, options: [], range: fullRange)
+            .compactMap { Range($0.range, in: content) }
+    }
 
-        searchResults = results
-        if !results.isEmpty {
-            currentSearchIndex = 0
+    /// Builds the matcher from the toggles. Escapes the term unless regex mode is on,
+    /// and wraps it in `\b` word boundaries for a whole-word literal search.
+    private func makeSearchRegex() -> NSRegularExpression? {
+        var pattern = isRegexEnabled ? searchText : NSRegularExpression.escapedPattern(for: searchText)
+        if isWholeWord && !isRegexEnabled {
+            pattern = "\\b\(pattern)\\b"
         }
+        let options: NSRegularExpression.Options = isCaseSensitive ? [] : [.caseInsensitive]
+        return try? NSRegularExpression(pattern: pattern, options: options)
     }
 
     /// Current matches as UTF-16 `NSRange`s for the editor to select and highlight.
@@ -66,39 +83,38 @@ class DocumentViewModel: ObservableObject {
     func replace(in content: inout String) -> Bool {
         guard currentSearchIndex < searchResults.count else { return false }
         let range = searchResults[currentSearchIndex]
-        content.replaceSubrange(range, with: replaceText)
+        content.replaceSubrange(range, with: expandedReplacement(for: range, in: content))
         search(in: content)
         return true
     }
 
-    /// Replaces every match in a single forward pass.
-    ///
-    /// The result is built into a separate string, so a replacement that contains the
-    /// search text (`foo` -> `foobar`) is never rescanned.
-    func replaceAll(in content: inout String) -> Int {
-        guard !searchText.isEmpty else { return 0 }
-
-        var result = ""
-        var count = 0
-        var cursor = content.startIndex
-
-        while cursor < content.endIndex,
-            let range = content.range(
-                of: searchText,
-                options: .caseInsensitive,
-                range: cursor..<content.endIndex
-            )
-        {
-            result += content[cursor..<range.lowerBound]
-            result += replaceText
-            count += 1
-            cursor = range.upperBound
+    /// Replacement text for a single match. Expands `$1`-style templates against the
+    /// capture groups in regex mode; returns the literal replace text otherwise.
+    private func expandedReplacement(for range: Range<String.Index>, in content: String) -> String {
+        guard isRegexEnabled, let regex = makeSearchRegex() else { return replaceText }
+        let target = NSRange(range, in: content)
+        let fullRange = NSRange(content.startIndex..., in: content)
+        guard let match = regex.matches(in: content, options: [], range: fullRange)
+            .first(where: { $0.range == target })
+        else {
+            return replaceText
         }
+        return regex.replacementString(for: match, in: content, offset: 0, template: replaceText)
+    }
+
+    /// Replaces every match in a single pass. Regex mode honors `$1` templates; a literal
+    /// search escapes the replacement so `$` and `\` stay verbatim.
+    func replaceAll(in content: inout String) -> Int {
+        guard !searchText.isEmpty, let regex = makeSearchRegex() else { return 0 }
+
+        let mutable = NSMutableString(string: content)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        let template = isRegexEnabled ? replaceText : NSRegularExpression.escapedTemplate(for: replaceText)
+        let count = regex.replaceMatches(in: mutable, options: [], range: fullRange, withTemplate: template)
 
         guard count > 0 else { return 0 }
 
-        result += content[cursor...]
-        content = result
+        content = mutable as String
         searchResults = []
         return count
     }
@@ -121,6 +137,7 @@ class DocumentViewModel: ObservableObject {
         replaceText = ""
         searchResults = []
         isReplaceVisible = false
+        isSearchInvalid = false
     }
 
     func toggleGoToLine() {

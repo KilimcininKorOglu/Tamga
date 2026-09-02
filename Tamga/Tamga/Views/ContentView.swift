@@ -173,8 +173,12 @@ struct ContentView: View {
                         replaceText: $documentViewModel.replaceText,
                         isVisible: $documentViewModel.isSearchVisible,
                         showReplace: $documentViewModel.isReplaceVisible,
+                        isRegexEnabled: $documentViewModel.isRegexEnabled,
+                        isCaseSensitive: $documentViewModel.isCaseSensitive,
+                        isWholeWord: $documentViewModel.isWholeWord,
                         matchCount: documentViewModel.searchResults.count,
                         currentMatch: documentViewModel.currentSearchIndex,
+                        isSearchInvalid: documentViewModel.isSearchInvalid,
                         onFindNext: { documentViewModel.findNext() },
                         onFindPrevious: { documentViewModel.findPrevious() },
                         onReplace: { replaceCurrentMatch() },
@@ -248,6 +252,9 @@ struct ContentView: View {
                 documentViewModel.search(in: tab.content)
             }
         }
+        .onChange(of: documentViewModel.isRegexEnabled) { _ in reRunSearch() }
+        .onChange(of: documentViewModel.isCaseSensitive) { _ in reRunSearch() }
+        .onChange(of: documentViewModel.isWholeWord) { _ in reRunSearch() }
         .onChange(of: documentViewModel.isSearchVisible) { _ in
             if documentViewModel.isSearchVisible, let tab = tabManager.activeTab {
                 documentViewModel.search(in: tab.content)
@@ -468,6 +475,14 @@ struct ContentView: View {
     private var activeSearchMatches: [NSRange] {
         guard documentViewModel.isSearchVisible, let tab = tabManager.activeTab else { return [] }
         return documentViewModel.matchRanges(in: tab.content)
+    }
+
+    /// Re-runs the search after a find-option toggle changes, so the matches and the
+    /// counter reflect the new mode immediately.
+    private func reRunSearch() {
+        if let tab = tabManager.activeTab {
+            documentViewModel.search(in: tab.content)
+        }
     }
 
     private func replaceCurrentMatch() {
