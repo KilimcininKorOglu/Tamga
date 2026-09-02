@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "닫은 탭 다시 열기";
+
+// Preferences
+"preferences.general" = "일반";
+"preferences.editor" = "편집기";
+"font" = "글꼴";
+"font.size" = "글꼴 크기";

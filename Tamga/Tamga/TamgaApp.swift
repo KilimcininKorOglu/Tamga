@@ -19,6 +19,98 @@ struct TamgaApp: App {
         .commands {
             TamgaCommands()
         }
+
+        // Adds the standard "Settings…" (Cmd+,) item to the app menu.
+        Settings {
+            SettingsView()
+                .preferredColorScheme(appState.currentTheme.colorScheme)
+        }
+    }
+}
+
+// MARK: - Settings
+
+/// Preferences window collecting the editor and general options that were previously
+/// only reachable through scattered menu toggles.
+struct SettingsView: View {
+    @ObservedObject private var appState = AppState.shared
+
+    private static let fontOptions = [
+        "SF Mono", "Menlo", "Monaco", "Courier New",
+        "Fira Code", "JetBrains Mono", "Source Code Pro"
+    ]
+
+    var body: some View {
+        TabView {
+            generalTab
+                .tabItem { Label(String(localized: "preferences.general"), systemImage: "gearshape") }
+            editorTab
+                .tabItem { Label(String(localized: "preferences.editor"), systemImage: "textformat") }
+        }
+        .frame(width: 420, height: 320)
+    }
+
+    private var generalTab: some View {
+        Form {
+            Picker(String(localized: "theme"), selection: bind(\.currentTheme)) {
+                ForEach(AppTheme.allCases, id: \.self) { theme in
+                    Text(theme.displayName).tag(theme)
+                }
+            }
+
+            Picker(String(localized: "language"), selection: languageBinding) {
+                ForEach(AppLanguage.allCases, id: \.self) { language in
+                    Text(language.displayName).tag(language)
+                }
+            }
+
+            Toggle(String(localized: "auto.save"), isOn: bind(\.isAutoSaveEnabled))
+        }
+        .padding()
+    }
+
+    private var editorTab: some View {
+        Form {
+            Picker(String(localized: "font"), selection: bind(\.fontName)) {
+                ForEach(Self.fontOptions, id: \.self) { name in
+                    Text(name).tag(name)
+                }
+            }
+
+            Stepper(value: bind(\.fontSize), in: 8...48, step: 1) {
+                Text("\(String(localized: "font.size")): \(Int(appState.fontSize))")
+            }
+
+            Toggle(String(localized: "line.numbers"), isOn: bind(\.showLineNumbers))
+            Toggle(String(localized: "word.wrap"), isOn: bind(\.isWordWrapEnabled))
+            Toggle(String(localized: "show.invisibles"), isOn: bind(\.showInvisibleCharacters))
+            Toggle(String(localized: "status.bar"), isOn: bind(\.isStatusBarVisible))
+            Toggle(String(localized: "sidebar"), isOn: bind(\.isSidebarVisible))
+        }
+        .padding()
+    }
+
+    /// A write-through binding that persists the change, so a preference set here survives
+    /// relaunch instead of living only in memory like the menu toggles did.
+    private func bind<T>(_ keyPath: ReferenceWritableKeyPath<AppState, T>) -> Binding<T> {
+        Binding(
+            get: { appState[keyPath: keyPath] },
+            set: { newValue in
+                appState[keyPath: keyPath] = newValue
+                appState.saveSettings()
+            }
+        )
+    }
+
+    /// Language is special: it triggers a relaunch, so it routes through `setLanguage`.
+    private var languageBinding: Binding<AppLanguage> {
+        Binding(
+            get: { appState.appLanguage },
+            set: { newValue in
+                guard newValue != appState.appLanguage else { return }
+                appState.setLanguage(newValue)
+            }
+        )
     }
 }
 

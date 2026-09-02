@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Mở lại thẻ đã đóng";
+
+// Preferences
+"preferences.general" = "Chung";
+"preferences.editor" = "Trình sửa";
+"font" = "Phông chữ";
+"font.size" = "Cỡ chữ";

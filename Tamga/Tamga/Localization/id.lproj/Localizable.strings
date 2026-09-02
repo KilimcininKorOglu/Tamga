@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Buka Kembali Tab yang Ditutup";
+
+// Preferences
+"preferences.general" = "Umum";
+"preferences.editor" = "Editor";
+"font" = "Font";
+"font.size" = "Ukuran Font";

@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "閉じたタブを再度開く";
+
+// Preferences
+"preferences.general" = "一般";
+"preferences.editor" = "エディタ";
+"font" = "フォント";
+"font.size" = "フォントサイズ";

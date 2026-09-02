@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "เปิดแท็บที่ปิดอีกครั้ง";
+
+// Preferences
+"preferences.general" = "ทั่วไป";
+"preferences.editor" = "ตัวแก้ไข";
+"font" = "แบบอักษร";
+"font.size" = "ขนาดอักษร";

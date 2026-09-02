@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "إعادة فتح علامة التبويب المغلقة";
+
+// Preferences
+"preferences.general" = "عام";
+"preferences.editor" = "المحرر";
+"font" = "الخط";
+"font.size" = "حجم الخط";

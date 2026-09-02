@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Открыть закрытую вкладку";
+
+// Preferences
+"preferences.general" = "Основные";
+"preferences.editor" = "Редактор";
+"font" = "Шрифт";
+"font.size" = "Размер шрифта";

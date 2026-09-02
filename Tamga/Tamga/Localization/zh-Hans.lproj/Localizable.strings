@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "重新打开已关闭的标签页";
+
+// Preferences
+"preferences.general" = "通用";
+"preferences.editor" = "编辑器";
+"font" = "字体";
+"font.size" = "字体大小";

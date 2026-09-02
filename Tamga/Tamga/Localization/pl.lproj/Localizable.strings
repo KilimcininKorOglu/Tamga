@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Otwórz ponownie zamkniętą kartę";
+
+// Preferences
+"preferences.general" = "Ogólne";
+"preferences.editor" = "Edytor";
+"font" = "Czcionka";
+"font.size" = "Rozmiar czcionki";

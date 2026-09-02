@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Kapatılan sekmeyi yeniden aç";
+
+// Preferences
+"preferences.general" = "Genel";
+"preferences.editor" = "Editör";
+"font" = "Yazı tipi";
+"font.size" = "Yazı tipi boyutu";

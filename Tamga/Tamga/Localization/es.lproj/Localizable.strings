@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Reabrir pestaña cerrada";
+
+// Preferences
+"preferences.general" = "General";
+"preferences.editor" = "Editor";
+"font" = "Fuente";
+"font.size" = "Tamaño de fuente";

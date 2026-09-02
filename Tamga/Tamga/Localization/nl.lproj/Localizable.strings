@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Gesloten tabblad opnieuw openen";
+
+// Preferences
+"preferences.general" = "Algemeen";
+"preferences.editor" = "Editor";
+"font" = "Lettertype";
+"font.size" = "Lettergrootte";

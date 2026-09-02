@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "বন্ধ করা ট্যাব পুনরায় খুলুন";
+
+// Preferences
+"preferences.general" = "সাধারণ";
+"preferences.editor" = "এডিটর";
+"font" = "ফন্ট";
+"font.size" = "ফন্ট আকার";

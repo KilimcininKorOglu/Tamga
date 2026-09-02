@@ -108,3 +108,9 @@
 
 // Reopen closed tab
 "reopen.closed.tab" = "Rouvrir l'onglet fermé";
+
+// Preferences
+"preferences.general" = "Général";
+"preferences.editor" = "Éditeur";
+"font" = "Police";
+"font.size" = "Taille de police";
