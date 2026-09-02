@@ -53,6 +53,36 @@ struct DocumentInfo {
     }
 }
 
+/// Line ending styles a document can use on disk.
+///
+/// The editor always holds content with `\n` separators, because splitting `\r\n`
+/// on `CharacterSet.newlines` would double the line count in the gutter. The chosen
+/// style is applied only when the file is written.
+enum LineEnding: String, Codable, CaseIterable {
+    case lf = "LF"
+    case crlf = "CRLF"
+    case cr = "CR"
+
+    /// The byte sequence written to disk for this style.
+    var sequence: String {
+        switch self {
+        case .lf: return "\n"
+        case .crlf: return "\r\n"
+        case .cr: return "\r"
+        }
+    }
+
+    var displayName: String { rawValue }
+
+    /// Detects the dominant style. `CRLF` wins when any `\r\n` is present, then a lone
+    /// `\r` means `CR`, otherwise `LF`.
+    static func detect(from text: String) -> LineEnding {
+        if text.contains("\r\n") { return .crlf }
+        if text.contains("\r") { return .cr }
+        return .lf
+    }
+}
+
 /// File encoding options
 enum FileEncoding: String, CaseIterable {
     case utf8 = "UTF-8"

@@ -5,8 +5,10 @@ struct StatusBarView: View {
     let documentInfo: DocumentInfo
     let language: SyntaxLanguage
     let encoding: String
+    let lineEnding: LineEnding
     let onLanguageChange: (SyntaxLanguage) -> Void
     let onEncodingChange: (String) -> Void
+    let onLineEndingChange: (LineEnding) -> Void
 
     private static let availableEncodings = [
         "UTF-8",
@@ -58,6 +60,33 @@ struct StatusBarView: View {
             }
 
             Spacer()
+
+            // Line ending selector
+            Menu {
+                ForEach(LineEnding.allCases, id: \.self) { ending in
+                    Button {
+                        onLineEndingChange(ending)
+                    } label: {
+                        HStack {
+                            Text(ending.displayName)
+                            if ending == lineEnding {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(lineEnding.displayName)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 8))
+                }
+            }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
+
+            Divider()
+                .frame(height: 12)
 
             // Encoding selector
             Menu {
@@ -117,7 +146,9 @@ struct StatusBarView: View {
         documentInfo: DocumentInfo(content: "Hello World\nThis is a test", cursorPosition: 5),
         language: .swift,
         encoding: "UTF-8",
+        lineEnding: .lf,
         onLanguageChange: { _ in },
-        onEncodingChange: { _ in }
+        onEncodingChange: { _ in },
+        onLineEndingChange: { _ in }
     )
 }

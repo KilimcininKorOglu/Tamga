@@ -12,6 +12,7 @@ struct Tab: Identifiable, Codable, Equatable {
     var scrollPosition: CGFloat
     var language: SyntaxLanguage
     var encoding: String
+    var lineEnding: LineEnding
     var createdAt: Date
     var lastModifiedAt: Date
 
@@ -25,6 +26,7 @@ struct Tab: Identifiable, Codable, Equatable {
         scrollPosition: CGFloat = 0,
         language: SyntaxLanguage = .plainText,
         encoding: String = "UTF-8",
+        lineEnding: LineEnding = .lf,
         createdAt: Date = Date(),
         lastModifiedAt: Date = Date()
     ) {
@@ -37,8 +39,32 @@ struct Tab: Identifiable, Codable, Equatable {
         self.scrollPosition = scrollPosition
         self.language = language
         self.encoding = encoding
+        self.lineEnding = lineEnding
         self.createdAt = createdAt
         self.lastModifiedAt = lastModifiedAt
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, content, filePath, isDirty, cursorPosition, scrollPosition
+        case language, encoding, lineEnding, createdAt, lastModifiedAt
+    }
+
+    /// Decodes a tab, tolerating a session written before `lineEnding` existed, so an
+    /// older `session.json` still restores instead of dropping every tab.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        content = try container.decode(String.self, forKey: .content)
+        filePath = try container.decodeIfPresent(URL.self, forKey: .filePath)
+        isDirty = try container.decode(Bool.self, forKey: .isDirty)
+        cursorPosition = try container.decode(Int.self, forKey: .cursorPosition)
+        scrollPosition = try container.decode(CGFloat.self, forKey: .scrollPosition)
+        language = try container.decode(SyntaxLanguage.self, forKey: .language)
+        encoding = try container.decode(String.self, forKey: .encoding)
+        lineEnding = try container.decodeIfPresent(LineEnding.self, forKey: .lineEnding) ?? .lf
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        lastModifiedAt = try container.decode(Date.self, forKey: .lastModifiedAt)
     }
 
     /// Creates a new untitled tab

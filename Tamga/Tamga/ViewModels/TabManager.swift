@@ -55,7 +55,7 @@ class TabManager: ObservableObject {
         untitledCounter = highestNumber + 1
     }
 
-    func openTab(with url: URL, content: String) {
+    func openTab(with url: URL, content: String, lineEnding: LineEnding = .lf) {
         // Check if file is already open
         if let existingTab = tabs.first(where: { $0.filePath == url }) {
             activeTabId = existingTab.id
@@ -66,7 +66,8 @@ class TabManager: ObservableObject {
             title: url.lastPathComponent,
             content: content,
             filePath: url,
-            isDirty: false
+            isDirty: false,
+            lineEnding: lineEnding
         )
         newTab.detectLanguage()
 
@@ -163,6 +164,15 @@ class TabManager: ObservableObject {
     func setEncoding(_ encoding: String, for id: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
         tabs[index].encoding = encoding
+    }
+
+    /// Changes the line-ending style and marks the tab dirty, because the choice only
+    /// reaches disk on the next save.
+    func setLineEnding(_ lineEnding: LineEnding, for id: UUID) {
+        guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
+        guard tabs[index].lineEnding != lineEnding else { return }
+        tabs[index].lineEnding = lineEnding
+        tabs[index].isDirty = true
     }
 
     // MARK: - Session Autosave (crash safety)

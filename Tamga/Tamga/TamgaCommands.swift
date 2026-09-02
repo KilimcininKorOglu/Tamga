@@ -28,8 +28,8 @@ struct TamgaCommands: Commands {
 
             Button(String(localized: "open")) {
                 Task {
-                    if let (url, content) = await documentViewModel?.openFile() {
-                        tabManager?.openTab(with: url, content: content)
+                    if let result = await documentViewModel?.openFile() {
+                        tabManager?.openTab(with: result.url, content: result.content, lineEnding: result.lineEnding)
                     }
                 }
             }
@@ -362,7 +362,8 @@ struct TamgaCommands: Commands {
             content: tab.content,
             existingPath: tab.filePath,
             suggestedName: tab.suggestedFileName,
-            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8,
+            lineEnding: tab.lineEnding
         ) {
             tabManager.markAsSaved(id: tab.id, filePath: url)
         }
@@ -376,7 +377,8 @@ struct TamgaCommands: Commands {
         if let url = await documentViewModel?.saveFileAs(
             content: tab.content,
             suggestedName: tab.suggestedFileName,
-            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+            encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8,
+            lineEnding: tab.lineEnding
         ) {
             tabManager.markAsSaved(id: tab.id, filePath: url)
         }
@@ -384,8 +386,8 @@ struct TamgaCommands: Commands {
 
     private func openRecentFile(_ url: URL) {
         do {
-            let content = try FileService.shared.readFile(at: url)
-            tabManager?.openTab(with: url, content: content)
+            let (content, lineEnding) = try FileService.shared.readFileWithLineEnding(at: url)
+            tabManager?.openTab(with: url, content: content, lineEnding: lineEnding)
         } catch {
             print("Failed to open recent file: \(error)")
         }

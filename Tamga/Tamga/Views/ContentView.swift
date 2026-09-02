@@ -153,11 +153,15 @@ struct ContentView: View {
                             documentInfo: currentDocumentInfo,
                             language: activeTab.language,
                             encoding: activeTab.encoding,
+                            lineEnding: activeTab.lineEnding,
                             onLanguageChange: { language in
                                 tabManager.setLanguage(language, for: activeTab.id)
                             },
                             onEncodingChange: { encoding in
                                 tabManager.setEncoding(encoding, for: activeTab.id)
+                            },
+                            onLineEndingChange: { ending in
+                                tabManager.setLineEnding(ending, for: activeTab.id)
                             }
                         )
                     }
@@ -321,8 +325,8 @@ struct ContentView: View {
 
     private func openFile(_ url: URL) {
         do {
-            let content = try FileService.shared.readFile(at: url)
-            tabManager.openTab(with: url, content: content)
+            let (content, lineEnding) = try FileService.shared.readFileWithLineEnding(at: url)
+            tabManager.openTab(with: url, content: content, lineEnding: lineEnding)
             appState.addRecentFile(url)
         } catch {
             print("Failed to open file: \(error)")
@@ -344,8 +348,8 @@ struct ContentView: View {
         // blank tab bound to the path, because saving that blank tab would overwrite
         // the real file content.
         do {
-            let content = try FileService.shared.readFile(at: url)
-            tabManager.openTab(with: url, content: content)
+            let (content, lineEnding) = try FileService.shared.readFileWithLineEnding(at: url)
+            tabManager.openTab(with: url, content: content, lineEnding: lineEnding)
             appState.addRecentFile(url)
         } catch {
             let alert = NSAlert()
@@ -365,7 +369,8 @@ struct ContentView: View {
                 content: tab.content,
                 existingPath: tab.filePath,
                 suggestedName: tab.suggestedFileName,
-                encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+                encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8,
+                lineEnding: tab.lineEnding
             )
             if let url {
                 tabManager.markAsSaved(id: tab.id, filePath: url)
@@ -384,7 +389,8 @@ struct ContentView: View {
                     try FileService.shared.writeFile(
                     content: tab.content,
                     to: filePath,
-                    encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8
+                    encoding: FileEncoding(rawValue: tab.encoding) ?? .utf8,
+                    lineEnding: tab.lineEnding
                 )
                     tabManager.markAsSaved(id: tab.id, filePath: filePath)
                 } catch {

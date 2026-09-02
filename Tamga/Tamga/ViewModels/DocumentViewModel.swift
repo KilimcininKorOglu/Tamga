@@ -158,7 +158,7 @@ class DocumentViewModel: ObservableObject {
 
     // MARK: - File Operations
 
-    func openFile() async -> (URL, String)? {
+    func openFile() async -> (url: URL, content: String, lineEnding: LineEnding)? {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
@@ -170,8 +170,8 @@ class DocumentViewModel: ObservableObject {
         guard response == .OK, let url = panel.url else { return nil }
 
         do {
-            let content = try fileService.readFile(at: url)
-            return (url, content)
+            let (content, lineEnding) = try fileService.readFileWithLineEnding(at: url)
+            return (url, content, lineEnding)
         } catch {
             print("Error opening file: \(error)")
             return nil
@@ -181,21 +181,27 @@ class DocumentViewModel: ObservableObject {
     /// Saves to `existingPath` when the tab is file-backed, otherwise opens the save
     /// panel. `suggestedName` is required so a never-saved tab proposes its own title
     /// instead of a generic name.
-    func saveFile(content: String, existingPath: URL?, suggestedName: String, encoding: FileEncoding) async -> URL? {
+    func saveFile(
+        content: String,
+        existingPath: URL?,
+        suggestedName: String,
+        encoding: FileEncoding,
+        lineEnding: LineEnding
+    ) async -> URL? {
         if let path = existingPath {
             do {
-                try fileService.writeFile(content: content, to: path, encoding: encoding)
+                try fileService.writeFile(content: content, to: path, encoding: encoding, lineEnding: lineEnding)
                 return path
             } catch {
                 NSAlert(error: error).runModal()
                 return nil
             }
         } else {
-            return await saveFileAs(content: content, suggestedName: suggestedName, encoding: encoding)
+            return await saveFileAs(content: content, suggestedName: suggestedName, encoding: encoding, lineEnding: lineEnding)
         }
     }
 
-    func saveFileAs(content: String, suggestedName: String, encoding: FileEncoding) async -> URL? {
+    func saveFileAs(content: String, suggestedName: String, encoding: FileEncoding, lineEnding: LineEnding) async -> URL? {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.text, .sourceCode, .json, .xml, .html, .plainText]
         panel.canCreateDirectories = true
@@ -206,7 +212,7 @@ class DocumentViewModel: ObservableObject {
         guard response == .OK, let url = panel.url else { return nil }
 
         do {
-            try fileService.writeFile(content: content, to: url, encoding: encoding)
+            try fileService.writeFile(content: content, to: url, encoding: encoding, lineEnding: lineEnding)
             return url
         } catch {
             NSAlert(error: error).runModal()
