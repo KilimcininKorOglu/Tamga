@@ -100,6 +100,7 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
     case sql = "SQL"
     case shell = "Shell"
     case yaml = "YAML"
+    case toml = "TOML"
 
     var displayName: String {
         rawValue
@@ -107,7 +108,7 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
 
     var fileExtensions: [String] {
         switch self {
-        case .plainText: return ["txt", "text", "log", "conf", "cfg", "ini", "toml"]
+        case .plainText: return ["txt", "text", "log"]
         case .swift: return ["swift"]
         case .python: return ["py", "pyw", "pyi"]
         case .javascript: return ["js", "jsx", "ts", "tsx", "mjs", "cjs"]
@@ -120,11 +121,20 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
         case .sql: return ["sql"]
         case .shell: return ["sh", "bash", "zsh", "ksh", "fish"]
         case .yaml: return ["yml", "yaml"]
+        case .toml: return ["toml", "ini", "conf", "cfg", "env"]
         }
     }
 
     static func detect(from url: URL) -> SyntaxLanguage {
-        let ext = url.pathExtension.lowercased()
+        var ext = url.pathExtension.lowercased()
+        if ext.isEmpty {
+            // Dotfiles like `.env` carry no path extension; treat the name after the
+            // leading dot as the extension so they still map to a language.
+            let name = url.lastPathComponent
+            if name.hasPrefix("."), !name.dropFirst().contains(".") {
+                ext = String(name.dropFirst()).lowercased()
+            }
+        }
         for language in SyntaxLanguage.allCases where language.fileExtensions.contains(ext) {
             return language
         }

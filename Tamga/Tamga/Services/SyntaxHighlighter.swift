@@ -117,7 +117,8 @@ class SyntaxHighlighter {
         .xml: \.xmlPatterns,
         .sql: \.sqlPatterns,
         .shell: \.shellPatterns,
-        .yaml: \.yamlPatterns
+        .yaml: \.yamlPatterns,
+        .toml: \.tomlPatterns
     ]
 
     private func getPatterns(for language: SyntaxLanguage) -> [(String, (Theme) -> NSColor)] {
@@ -420,6 +421,33 @@ class SyntaxHighlighter {
 
             // Booleans and null
             (#"\b(true|false|yes|no|null|~)\b"#, { $0.keyword }),
+
+            // Numbers
+            (#"\b\d+\.?\d*\b"#, { $0.number })
+        ]
+    }
+
+    // MARK: - TOML / INI Patterns
+
+    /// Shared by TOML and INI-style config files (`.toml`, `.ini`, `.conf`, `.cfg`, `.env`).
+    private var tomlPatterns: [(String, (Theme) -> NSColor)] {
+        [
+            // Comments
+            (#"#.*$"#, { $0.comment }),
+            (#";.*$"#, { $0.comment }),
+
+            // Section headers, e.g. [server] or [tool.poetry]
+            (#"^\s*\[.*\]"#, { $0.keyword }),
+
+            // Keys before an '=' or ':'
+            (#"^\s*[A-Za-z0-9_.\-]+\s*(?=[:=])"#, { $0.attribute }),
+
+            // Strings
+            (#"\"[^\"]*\""#, { $0.string }),
+            (#"'[^']*'"#, { $0.string }),
+
+            // Booleans
+            (#"\b(true|false)\b"#, { $0.keyword }),
 
             // Numbers
             (#"\b\d+\.?\d*\b"#, { $0.number })
