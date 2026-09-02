@@ -14,11 +14,4 @@ enum Constants {
         /// Quiet period after the last edit before a crash-safety session save fires.
         static let sessionAutosaveDebounceInterval: TimeInterval = 2.0
     }
-
-    /// Supported file extensions
-    enum FileExtensions {
-        static let text = ["txt", "text", "md", "markdown"]
-        static let code = ["swift", "py", "js", "ts", "jsx", "tsx", "json", "html", "css", "xml", "sql", "sh", "bash", "zsh", "yml", "yaml"]
-        static let all = text + code
-    }
 }

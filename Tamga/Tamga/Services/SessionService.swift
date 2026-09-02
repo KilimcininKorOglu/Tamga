@@ -153,45 +153,4 @@ class SessionService {
     func clearSession() {
         try? fileManager.removeItem(at: sessionFileURL)
     }
-
-    // MARK: - Temp Files
-
-    private var tempDirectory: URL {
-        applicationSupportDirectory.appendingPathComponent("temp")
-    }
-
-    func saveTempFile(content: String, id: UUID) -> URL? {
-        if !fileManager.fileExists(atPath: tempDirectory.path) {
-            try? fileManager.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
-        }
-
-        let tempFileURL = tempDirectory.appendingPathComponent("\(id.uuidString).tmp")
-
-        do {
-            try content.write(to: tempFileURL, atomically: true, encoding: .utf8)
-            return tempFileURL
-        } catch {
-            print("Failed to save temp file: \(error)")
-            return nil
-        }
-    }
-
-    func loadTempFile(id: UUID) -> String? {
-        let tempFileURL = tempDirectory.appendingPathComponent("\(id.uuidString).tmp")
-
-        guard fileManager.fileExists(atPath: tempFileURL.path) else {
-            return nil
-        }
-
-        return try? String(contentsOf: tempFileURL, encoding: .utf8)
-    }
-
-    func deleteTempFile(id: UUID) {
-        let tempFileURL = tempDirectory.appendingPathComponent("\(id.uuidString).tmp")
-        try? fileManager.removeItem(at: tempFileURL)
-    }
-
-    func clearTempFiles() {
-        try? fileManager.removeItem(at: tempDirectory)
-    }
 }

@@ -145,11 +145,6 @@ class TabManager: ObservableObject {
         tabs[index].cursorPosition = position
     }
 
-    func updateScrollPosition(_ position: CGFloat, for id: UUID) {
-        guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
-        tabs[index].scrollPosition = position
-    }
-
     func markAsSaved(id: UUID, filePath: URL) {
         guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
         tabs[index].isDirty = false
@@ -216,10 +211,5 @@ class TabManager: ObservableObject {
 
     func getDirtyTabs() -> [Tab] {
         tabs.filter { $0.isDirty }
-    }
-
-    func getDocumentInfo(for id: UUID) -> DocumentInfo? {
-        guard let tab = getTab(by: id) else { return nil }
-        return DocumentInfo(content: tab.content, cursorPosition: tab.cursorPosition)
     }
 }
