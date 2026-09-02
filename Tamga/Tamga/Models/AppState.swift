@@ -98,12 +98,12 @@ class AppState: ObservableObject {
     }
 
     private func restartApp() {
-        let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
-        let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString
+        // Relaunch the app bundle, then quit. `bundleURL` is the .app itself, so no
+        // force-unwrap or path gymnastics are needed.
         let task = Process()
-        task.launchPath = "/usr/bin/open"
-        task.arguments = [path]
-        task.launch()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        task.arguments = [Bundle.main.bundleURL.path]
+        try? task.run()
         NSApp.terminate(nil)
     }
 
