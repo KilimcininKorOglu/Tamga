@@ -127,7 +127,7 @@ class DocumentViewModel: ObservableObject {
 
         var position = 0
         for i in 0..<(lineNumber - 1) {
-            position += lines[i].count + 1  // +1 for newline
+            position += (lines[i] as NSString).length + 1  // +1 for newline; UTF-16 units for the caret
         }
         targetLineNumber = lineNumber
         return position

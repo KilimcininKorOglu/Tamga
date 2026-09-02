@@ -145,25 +145,13 @@ class TamgaTextView: NSTextView {
     // MARK: - Auto-indent
 
     override func insertNewline(_ sender: Any?) {
-        let text = string
-        let cursorPos = selectedRange().location
+        let ns = string as NSString
+        let cursorPos = min(selectedRange().location, ns.length)
 
-        // Find the current line content before cursor
-        let lines = text.components(separatedBy: "\n")
-        var currentPos = 0
-        var lineContent = ""
-
-        for line in lines {
-            let lineEnd = currentPos + line.count
-            if cursorPos <= lineEnd {
-                // Get the part of the line before cursor
-                let cursorOffsetInLine = cursorPos - currentPos
-                let endIndex = line.index(line.startIndex, offsetBy: min(cursorOffsetInLine, line.count))
-                lineContent = String(line[line.startIndex..<endIndex])
-                break
-            }
-            currentPos = lineEnd + 1  // +1 for newline
-        }
+        // Current line up to the cursor, computed in UTF-16 units so a non-BMP
+        // character earlier in the document does not shift the indentation source.
+        let lineRange = ns.lineRange(for: NSRange(location: cursorPos, length: 0))
+        let lineContent = ns.substring(with: NSRange(location: lineRange.location, length: cursorPos - lineRange.location))
 
         // Calculate current indentation
         var indentation = ""

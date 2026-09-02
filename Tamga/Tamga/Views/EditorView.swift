@@ -209,8 +209,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
 
         func scrollToPosition(_ position: Int) {
             guard let textView = textView else { return }
-            let text = textView.string
-            let safePosition = min(position, text.count)
+            let safePosition = min(position, (textView.string as NSString).length)
             let range = NSRange(location: safePosition, length: 0)
             textView.setSelectedRange(range)
             textView.scrollRangeToVisible(range)

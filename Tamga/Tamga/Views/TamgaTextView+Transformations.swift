@@ -83,7 +83,7 @@ extension TamgaTextView {
         var currentPos = 0
         var lineIndex = 0
         for (index, line) in lines.enumerated() {
-            let lineEnd = currentPos + line.count
+            let lineEnd = currentPos + (line as NSString).length
             if cursorPos <= lineEnd || index == lines.count - 1 {
                 lineIndex = index
                 break
@@ -100,7 +100,7 @@ extension TamgaTextView {
         // Calculate new cursor position
         var newCursorPos = 0
         for i in 0...lineIndex {
-            newCursorPos += lines[i].count + 1
+            newCursorPos += (lines[i] as NSString).length + 1
         }
 
         // Update text through the undo-aware pipeline so Cmd-Z can revert it.
@@ -129,7 +129,7 @@ extension TamgaTextView {
         var lineIndex = 0
         var cursorOffsetInLine = 0
         for (index, line) in lines.enumerated() {
-            let lineEnd = currentPos + line.count
+            let lineEnd = currentPos + (line as NSString).length
             if cursorPos <= lineEnd || index == lines.count - 1 {
                 lineIndex = index
                 cursorOffsetInLine = cursorPos - currentPos
@@ -160,9 +160,9 @@ extension TamgaTextView {
         // Calculate new cursor position
         var newCursorPos = 0
         for i in 0..<targetIndex {
-            newCursorPos += newLines[i].count + 1
+            newCursorPos += (newLines[i] as NSString).length + 1
         }
-        newCursorPos += min(cursorOffsetInLine, newLines[targetIndex].count)
+        newCursorPos += min(cursorOffsetInLine, (newLines[targetIndex] as NSString).length)
 
         // Update text through the undo-aware pipeline so Cmd-Z can revert it.
         let fullRange = NSRange(location: 0, length: (string as NSString).length)
