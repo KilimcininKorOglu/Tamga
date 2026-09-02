@@ -315,7 +315,7 @@ struct ContentView: View {
     private func openFileFromPath(_ path: String) {
         let url = URL(fileURLWithPath: path).standardized
 
-        // Dosya yoksa oluştur
+        // Create the file if it does not exist
         if !FileManager.default.fileExists(atPath: url.path) {
             FileManager.default.createFile(atPath: url.path, contents: nil)
         }
