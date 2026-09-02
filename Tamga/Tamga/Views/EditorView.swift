@@ -287,27 +287,32 @@ struct HighlightedTextEditor: NSViewRepresentable {
                 return
             }
 
-            // Regex fallback for non-migrated languages.
-            guard !textView.string.isEmpty else { return }
+            // Regex fallback for non-migrated languages. Apply the colors as attributes
+            // on the existing text storage instead of replacing it, so the text, the undo
+            // stack, the selection, and the editor font all stay intact.
+            guard let textStorage = textView.textStorage, !textView.string.isEmpty else { return }
 
             isUpdating = true
             defer { isUpdating = false }
 
-            let text = textView.string
-            let selectedRanges = textView.selectedRanges
-            let scrollPosition = scrollView?.contentView.bounds.origin ?? .zero
-
-            let attributedString = highlighter.highlight(
-                text: text,
+            let highlighted = highlighter.highlight(
+                text: textView.string,
                 language: language,
                 isDarkMode: isDarkMode
             )
 
-            textView.textStorage?.setAttributedString(attributedString)
-
-            // Restore selection and scroll
-            textView.selectedRanges = selectedRanges
-            scrollView?.contentView.scroll(to: scrollPosition)
+            let fullRange = NSRange(location: 0, length: textStorage.length)
+            textStorage.beginEditing()
+            textStorage.removeAttribute(.foregroundColor, range: fullRange)
+            highlighted.enumerateAttribute(
+                .foregroundColor,
+                in: NSRange(location: 0, length: highlighted.length)
+            ) { value, range, _ in
+                if let color = value as? NSColor {
+                    textStorage.addAttribute(.foregroundColor, value: color, range: range)
+                }
+            }
+            textStorage.endEditing()
         }
 
         @objc func scrollViewDidScroll(_ notification: Notification) {
