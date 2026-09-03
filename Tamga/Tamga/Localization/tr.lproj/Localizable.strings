@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Yazı tipi seç…";
+
+// Command palette
+"command.palette" = "Komut paleti";
+"command.palette.placeholder" = "Bir komut yazın…";

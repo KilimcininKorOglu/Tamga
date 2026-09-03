@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Escolher fonte…";
+
+// Command palette
+"command.palette" = "Paleta de comandos";
+"command.palette.placeholder" = "Digite um comando…";

@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "フォントを選択…";
+
+// Command palette
+"command.palette" = "コマンドパレット";
+"command.palette.placeholder" = "コマンドを入力…";

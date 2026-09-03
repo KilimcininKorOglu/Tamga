@@ -128,6 +128,13 @@ struct TamgaCommands: Commands {
         CommandGroup(after: .undoRedo) {
             Divider()
 
+            Button(String(localized: "command.palette")) {
+                documentViewModel?.toggleCommandPalette()
+            }
+            .keyboardShortcut("p", modifiers: [.command, .shift])
+
+            Divider()
+
             Button(String(localized: "find")) {
                 documentViewModel?.toggleSearch()
             }

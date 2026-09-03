@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Выбрать шрифт…";
+
+// Command palette
+"command.palette" = "Палитра команд";
+"command.palette.placeholder" = "Введите команду…";

@@ -208,6 +208,20 @@ struct ContentView: View {
                 .transition(.scale.combined(with: .opacity))
             }
 
+            // Command Palette
+            if documentViewModel.isCommandPaletteVisible {
+                VStack(spacing: 0) {
+                    Spacer().frame(height: 60)
+                    CommandPaletteView(
+                        isVisible: $documentViewModel.isCommandPaletteVisible,
+                        commands: paletteCommands
+                    )
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+                .transition(.opacity)
+            }
+
             // Compare View
             if documentViewModel.isCompareVisible, let activeTab = tabManager.activeTab {
                 CompareView(
@@ -271,6 +285,7 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: documentViewModel.isSearchVisible)
+        .animation(.easeInOut(duration: 0.15), value: documentViewModel.isCommandPaletteVisible)
         .animation(.easeInOut(duration: 0.2), value: documentViewModel.isGoToLineVisible)
         .animation(.easeInOut(duration: 0.3), value: documentViewModel.isCompareVisible)
         .onReceive(NotificationCenter.default.publisher(for: .autoSave)) { _ in
@@ -513,6 +528,40 @@ struct ContentView: View {
             content: content,
             cursorPosition: cursorPosition
         )
+    }
+
+    // MARK: - Command Palette
+
+    /// Actions offered by the command palette. Titles reuse the existing menu keys; each
+    /// action calls the same path the menu would, so the palette stays a shortcut, not a
+    /// second source of truth.
+    private var paletteCommands: [PaletteCommand] {
+        func post(_ name: Notification.Name) { NotificationCenter.default.post(name: name, object: nil) }
+        return [
+            PaletteCommand(title: String(localized: "new.tab")) { tabManager.createNewTab() },
+            PaletteCommand(title: String(localized: "close.tab")) { tabManager.closeActiveTab() },
+            PaletteCommand(title: String(localized: "reopen.closed.tab")) { tabManager.reopenLastClosedTab() },
+            PaletteCommand(title: String(localized: "find")) { documentViewModel.toggleSearch() },
+            PaletteCommand(title: String(localized: "go.to.line")) { documentViewModel.toggleGoToLine() },
+            PaletteCommand(title: String(localized: "sidebar")) { appState.isSidebarVisible.toggle() },
+            PaletteCommand(title: String(localized: "word.wrap")) { appState.isWordWrapEnabled.toggle() },
+            PaletteCommand(title: String(localized: "line.numbers")) { appState.showLineNumbers.toggle() },
+            PaletteCommand(title: String(localized: "split.view")) { appState.isSplitViewEnabled.toggle() },
+            PaletteCommand(title: String(localized: "markdown.preview")) { appState.isMarkdownPreviewEnabled.toggle() },
+            PaletteCommand(title: String(localized: "show.invisibles")) { appState.showInvisibleCharacters.toggle() },
+            PaletteCommand(title: String(localized: "duplicate.line")) { post(.duplicateLine) },
+            PaletteCommand(title: String(localized: "sort.lines.ascending")) { post(.sortLinesAscending) },
+            PaletteCommand(title: String(localized: "sort.lines.descending")) { post(.sortLinesDescending) },
+            PaletteCommand(title: String(localized: "remove.duplicate.lines")) { post(.removeDuplicateLines) },
+            PaletteCommand(title: String(localized: "remove.empty.lines")) { post(.removeEmptyLines) },
+            PaletteCommand(title: String(localized: "uppercase")) { post(.uppercaseSelection) },
+            PaletteCommand(title: String(localized: "lowercase")) { post(.lowercaseSelection) },
+            PaletteCommand(title: String(localized: "capitalize")) { post(.capitalizeSelection) },
+            PaletteCommand(title: String(localized: "format.json")) { post(.formatJSON) },
+            PaletteCommand(title: String(localized: "minify.json")) { post(.minifyJSON) },
+            PaletteCommand(title: String(localized: "fold.all")) { post(.foldAll) },
+            PaletteCommand(title: String(localized: "unfold.all")) { post(.unfoldAll) },
+        ]
     }
 
     // MARK: - Search & Replace

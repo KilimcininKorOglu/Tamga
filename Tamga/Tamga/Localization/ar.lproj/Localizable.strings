@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "اختيار الخط…";
+
+// Command palette
+"command.palette" = "لوحة الأوامر";
+"command.palette.placeholder" = "اكتب أمرًا…";

@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "เลือกแบบอักษร…";
+
+// Command palette
+"command.palette" = "แผงคำสั่ง";
+"command.palette.placeholder" = "พิมพ์คำสั่ง…";

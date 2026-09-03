@@ -39,6 +39,7 @@
 		A1000028AAAAAAAA00000028 /* TamgaTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000028AAAAAAAA00000028 /* TamgaTextView.swift */; };
 		A1000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift */; };
 		A1000035AAAAAAAA00000035 /* GutterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000035AAAAAAAA00000035 /* GutterView.swift */; };
+		A1000036AAAAAAAA00000036 /* CommandPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000036AAAAAAAA00000036 /* CommandPaletteView.swift */; };
 		C3000001CCCCCCCC00000001 /* Neon in Frameworks */ = {isa = PBXBuildFile; productRef = C2000001CCCCCCCC00000001 /* Neon */; };
 		C3000002CCCCCCCC00000002 /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = C2000002CCCCCCCC00000002 /* SwiftTreeSitter */; };
 		C3000003CCCCCCCC00000003 /* SwiftTreeSitterLayer in Frameworks */ = {isa = PBXBuildFile; productRef = C2000003CCCCCCCC00000003 /* SwiftTreeSitterLayer */; };
@@ -73,6 +74,7 @@
 		A2000028AAAAAAAA00000028 /* TamgaTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TamgaTextView.swift"; sourceTree = "<group>"; };
 		A2000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TamgaTextView+Transformations.swift"; sourceTree = "<group>"; };
 		A2000035AAAAAAAA00000035 /* GutterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GutterView.swift; sourceTree = "<group>"; };
+		A2000036AAAAAAAA00000036 /* CommandPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandPaletteView.swift; sourceTree = "<group>"; };
 		A2000016AAAAAAAA00000016 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A2000017AAAAAAAA00000017 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A2000019AAAAAAAA00000019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				A2000028AAAAAAAA00000028 /* TamgaTextView.swift */,
 				A2000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift */,
 				A2000035AAAAAAAA00000035 /* GutterView.swift */,
+				A2000036AAAAAAAA00000036 /* CommandPaletteView.swift */,
 				A2000031AAAAAAAA00000031 /* AboutPanel.swift */,
 			);
 			path = Views;
@@ -403,6 +406,7 @@
 				A1000028AAAAAAAA00000028 /* TamgaTextView.swift in Sources */,
 				A1000029AAAAAAAA00000029 /* TamgaTextView+Transformations.swift in Sources */,
 				A1000035AAAAAAAA00000035 /* GutterView.swift in Sources */,
+				A1000036AAAAAAAA00000036 /* CommandPaletteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

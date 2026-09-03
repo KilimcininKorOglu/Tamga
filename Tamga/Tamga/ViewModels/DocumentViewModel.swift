@@ -20,6 +20,8 @@ class DocumentViewModel: ObservableObject {
     @Published var searchResults: [Range<String.Index>] = []
     @Published var currentSearchIndex: Int = 0
     @Published var isGoToLineVisible: Bool = false
+    /// Whether the fuzzy command palette overlay is shown.
+    @Published var isCommandPaletteVisible: Bool = false
     @Published var targetLineNumber: Int?
     @Published var isCompareVisible: Bool = false
     @Published var compareText: String = ""
@@ -142,6 +144,10 @@ class DocumentViewModel: ObservableObject {
 
     func toggleGoToLine() {
         isGoToLineVisible.toggle()
+    }
+
+    func toggleCommandPalette() {
+        isCommandPaletteVisible.toggle()
     }
 
     func goToLine(_ lineNumber: Int, in content: String) -> Int? {

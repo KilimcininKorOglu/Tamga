@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Pilih Font…";
+
+// Command palette
+"command.palette" = "Palet Perintah";
+"command.palette.placeholder" = "Ketik perintah…";

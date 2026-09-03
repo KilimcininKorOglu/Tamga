@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Chọn phông…";
+
+// Command palette
+"command.palette" = "Bảng lệnh";
+"command.palette.placeholder" = "Nhập lệnh…";

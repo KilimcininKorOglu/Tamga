@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "Lettertype kiezen…";
+
+// Command palette
+"command.palette" = "Opdrachtenpalet";
+"command.palette.placeholder" = "Typ een opdracht…";

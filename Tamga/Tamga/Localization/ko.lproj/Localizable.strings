@@ -122,3 +122,7 @@
 
 // Font panel
 "choose.font" = "글꼴 선택…";
+
+// Command palette
+"command.palette" = "명령 팔레트";
+"command.palette.placeholder" = "명령 입력…";
