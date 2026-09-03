@@ -132,6 +132,7 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
     case c = "C"
     case java = "Java"
     case cpp = "C++"
+    case dockerfile = "Dockerfile"
 
     var displayName: String {
         rawValue
@@ -158,10 +159,18 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
         case .c: return ["c", "h"]
         case .java: return ["java"]
         case .cpp: return ["cpp", "cc", "cxx", "hpp", "hh", "hxx", "c++"]
+        case .dockerfile: return ["dockerfile"]
         }
     }
 
     static func detect(from url: URL) -> SyntaxLanguage {
+        // Dockerfiles are usually named `Dockerfile` or `Dockerfile.<stage>` with no
+        // extension, so match the file name before falling back to extension matching.
+        let fileName = url.lastPathComponent.lowercased()
+        if fileName == "dockerfile" || fileName.hasPrefix("dockerfile.") {
+            return .dockerfile
+        }
+
         var ext = url.pathExtension.lowercased()
         if ext.isEmpty {
             // Dotfiles like `.env` carry no path extension; treat the name after the

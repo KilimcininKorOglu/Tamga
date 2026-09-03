@@ -146,7 +146,8 @@ struct SidebarView: View {
         .rust: "r.square",
         .c: "c.square",
         .java: "cup.and.saucer",
-        .cpp: "plus.square"
+        .cpp: "plus.square",
+        .dockerfile: "shippingbox"
     ]
 
     private func fileIcon(for language: SyntaxLanguage) -> String {

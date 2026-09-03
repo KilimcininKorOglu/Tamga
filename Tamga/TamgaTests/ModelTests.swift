@@ -16,6 +16,11 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(SyntaxLanguage.detect(from: URL(fileURLWithPath: "/a/.env")), .toml)
     }
 
+    func testDetectDockerfileByName() {
+        XCTAssertEqual(SyntaxLanguage.detect(from: URL(fileURLWithPath: "/a/Dockerfile")), .dockerfile)
+        XCTAssertEqual(SyntaxLanguage.detect(from: URL(fileURLWithPath: "/a/Dockerfile.dev")), .dockerfile)
+    }
+
     func testLineEndingDetect() {
         XCTAssertEqual(LineEnding.detect(from: "a\r\nb"), .crlf)
         XCTAssertEqual(LineEnding.detect(from: "a\rb"), .cr)

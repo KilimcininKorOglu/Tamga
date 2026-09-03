@@ -30,6 +30,7 @@ let package = Package(
                 "TreeSitterC",
                 "TreeSitterJava",
                 "TreeSitterCPP",
+                "TreeSitterDockerfile",
             ]
         ),
     ],
@@ -157,6 +158,14 @@ let package = Package(
         .target(
             name: "TreeSitterCPP",
             path: "Sources/TreeSitterCPP",
+            sources: ["src/parser.c", "src/scanner.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterDockerfile",
+            path: "Sources/TreeSitterDockerfile",
             sources: ["src/parser.c", "src/scanner.c"],
             resources: [.copy("queries")],
             publicHeadersPath: "bindings/swift",

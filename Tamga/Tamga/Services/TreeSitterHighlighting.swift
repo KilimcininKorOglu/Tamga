@@ -6,6 +6,7 @@ import TreeSitterBash
 import TreeSitterC
 import TreeSitterCPP
 import TreeSitterCSS
+import TreeSitterDockerfile
 import TreeSitterGo
 import TreeSitterHTML
 import TreeSitterJSON
@@ -92,7 +93,7 @@ enum TreeSitterLanguageResolver {
     /// Languages currently driven by tree-sitter. Kept in sync with ``setup(for:)``.
     static let migratedLanguages: Set<SyntaxLanguage> = [
         .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php,
-        .go, .rust, .c, .java, .cpp
+        .go, .rust, .c, .java, .cpp, .dockerfile
     ]
 
     /// A resolved tree-sitter setup: the root language plus a provider for embedded
@@ -127,6 +128,7 @@ enum TreeSitterLanguageResolver {
     private static let cConfiguration = config(tree_sitter_c(), "c", bundle: "TamgaGrammars_TreeSitterC")
     private static let javaConfiguration = config(tree_sitter_java(), "java", bundle: "TamgaGrammars_TreeSitterJava")
     private static let cppConfiguration = config(tree_sitter_cpp(), "cpp", bundle: "TamgaGrammars_TreeSitterCPP")
+    private static let dockerfileConfiguration = config(tree_sitter_dockerfile(), "dockerfile", bundle: "TamgaGrammars_TreeSitterDockerfile")
 
     /// Maps an injection language name (from a host grammar's `injections.scm`) to a
     /// child configuration. Names are taken from the actual query files, not guessed:
@@ -166,7 +168,8 @@ enum TreeSitterLanguageResolver {
         .rust: { rustConfiguration },
         .c: { cConfiguration },
         .java: { javaConfiguration },
-        .cpp: { cppConfiguration }
+        .cpp: { cppConfiguration },
+        .dockerfile: { dockerfileConfiguration }
     ]
 
     static func setup(for language: SyntaxLanguage) -> Setup? {
