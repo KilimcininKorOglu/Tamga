@@ -29,6 +29,7 @@ class AppState: ObservableObject {
     @Published var isMinimapVisible: Bool = false
     @Published var isIndentGuidesVisible: Bool = false
     @Published var isOccurrenceHighlightEnabled: Bool = true
+    @Published var isAutoCloseBracketsEnabled: Bool = true
     @Published var appLanguage: AppLanguage = .system
 
     private let userDefaults = UserDefaults.standard
@@ -67,6 +68,7 @@ class AppState: ObservableObject {
         isMinimapVisible = userDefaults.object(forKey: "minimap") as? Bool ?? false
         isIndentGuidesVisible = userDefaults.object(forKey: "indentGuides") as? Bool ?? false
         isOccurrenceHighlightEnabled = userDefaults.object(forKey: "occurrenceHighlight") as? Bool ?? true
+        isAutoCloseBracketsEnabled = userDefaults.object(forKey: "autoCloseBrackets") as? Bool ?? true
 
         if let themeRaw = userDefaults.string(forKey: "theme"),
             let theme = AppTheme(rawValue: themeRaw)
@@ -125,6 +127,7 @@ class AppState: ObservableObject {
         userDefaults.set(isMinimapVisible, forKey: "minimap")
         userDefaults.set(isIndentGuidesVisible, forKey: "indentGuides")
         userDefaults.set(isOccurrenceHighlightEnabled, forKey: "occurrenceHighlight")
+        userDefaults.set(isAutoCloseBracketsEnabled, forKey: "autoCloseBrackets")
         userDefaults.set(appLanguage.rawValue, forKey: "appLanguage")
 
         if let data = try? JSONEncoder().encode(recentFiles) {

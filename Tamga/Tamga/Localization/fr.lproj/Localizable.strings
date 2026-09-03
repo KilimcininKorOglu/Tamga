@@ -135,3 +135,5 @@
 "indent.guides" = "Guides d'indentation";
 
 "highlight.occurrences" = "Surligner les occurrences";
+
+"auto.close.brackets" = "Fermeture automatique des parenthèses";

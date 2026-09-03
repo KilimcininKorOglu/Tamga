@@ -283,6 +283,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
             )
 
             applyOccurrenceHighlights(textView: textView, layoutManager: layoutManager, nsText: nsText, length: length)
+            applyBracketMatch(textView: textView, layoutManager: layoutManager, nsText: nsText, length: length)
         }
 
         /// Highlights every occurrence of the current selection when it is a single word,
@@ -309,6 +310,80 @@ struct HighlightedTextEditor: NSViewRepresentable {
                 let next = NSMaxRange(found)
                 searchRange = NSRange(location: next, length: length - next)
             }
+        }
+
+        private static let openToClose: [unichar: unichar] = [0x28: 0x29, 0x5B: 0x5D, 0x7B: 0x7D]
+        private static let closeToOpen: [unichar: unichar] = [0x29: 0x28, 0x5D: 0x5B, 0x7D: 0x7B]
+
+        /// Highlights the bracket next to the caret and its partner. Prefers the bracket
+        /// just before the caret (typical after typing a closing bracket), then the one at
+        /// the caret. Only runs for a zero-length selection.
+        private func applyBracketMatch(
+            textView: NSTextView,
+            layoutManager: NSLayoutManager,
+            nsText: NSString,
+            length: Int
+        ) {
+            let caret = textView.selectedRange()
+            guard caret.length == 0 else { return }
+
+            if caret.location > 0, let partner = matchingBracket(at: caret.location - 1, in: nsText, length: length) {
+                highlightBracketPair(caret.location - 1, partner, layoutManager: layoutManager)
+            } else if caret.location < length, let partner = matchingBracket(at: caret.location, in: nsText, length: length) {
+                highlightBracketPair(caret.location, partner, layoutManager: layoutManager)
+            }
+        }
+
+        private func highlightBracketPair(_ first: Int, _ second: Int, layoutManager: NSLayoutManager) {
+            let color = NSColor.systemBlue.withAlphaComponent(parent.isDarkMode ? 0.5 : 0.35)
+            layoutManager.addTemporaryAttribute(.backgroundColor, value: color, forCharacterRange: NSRange(location: first, length: 1))
+            layoutManager.addTemporaryAttribute(.backgroundColor, value: color, forCharacterRange: NSRange(location: second, length: 1))
+        }
+
+        /// Returns the index of the bracket matching the one at `index`, or nil if the
+        /// character is not a bracket or has no match. Naive depth counting; it does not
+        /// skip brackets inside strings or comments.
+        private func matchingBracket(at index: Int, in text: NSString, length: Int) -> Int? {
+            let char = text.character(at: index)
+            if let close = Self.openToClose[char] {
+                return scanForward(open: char, close: close, from: index + 1, in: text, length: length)
+            }
+            if let open = Self.closeToOpen[char] {
+                return scanBackward(open: open, close: char, from: index - 1, in: text)
+            }
+            return nil
+        }
+
+        private func scanForward(open: unichar, close: unichar, from start: Int, in text: NSString, length: Int) -> Int? {
+            var depth = 1
+            var i = start
+            while i < length {
+                let char = text.character(at: i)
+                if char == open {
+                    depth += 1
+                } else if char == close {
+                    depth -= 1
+                    if depth == 0 { return i }
+                }
+                i += 1
+            }
+            return nil
+        }
+
+        private func scanBackward(open: unichar, close: unichar, from start: Int, in text: NSString) -> Int? {
+            var depth = 1
+            var i = start
+            while i >= 0 {
+                let char = text.character(at: i)
+                if char == close {
+                    depth += 1
+                } else if char == open {
+                    depth -= 1
+                    if depth == 0 { return i }
+                }
+                i -= 1
+            }
+            return nil
         }
 
         // MARK: - Gutter

@@ -135,3 +135,5 @@
 "indent.guides" = "Indent Guides";
 
 "highlight.occurrences" = "Highlight Occurrences";
+
+"auto.close.brackets" = "Auto-Close Brackets";

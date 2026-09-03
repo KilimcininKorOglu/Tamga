@@ -135,3 +135,5 @@
 "indent.guides" = "Guías de sangría";
 
 "highlight.occurrences" = "Resaltar coincidencias";
+
+"auto.close.brackets" = "Cerrar corchetes automáticamente";

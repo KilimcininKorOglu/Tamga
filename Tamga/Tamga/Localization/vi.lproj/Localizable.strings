@@ -135,3 +135,5 @@
 "indent.guides" = "Đường dẫn thụt lề";
 
 "highlight.occurrences" = "Làm nổi bật các lần xuất hiện";
+
+"auto.close.brackets" = "Tự động đóng dấu ngoặc";

@@ -135,3 +135,5 @@
 "indent.guides" = "Girinti Kılavuzları";
 
 "highlight.occurrences" = "Eşleşmeleri Vurgula";
+
+"auto.close.brackets" = "Parantezleri Otomatik Kapat";

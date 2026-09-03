@@ -252,6 +252,63 @@ class TamgaTextView: NSTextView {
         insertText("    ", replacementRange: selectedRange())
     }
 
+    // MARK: - Auto-close brackets
+
+    /// Opening character to its closing partner. Quotes map to themselves.
+    private static let bracketPairs: [String: String] = [
+        "(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'", "`": "`"
+    ]
+    private static let closingCharacters: Set<String> = [")", "]", "}", "\"", "'", "`"]
+
+    /// Wraps a selection in a pair, closes an opening char, or types over an existing
+    /// closing char. Every other input, a paste, or IME composition falls straight
+    /// through to the superclass. Auto-indent and Tab-to-spaces route through this
+    /// override too, but their strings are never a single bracket, so they pass through.
+    override func insertText(_ string: Any, replacementRange: NSRange) {
+        guard AppState.shared.isAutoCloseBracketsEnabled,
+            !hasMarkedText(),
+            let input = string as? String,
+            input.count == 1
+        else {
+            super.insertText(string, replacementRange: replacementRange)
+            return
+        }
+
+        let selection = selectedRange()
+
+        if selection.length > 0, let close = Self.bracketPairs[input] {
+            wrapSelection(open: input, close: close, selection: selection)
+            return
+        }
+        if selection.length == 0, Self.closingCharacters.contains(input), typeOverClosing(input, at: selection.location) {
+            return
+        }
+        if selection.length == 0, let close = Self.bracketPairs[input] {
+            super.insertText(input + close, replacementRange: replacementRange)
+            setSelectedRange(NSRange(location: selection.location + (input as NSString).length, length: 0))
+            return
+        }
+
+        super.insertText(string, replacementRange: replacementRange)
+    }
+
+    /// Moves the caret past an identical closing character instead of inserting a second
+    /// one, so typing `)` right before a `)` just steps over it.
+    private func typeOverClosing(_ input: String, at location: Int) -> Bool {
+        let text = string as NSString
+        guard location < text.length else { return false }
+        guard text.substring(with: NSRange(location: location, length: 1)) == input else { return false }
+        setSelectedRange(NSRange(location: location + 1, length: 0))
+        return true
+    }
+
+    /// Surrounds the current selection with the pair and reselects the inner text.
+    private func wrapSelection(open: String, close: String, selection: NSRange) {
+        let inner = (string as NSString).substring(with: selection)
+        super.insertText(open + inner + close, replacementRange: selection)
+        setSelectedRange(NSRange(location: selection.location + (open as NSString).length, length: (inner as NSString).length))
+    }
+
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         // Allow standard shortcuts
         if event.modifierFlags.contains(.command) {

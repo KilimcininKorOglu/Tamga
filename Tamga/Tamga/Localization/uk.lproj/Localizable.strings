@@ -135,3 +135,5 @@
 "indent.guides" = "Напрямні відступів";
 
 "highlight.occurrences" = "Підсвічувати збіги";
+
+"auto.close.brackets" = "Автозакриття дужок";

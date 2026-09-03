@@ -75,3 +75,59 @@ final class ModelTests: XCTestCase {
         XCTAssertNotNil(setup.languageProvider("markdown_inline"))
     }
 }
+
+/// Tests the auto-close bracket behaviour of the editor's text view. These drive the
+/// programmatic `insertText` entry point directly, so no window or key events are needed.
+@MainActor
+final class AutoCloseTests: XCTestCase {
+    private func makeTextView() -> TamgaTextView {
+        let textView = TamgaTextView(frame: NSRect(x: 0, y: 0, width: 300, height: 200))
+        textView.isEditable = true
+        textView.string = ""
+        return textView
+    }
+
+    func testTypingOpenBracketInsertsPairAndCentersCaret() {
+        AppState.shared.isAutoCloseBracketsEnabled = true
+        let textView = makeTextView()
+        textView.insertText("(", replacementRange: textView.selectedRange())
+        XCTAssertEqual(textView.string, "()")
+        XCTAssertEqual(textView.selectedRange(), NSRange(location: 1, length: 0))
+    }
+
+    func testTypingClosingBracketOverAnExistingOneStepsOver() {
+        AppState.shared.isAutoCloseBracketsEnabled = true
+        let textView = makeTextView()
+        textView.string = "()"
+        textView.setSelectedRange(NSRange(location: 1, length: 0))
+        textView.insertText(")", replacementRange: textView.selectedRange())
+        XCTAssertEqual(textView.string, "()")
+        XCTAssertEqual(textView.selectedRange(), NSRange(location: 2, length: 0))
+    }
+
+    func testTypingBracketWrapsSelection() {
+        AppState.shared.isAutoCloseBracketsEnabled = true
+        let textView = makeTextView()
+        textView.string = "abc"
+        textView.setSelectedRange(NSRange(location: 0, length: 3))
+        textView.insertText("[", replacementRange: textView.selectedRange())
+        XCTAssertEqual(textView.string, "[abc]")
+        XCTAssertEqual(textView.selectedRange(), NSRange(location: 1, length: 3))
+    }
+
+    func testNormalCharacterTypingIsUnaffected() {
+        AppState.shared.isAutoCloseBracketsEnabled = true
+        let textView = makeTextView()
+        textView.insertText("a", replacementRange: textView.selectedRange())
+        textView.insertText("b", replacementRange: textView.selectedRange())
+        XCTAssertEqual(textView.string, "ab")
+    }
+
+    func testDisabledToggleSkipsAutoClose() {
+        AppState.shared.isAutoCloseBracketsEnabled = false
+        let textView = makeTextView()
+        textView.insertText("(", replacementRange: textView.selectedRange())
+        XCTAssertEqual(textView.string, "(")
+        AppState.shared.isAutoCloseBracketsEnabled = true
+    }
+}

@@ -135,3 +135,5 @@
 "indent.guides" = "缩进参考线";
 
 "highlight.occurrences" = "高亮匹配项";
+
+"auto.close.brackets" = "自动闭合括号";

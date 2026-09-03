@@ -120,6 +120,9 @@ struct SettingsView: View {
             Toggle(String(localized: "line.numbers"), isOn: bind(\.showLineNumbers))
             Toggle(String(localized: "word.wrap"), isOn: bind(\.isWordWrapEnabled))
             Toggle(String(localized: "show.invisibles"), isOn: bind(\.showInvisibleCharacters))
+            Toggle(String(localized: "indent.guides"), isOn: bind(\.isIndentGuidesVisible))
+            Toggle(String(localized: "auto.close.brackets"), isOn: bind(\.isAutoCloseBracketsEnabled))
+            Toggle(String(localized: "highlight.occurrences"), isOn: bind(\.isOccurrenceHighlightEnabled))
             Toggle(String(localized: "status.bar"), isOn: bind(\.isStatusBarVisible))
             Toggle(String(localized: "sidebar"), isOn: bind(\.isSidebarVisible))
         }

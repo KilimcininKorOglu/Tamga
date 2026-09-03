@@ -135,3 +135,5 @@
 "indent.guides" = "เส้นนำการเยื้อง";
 
 "highlight.occurrences" = "ไฮไลต์ที่ตรงกัน";
+
+"auto.close.brackets" = "ปิดวงเล็บอัตโนมัติ";

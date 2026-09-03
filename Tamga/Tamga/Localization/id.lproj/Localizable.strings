@@ -135,3 +135,5 @@
 "indent.guides" = "Panduan Indentasi";
 
 "highlight.occurrences" = "Sorot Kemunculan";
+
+"auto.close.brackets" = "Tutup Tanda Kurung Otomatis";

@@ -135,3 +135,5 @@
 "indent.guides" = "इंडेंट गाइड";
 
 "highlight.occurrences" = "घटनाओं को हाइलाइट करें";
+
+"auto.close.brackets" = "कोष्ठक स्वतः बंद करें";

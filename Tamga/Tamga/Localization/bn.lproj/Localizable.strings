@@ -135,3 +135,5 @@
 "indent.guides" = "ইনডেন্ট গাইড";
 
 "highlight.occurrences" = "উপস্থিতি হাইলাইট করুন";
+
+"auto.close.brackets" = "স্বয়ংক্রিয়ভাবে বন্ধনী বন্ধ করুন";
