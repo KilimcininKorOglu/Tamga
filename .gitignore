@@ -49,3 +49,6 @@ GEMINI.md
 
 # SwiftPM
 .build/
+
+# Code coverage
+*.profraw
