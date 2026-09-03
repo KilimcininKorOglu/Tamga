@@ -64,4 +64,14 @@ final class ModelTests: XCTestCase {
             )
         }
     }
+
+    /// The markdown block grammar injects its inline grammar for spans and emphasis;
+    /// resolve that injection to prove the inline grammar and its queries also load.
+    func testMarkdownInlineInjectionResolves() {
+        guard let setup = TreeSitterLanguageResolver.setup(for: .markdown) else {
+            XCTFail("markdown grammar failed to load")
+            return
+        }
+        XCTAssertNotNil(setup.languageProvider("markdown_inline"))
+    }
 }

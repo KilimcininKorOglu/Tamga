@@ -12,6 +12,8 @@ import TreeSitterHTML
 import TreeSitterJSON
 import TreeSitterJava
 import TreeSitterJavaScript
+import TreeSitterMarkdown
+import TreeSitterMarkdownInline
 import TreeSitterPHP
 import TreeSitterPython
 import TreeSitterRust
@@ -68,14 +70,29 @@ enum TreeSitterTheme {
         "field": \.variable,
         "label": \.variable,
         "attribute": \.attribute,
-        "tag": \.tag
+        "tag": \.tag,
+        "punctuation": \.operator,
+        "none": \.foreground,
+        // Markdown (nvim-treesitter capture names) needs dotted keys, matched by the
+        // longest-prefix lookup below.
+        "text.title": \.keyword,
+        "text.literal": \.string,
+        "text.uri": \.attribute,
+        "text.reference": \.attribute,
+        "text.emphasis": \.type,
+        "text.strong": \.keyword
     ]
 
-    /// Longest-prefix match on dotted capture names; returns nil for captures with
-    /// no themed color (caller substitutes the base foreground).
+    /// Longest dotted-prefix match on a capture name (`text.title` beats `text`); returns
+    /// nil for captures with no themed color (caller substitutes the base foreground).
     private static func color(forCapture capture: String, theme: SyntaxHighlighter.Theme) -> NSColor? {
-        let root = capture.split(separator: ".").first.map(String.init) ?? capture
-        guard let keyPath = captureColors[root] else { return nil }
+        var prefix = ""
+        var match: KeyPath<SyntaxHighlighter.Theme, NSColor>?
+        for component in capture.split(separator: ".") {
+            prefix = prefix.isEmpty ? String(component) : "\(prefix).\(component)"
+            if let keyPath = captureColors[prefix] { match = keyPath }
+        }
+        guard let keyPath = match else { return nil }
         return theme[keyPath: keyPath]
     }
 }
@@ -93,7 +110,7 @@ enum TreeSitterLanguageResolver {
     /// Languages currently driven by tree-sitter. Kept in sync with ``setup(for:)``.
     static let migratedLanguages: Set<SyntaxLanguage> = [
         .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php,
-        .go, .rust, .c, .java, .cpp, .dockerfile
+        .go, .rust, .c, .java, .cpp, .dockerfile, .markdown
     ]
 
     /// A resolved tree-sitter setup: the root language plus a provider for embedded
@@ -129,20 +146,33 @@ enum TreeSitterLanguageResolver {
     private static let javaConfiguration = config(tree_sitter_java(), "java", bundle: "TamgaGrammars_TreeSitterJava")
     private static let cppConfiguration = config(tree_sitter_cpp(), "cpp", bundle: "TamgaGrammars_TreeSitterCPP")
     private static let dockerfileConfiguration = config(tree_sitter_dockerfile(), "dockerfile", bundle: "TamgaGrammars_TreeSitterDockerfile")
+    private static let markdownConfiguration = config(tree_sitter_markdown(), "markdown", bundle: "TamgaGrammars_TreeSitterMarkdown")
+    private static let markdownInlineConfiguration = config(tree_sitter_markdown_inline(), "markdown_inline", bundle: "TamgaGrammars_TreeSitterMarkdownInline")
 
     /// Maps an injection language name (from a host grammar's `injections.scm`) to a
     /// child configuration. Names are taken from the actual query files, not guessed:
     /// HTML injects `javascript` (`<script>`) and `css` (`<style>`).
     private static let injectionProvider: LanguageLayer.LanguageProvider = { name in
         switch name {
-        case "javascript", "js": return javascriptConfiguration
+        case "javascript", "js", "typescript", "ts": return javascriptConfiguration
         case "css": return cssConfiguration
         case "html": return htmlConfiguration
-        case "python": return pythonConfiguration
+        case "python", "py": return pythonConfiguration
         case "json": return jsonConfiguration
         case "bash", "shell", "sh": return bashConfiguration
-        case "yaml": return yamlConfiguration
+        case "yaml", "yml": return yamlConfiguration
         case "xml": return xmlConfiguration
+        case "swift": return swiftConfiguration
+        case "sql": return sqlConfiguration
+        case "php": return phpConfiguration
+        case "go": return goConfiguration
+        case "rust", "rs": return rustConfiguration
+        case "c": return cConfiguration
+        case "java": return javaConfiguration
+        case "cpp", "c++": return cppConfiguration
+        case "dockerfile": return dockerfileConfiguration
+        // The block markdown grammar injects its inline grammar for spans, links, emphasis.
+        case "markdown_inline", "markdown.inline", "inline": return markdownInlineConfiguration
         default: return nil
         }
     }
@@ -169,7 +199,8 @@ enum TreeSitterLanguageResolver {
         .c: { cConfiguration },
         .java: { javaConfiguration },
         .cpp: { cppConfiguration },
-        .dockerfile: { dockerfileConfiguration }
+        .dockerfile: { dockerfileConfiguration },
+        .markdown: { markdownConfiguration }
     ]
 
     static func setup(for language: SyntaxLanguage) -> Setup? {
