@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Automatyczne zamykanie nawiasów";
 
 "complete.word" = "Uzupełnij słowo";
+
+"outline" = "Konspekt";
+"no.symbols" = "Brak symboli";

@@ -139,3 +139,6 @@
 "auto.close.brackets" = "괄호 자동 닫기";
 
 "complete.word" = "단어 완성";
+
+"outline" = "개요";
+"no.symbols" = "기호 없음";

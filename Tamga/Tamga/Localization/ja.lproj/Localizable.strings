@@ -139,3 +139,6 @@
 "auto.close.brackets" = "括弧を自動的に閉じる";
 
 "complete.word" = "単語を補完";
+
+"outline" = "アウトライン";
+"no.symbols" = "シンボルなし";

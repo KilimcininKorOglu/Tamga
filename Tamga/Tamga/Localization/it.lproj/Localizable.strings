@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Chiudi automaticamente le parentesi";
 
 "complete.word" = "Completa parola";
+
+"outline" = "Struttura";
+"no.symbols" = "Nessun simbolo";

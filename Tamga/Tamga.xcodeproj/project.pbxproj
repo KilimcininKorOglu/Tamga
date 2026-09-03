@@ -12,6 +12,7 @@
 		A1000031AAAAAAAA00000031 /* AboutPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000031AAAAAAAA00000031 /* AboutPanel.swift */; };
 		A1000032AAAAAAAA00000032 /* CLIInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000032AAAAAAAA00000032 /* CLIInstaller.swift */; };
 		A1000033AAAAAAAA00000033 /* PrintService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000033AAAAAAAA00000033 /* PrintService.swift */; };
+		A1000038AAAAAAAA00000038 /* SymbolExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000038AAAAAAAA00000038 /* SymbolExtractor.swift */; };
 		A1000002AAAAAAAA00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002AAAAAAAA00000002 /* ContentView.swift */; };
 		A1000003AAAAAAAA00000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000003AAAAAAAA00000003 /* Assets.xcassets */; };
 		A1000004AAAAAAAA00000004 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000004AAAAAAAA00000004 /* Tab.swift */; };
@@ -56,6 +57,7 @@
 		A2000031AAAAAAAA00000031 /* AboutPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPanel.swift; sourceTree = "<group>"; };
 		A2000032AAAAAAAA00000032 /* CLIInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIInstaller.swift; sourceTree = "<group>"; };
 		A2000033AAAAAAAA00000033 /* PrintService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintService.swift; sourceTree = "<group>"; };
+		A2000038AAAAAAAA00000038 /* SymbolExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolExtractor.swift; sourceTree = "<group>"; };
 		A2000002AAAAAAAA00000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A2000003AAAAAAAA00000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000004AAAAAAAA00000004 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				A2000015AAAAAAAA00000015 /* SyntaxHighlighter.swift */,
 				A2000025AAAAAAAA00000025 /* TreeSitterHighlighting.swift */,
 				A2000033AAAAAAAA00000033 /* PrintService.swift */,
+				A2000038AAAAAAAA00000038 /* SymbolExtractor.swift */,
 				A2000032AAAAAAAA00000032 /* CLIInstaller.swift */,
 			);
 			path = Services;
@@ -384,6 +387,7 @@
 				A1000031AAAAAAAA00000031 /* AboutPanel.swift in Sources */,
 				A1000032AAAAAAAA00000032 /* CLIInstaller.swift in Sources */,
 				A1000033AAAAAAAA00000033 /* PrintService.swift in Sources */,
+				A1000038AAAAAAAA00000038 /* SymbolExtractor.swift in Sources */,
 				A1000002AAAAAAAA00000002 /* ContentView.swift in Sources */,
 				A1000004AAAAAAAA00000004 /* Tab.swift in Sources */,
 				A1000005AAAAAAAA00000005 /* Document.swift in Sources */,

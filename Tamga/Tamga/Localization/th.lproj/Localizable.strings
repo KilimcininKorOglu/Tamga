@@ -139,3 +139,6 @@
 "auto.close.brackets" = "ปิดวงเล็บอัตโนมัติ";
 
 "complete.word" = "เติมคำให้สมบูรณ์";
+
+"outline" = "โครงร่าง";
+"no.symbols" = "ไม่มีสัญลักษณ์";

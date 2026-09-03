@@ -164,3 +164,40 @@ final class AutoCloseTests: XCTestCase {
         XCTAssertTrue(textView.urlRanges.isEmpty)
     }
 }
+
+/// Tests the regex-based outline extraction.
+final class SymbolExtractorTests: XCTestCase {
+    func testSwiftFunctionsAndTypes() {
+        let content = "import Foundation\nstruct Model {\n    func load() {}\n}\n"
+        let symbols = SymbolExtractor.symbols(in: content, language: .swift)
+        XCTAssertEqual(symbols.map(\.name), ["Model", "load"])
+        XCTAssertEqual(symbols.first?.line, 2)
+        XCTAssertEqual(symbols.first?.kind, .type)
+    }
+
+    func testPythonDefAndClass() {
+        let content = "class Animal:\n    def speak(self):\n        pass\n"
+        let symbols = SymbolExtractor.symbols(in: content, language: .python)
+        XCTAssertEqual(symbols.map(\.name), ["Animal", "speak"])
+    }
+
+    func testMarkdownHeadings() {
+        let content = "# Title\nText\n## Section\n"
+        let symbols = SymbolExtractor.symbols(in: content, language: .markdown)
+        XCTAssertEqual(symbols.map(\.name), ["Title", "Section"])
+        XCTAssertEqual(symbols.first?.kind, .heading)
+    }
+
+    func testPlainTextHasNoSymbols() {
+        let symbols = SymbolExtractor.symbols(in: "just text\nmore text", language: .plainText)
+        XCTAssertTrue(symbols.isEmpty)
+    }
+
+    func testControlKeywordsAreNotFunctions() {
+        // A loose C function pattern must not capture an `if` statement.
+        let content = "int main() {\n    if (x) {\n        return 0;\n    }\n}\n"
+        let symbols = SymbolExtractor.symbols(in: content, language: .c)
+        XCTAssertTrue(symbols.contains { $0.name == "main" })
+        XCTAssertFalse(symbols.contains { $0.name == "if" })
+    }
+}

@@ -5,12 +5,14 @@ struct SidebarView: View {
     @ObservedObject var tabManager: TabManager
     @ObservedObject private var appState = AppState.shared
     let onOpenFile: (URL) -> Void
+    let onGoToLine: (Int) -> Void
 
     @State private var selectedSection: SidebarSection = .openTabs
 
     private enum SidebarSection: String, CaseIterable {
         case openTabs = "open.tabs"
         case recentFiles = "recent.files"
+        case outline = "outline"
     }
 
     var body: some View {
@@ -33,6 +35,8 @@ struct SidebarView: View {
                 openTabsSection
             case .recentFiles:
                 recentFilesSection
+            case .outline:
+                outlineSection
             }
 
             Spacer()
@@ -116,6 +120,51 @@ struct SidebarView: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         onOpenFile(url)
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+    }
+
+    // MARK: - Outline Section
+
+    private var outlineSymbols: [DocumentSymbol] {
+        guard let tab = tabManager.activeTab else { return [] }
+        return SymbolExtractor.symbols(in: tab.content, language: tab.language)
+    }
+
+    private var outlineSection: some View {
+        Group {
+            let symbols = outlineSymbols
+            if symbols.isEmpty {
+                VStack {
+                    Image(systemName: "list.bullet.indent")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                    Text(String(localized: "no.symbols"))
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                List(symbols) { symbol in
+                    HStack {
+                        Image(systemName: symbol.kind.icon)
+                            .foregroundColor(.secondary)
+                            .frame(width: 16)
+
+                        Text(symbol.name)
+                            .lineLimit(1)
+
+                        Spacer()
+
+                        Text("\(symbol.line)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        onGoToLine(symbol.line)
                     }
                 }
                 .listStyle(.plain)

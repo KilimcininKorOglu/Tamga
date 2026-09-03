@@ -139,3 +139,6 @@
 "auto.close.brackets" = "自动闭合括号";
 
 "complete.word" = "补全单词";
+
+"outline" = "大纲";
+"no.symbols" = "无符号";

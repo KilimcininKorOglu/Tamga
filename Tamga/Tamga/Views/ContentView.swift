@@ -19,9 +19,11 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 // Sidebar
                 if appState.isSidebarVisible {
-                    SidebarView(tabManager: tabManager) { url in
-                        openFile(url)
-                    }
+                    SidebarView(
+                        tabManager: tabManager,
+                        onOpenFile: { url in openFile(url) },
+                        onGoToLine: { line in goToLine(line) }
+                    )
 
                     Divider()
                 }

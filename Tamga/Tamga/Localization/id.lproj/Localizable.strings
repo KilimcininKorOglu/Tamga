@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Tutup Tanda Kurung Otomatis";
 
 "complete.word" = "Lengkapi Kata";
+
+"outline" = "Kerangka";
+"no.symbols" = "Tidak ada simbol";

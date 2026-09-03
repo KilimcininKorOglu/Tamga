@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Auto-Close Brackets";
 
 "complete.word" = "Complete Word";
+
+"outline" = "Outline";
+"no.symbols" = "No symbols";

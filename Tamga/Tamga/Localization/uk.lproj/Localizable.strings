@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Автозакриття дужок";
 
 "complete.word" = "Завершити слово";
+
+"outline" = "Структура";
+"no.symbols" = "Немає символів";

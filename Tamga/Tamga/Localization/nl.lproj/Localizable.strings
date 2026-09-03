@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Haakjes automatisch sluiten";
 
 "complete.word" = "Woord aanvullen";
+
+"outline" = "Overzicht";
+"no.symbols" = "Geen symbolen";

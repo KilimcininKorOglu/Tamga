@@ -139,3 +139,6 @@
 "auto.close.brackets" = "Klammern automatisch schließen";
 
 "complete.word" = "Wort vervollständigen";
+
+"outline" = "Gliederung";
+"no.symbols" = "Keine Symbole";
