@@ -119,3 +119,6 @@
 "export" = "Xuất";
 "export.html" = "Xuất dạng HTML";
 "export.pdf" = "Xuất dạng PDF";
+
+// Font panel
+"choose.font" = "Chọn phông…";

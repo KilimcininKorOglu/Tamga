@@ -119,3 +119,6 @@
 "export" = "এক্সপোর্ট";
 "export.html" = "HTML হিসেবে এক্সপোর্ট";
 "export.pdf" = "PDF হিসেবে এক্সপোর্ট";
+
+// Font panel
+"choose.font" = "ফন্ট নির্বাচন…";

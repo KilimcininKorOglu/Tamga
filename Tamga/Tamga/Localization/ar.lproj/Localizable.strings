@@ -119,3 +119,6 @@
 "export" = "تصدير";
 "export.html" = "تصدير كـ HTML";
 "export.pdf" = "تصدير كـ PDF";
+
+// Font panel
+"choose.font" = "اختيار الخط…";

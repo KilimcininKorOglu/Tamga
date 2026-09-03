@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 
 @testable import Tamga
@@ -101,6 +102,12 @@ final class DocumentViewModelTests: XCTestCase {
         let content = "l1\nl2\nl3"
         XCTAssertEqual(viewModel.goToLine(2, in: content), 3)
         XCTAssertNil(viewModel.goToLine(99, in: content))
+    }
+
+    func testFontPanelShowConfiguresManager() {
+        FontPanelController.shared.show()
+        XCTAssertTrue(NSFontManager.shared.target as AnyObject? === FontPanelController.shared)
+        XCTAssertEqual(NSFontManager.shared.action, #selector(FontPanelController.changeFont(_:)))
     }
 
     func testHTMLExportProducesHTML() {

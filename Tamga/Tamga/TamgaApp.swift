@@ -28,6 +28,38 @@ struct TamgaApp: App {
     }
 }
 
+// MARK: - Font Panel
+
+/// Bridges the system font panel to `AppState`. Retained by `shared` because
+/// `NSFontManager.target` is weak, and it writes the chosen font through so the change
+/// persists.
+@MainActor
+final class FontPanelController: NSObject {
+    static let shared = FontPanelController()
+    private override init() { super.init() }
+
+    private var currentFont: NSFont {
+        NSFont(name: AppState.shared.fontName, size: AppState.shared.fontSize)
+            ?? .monospacedSystemFont(ofSize: AppState.shared.fontSize, weight: .regular)
+    }
+
+    func show() {
+        let manager = NSFontManager.shared
+        manager.target = self
+        manager.action = #selector(changeFont(_:))
+        manager.setSelectedFont(currentFont, isMultiple: false)
+        manager.orderFrontFontPanel(nil)
+    }
+
+    @objc func changeFont(_ sender: NSFontManager?) {
+        guard let sender else { return }
+        let newFont = sender.convert(currentFont)
+        AppState.shared.fontName = newFont.fontName
+        AppState.shared.fontSize = newFont.pointSize
+        AppState.shared.saveSettings()
+    }
+}
+
 // MARK: - Settings
 
 /// Preferences window collecting the editor and general options that were previously
@@ -79,6 +111,10 @@ struct SettingsView: View {
 
             Stepper(value: bind(\.fontSize), in: 8...48, step: 1) {
                 Text("\(String(localized: "font.size")): \(Int(appState.fontSize))")
+            }
+
+            Button(String(localized: "choose.font")) {
+                FontPanelController.shared.show()
             }
 
             Toggle(String(localized: "line.numbers"), isOn: bind(\.showLineNumbers))

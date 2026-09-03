@@ -119,3 +119,6 @@
 "export" = "Dışa aktar";
 "export.html" = "HTML olarak dışa aktar";
 "export.pdf" = "PDF olarak dışa aktar";
+
+// Font panel
+"choose.font" = "Yazı tipi seç…";

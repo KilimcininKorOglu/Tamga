@@ -119,3 +119,6 @@
 "export" = "Exporter";
 "export.html" = "Exporter en HTML";
 "export.pdf" = "Exporter en PDF";
+
+// Font panel
+"choose.font" = "Choisir la police…";

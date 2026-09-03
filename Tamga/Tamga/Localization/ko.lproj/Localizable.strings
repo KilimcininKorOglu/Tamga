@@ -119,3 +119,6 @@
 "export" = "내보내기";
 "export.html" = "HTML로 내보내기";
 "export.pdf" = "PDF로 내보내기";
+
+// Font panel
+"choose.font" = "글꼴 선택…";

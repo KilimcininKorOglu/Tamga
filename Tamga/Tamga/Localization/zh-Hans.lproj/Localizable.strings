@@ -119,3 +119,6 @@
 "export" = "导出";
 "export.html" = "导出为 HTML";
 "export.pdf" = "导出为 PDF";
+
+// Font panel
+"choose.font" = "选择字体…";
