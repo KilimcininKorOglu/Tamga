@@ -43,6 +43,8 @@
 		C3000002CCCCCCCC00000002 /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = C2000002CCCCCCCC00000002 /* SwiftTreeSitter */; };
 		C3000003CCCCCCCC00000003 /* SwiftTreeSitterLayer in Frameworks */ = {isa = PBXBuildFile; productRef = C2000003CCCCCCCC00000003 /* SwiftTreeSitterLayer */; };
 		D3000001DDDDDDDD00000001 /* TamgaGrammars in Frameworks */ = {isa = PBXBuildFile; productRef = D2000001DDDDDDDD00000001 /* TamgaGrammars */; };
+		E1000041AAAAAAAA00000041 /* DocumentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2000041AAAAAAAA00000041 /* DocumentViewModelTests.swift */; };
+		E1000042AAAAAAAA00000042 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2000042AAAAAAAA00000042 /* ModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +101,9 @@
 		B1000018BBBBBBB000000018 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B1000019BBBBBBB000000019 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B1000020BBBBBBB000000020 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E2000040AAAAAAAA00000040 /* TamgaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TamgaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2000041AAAAAAAA00000041 /* DocumentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModelTests.swift; sourceTree = "<group>"; };
+		E2000042AAAAAAAA00000042 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +118,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E5000042AAAAAAAA00000042 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -120,8 +132,18 @@
 			isa = PBXGroup;
 			children = (
 				A4000002AAAAAAAA00000002 /* Tamga */,
+				E4000040AAAAAAAA00000040 /* TamgaTests */,
 				A4000003AAAAAAAA00000003 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		E4000040AAAAAAAA00000040 /* TamgaTests */ = {
+			isa = PBXGroup;
+			children = (
+				E2000041AAAAAAAA00000041 /* DocumentViewModelTests.swift */,
+				E2000042AAAAAAAA00000042 /* ModelTests.swift */,
+			);
+			path = TamgaTests;
 			sourceTree = "<group>";
 		};
 		A4000002AAAAAAAA00000002 /* Tamga */ = {
@@ -145,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000000AAAAAAAA00000000 /* Tamga.app */,
+				E2000040AAAAAAAA00000040 /* TamgaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,6 +269,24 @@
 			productReference = A2000000AAAAAAAA00000000 /* Tamga.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E5000040AAAAAAAA00000040 /* TamgaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E6000040AAAAAAAA00000040 /* Build configuration list for PBXNativeTarget "TamgaTests" */;
+			buildPhases = (
+				E5000041AAAAAAAA00000041 /* Sources */,
+				E5000042AAAAAAAA00000042 /* Frameworks */,
+				E5000043AAAAAAAA00000043 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E9000041AAAAAAAA00000041 /* PBXTargetDependency */,
+			);
+			name = TamgaTests;
+			productName = TamgaTests;
+			productReference = E2000040AAAAAAAA00000040 /* TamgaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -258,6 +299,10 @@
 				TargetAttributes = {
 					A5000001AAAAAAAA00000001 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					E5000040AAAAAAAA00000040 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A5000001AAAAAAAA00000001;
 					};
 				};
 			};
@@ -299,6 +344,7 @@
 			projectRoot = "";
 			targets = (
 				A5000001AAAAAAAA00000001 /* Tamga */,
+				E5000040AAAAAAAA00000040 /* TamgaTests */,
 			);
 		};
 /* End PBXProject section */
@@ -310,6 +356,13 @@
 			files = (
 				A1000003AAAAAAAA00000003 /* Assets.xcassets in Resources */,
 				A1000018AAAAAAAA00000018 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5000043AAAAAAAA00000043 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +406,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E5000041AAAAAAAA00000041 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1000041AAAAAAAA00000041 /* DocumentViewModelTests.swift in Sources */,
+				E1000042AAAAAAAA00000042 /* ModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		E9000040AAAAAAAA00000040 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7000001AAAAAAAA00000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5000001AAAAAAAA00000001;
+			remoteInfo = Tamga;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		E9000041AAAAAAAA00000041 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5000001AAAAAAAA00000001 /* Tamga */;
+			targetProxy = E9000040AAAAAAAA00000040 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		B0000001BBBBBBB000000001 /* Localizable.strings */ = {
@@ -558,6 +638,42 @@
 			};
 			name = Release;
 		};
+		E8000040AAAAAAAA00000040 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tamga.appTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tamga.app/Contents/MacOS/Tamga";
+			};
+			name = Debug;
+		};
+		E8000041AAAAAAAA00000041 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tamga.appTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tamga.app/Contents/MacOS/Tamga";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -575,6 +691,15 @@
 			buildConfigurations = (
 				A8000001AAAAAAAA00000001 /* Debug */,
 				A8000002AAAAAAAA00000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E6000040AAAAAAAA00000040 /* Build configuration list for PBXNativeTarget "TamgaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8000040AAAAAAAA00000040 /* Debug */,
+				E8000041AAAAAAAA00000041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
