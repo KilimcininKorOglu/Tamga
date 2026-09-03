@@ -145,4 +145,22 @@ final class AutoCloseTests: XCTestCase {
         let range = NSRange(location: 0, length: 5)  // "alpha", no longer word starts with it
         XCTAssertNil(textView.completions(forPartialWordRange: range, indexOfSelectedItem: nil))
     }
+
+    func testURLDetectionFindsLinks() {
+        let textView = makeTextView()
+        let content = "see https://apple.com now"
+        textView.string = content
+        textView.refreshURLDetection()
+
+        XCTAssertEqual(textView.urlRanges.count, 1)
+        guard let range = textView.urlRanges.first else { return }
+        XCTAssertEqual((content as NSString).substring(with: range), "https://apple.com")
+    }
+
+    func testURLDetectionEmptyWithoutLinks() {
+        let textView = makeTextView()
+        textView.string = "just some plain words here"
+        textView.refreshURLDetection()
+        XCTAssertTrue(textView.urlRanges.isEmpty)
+    }
 }

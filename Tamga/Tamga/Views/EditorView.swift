@@ -154,6 +154,9 @@ struct HighlightedTextEditor: NSViewRepresentable {
             let selectedRanges = textView.selectedRanges
             textView.string = text
             textView.selectedRanges = selectedRanges
+            // Direct string assignment does not fire didChangeText, so refresh URL
+            // detection here for opened files and tab switches.
+            textView.refreshURLDetection()
         }
 
         // Update font

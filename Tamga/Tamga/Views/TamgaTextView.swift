@@ -21,6 +21,10 @@ class TamgaTextView: NSTextView {
         }
     }
 
+    /// Cached URL ranges (UTF-16), refreshed on content change. Drawn underlined and
+    /// opened on Cmd-click.
+    var urlRanges: [NSRange] = []
+
     private let spaceSymbol = "·"
     private let tabSymbol = "→"
     private let newlineSymbol = "¶"
@@ -51,7 +55,63 @@ class TamgaTextView: NSTextView {
             drawInvisibleCharacters(in: dirtyRect)
         }
 
+        drawURLUnderlines(in: dirtyRect)
         drawFoldIndicators()
+    }
+
+    /// Re-scans the document for URLs and caches their ranges. Skips very large documents
+    /// so a big paste does not stall on link detection.
+    func refreshURLDetection() {
+        let text = string
+        let length = (text as NSString).length
+        guard length > 0, length < 1_000_000,
+            let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        else {
+            urlRanges = []
+            needsDisplay = true
+            return
+        }
+        urlRanges = detector.matches(in: text, range: NSRange(location: 0, length: length)).map { $0.range }
+        needsDisplay = true
+    }
+
+    /// Underlines each cached URL range with the system link color, following the glyph
+    /// rects so a wrapped URL underlines across every visual row.
+    private func drawURLUnderlines(in rect: NSRect) {
+        guard !urlRanges.isEmpty, let layoutManager = layoutManager, let textContainer = textContainer else {
+            return
+        }
+
+        NSColor.linkColor.setStroke()
+        let visibleGlyphs = layoutManager.glyphRange(forBoundingRect: rect, in: textContainer)
+        let visibleChars = layoutManager.characterRange(forGlyphRange: visibleGlyphs, actualGlyphRange: nil)
+        let length = (string as NSString).length
+
+        for range in urlRanges where NSMaxRange(range) <= length && NSIntersectionRange(range, visibleChars).length > 0 {
+            let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+            layoutManager.enumerateEnclosingRects(
+                forGlyphRange: glyphRange,
+                withinSelectedGlyphRange: NSRange(location: NSNotFound, length: 0),
+                in: textContainer
+            ) { [weak self] fragment, _ in
+                guard let self = self else { return }
+                let y = fragment.maxY + self.textContainerInset.height - 1
+                let path = NSBezierPath()
+                path.move(to: NSPoint(x: fragment.minX + self.textContainerInset.width, y: y))
+                path.line(to: NSPoint(x: fragment.maxX + self.textContainerInset.width, y: y))
+                path.lineWidth = 1
+                path.stroke()
+            }
+        }
+    }
+
+    /// Returns the URL at a character index, if that index falls inside a detected range.
+    private func url(at charIndex: Int) -> URL? {
+        let text = string as NSString
+        for range in urlRanges where NSLocationInRange(charIndex, range) {
+            return URL(string: text.substring(with: range))
+        }
+        return nil
     }
 
     /// Draws a faint vertical line at each indentation level (every 4 columns) so nested
@@ -444,30 +504,39 @@ class TamgaTextView: NSTextView {
         return super.shouldChangeText(in: affectedCharRange, replacementString: replacementString)
     }
 
-    /// Maintains fold positions after every edit.
+    /// Maintains fold positions after every edit and refreshes URL detection.
     override func didChangeText() {
         super.didChangeText()
         maintainFoldsAfterEdit()
+        refreshURLDetection()
     }
 
-    /// A click on a folded block's brace or indicator unfolds it.
+    /// A Cmd-click on a URL opens it; a plain click on a folded block's brace unfolds it.
     override func mouseDown(with event: NSEvent) {
-        if !foldedRanges.isEmpty,
-            let layoutManager = layoutManager,
-            let textContainer = textContainer
-        {
-            let viewPoint = convert(event.locationInWindow, from: nil)
-            let containerPoint = NSPoint(
-                x: viewPoint.x - textContainerInset.width,
-                y: viewPoint.y - textContainerInset.height)
-            let glyphIndex = layoutManager.glyphIndex(for: containerPoint, in: textContainer)
-            let charIndex = layoutManager.characterIndexForGlyph(at: glyphIndex)
-            if let index = foldedRanges.firstIndex(where: { charIndex == $0.location - 1 || charIndex == $0.location }) {
-                foldedRanges.remove(at: index)
-                invalidateFoldLayout()
-                return
-            }
+        guard let layoutManager = layoutManager, let textContainer = textContainer else {
+            super.mouseDown(with: event)
+            return
         }
+
+        let viewPoint = convert(event.locationInWindow, from: nil)
+        let containerPoint = NSPoint(
+            x: viewPoint.x - textContainerInset.width,
+            y: viewPoint.y - textContainerInset.height)
+        let glyphIndex = layoutManager.glyphIndex(for: containerPoint, in: textContainer)
+        let charIndex = layoutManager.characterIndexForGlyph(at: glyphIndex)
+
+        if event.modifierFlags.contains(.command), let url = url(at: charIndex) {
+            NSWorkspace.shared.open(url)
+            return
+        }
+
+        if !foldedRanges.isEmpty,
+            let index = foldedRanges.firstIndex(where: { charIndex == $0.location - 1 || charIndex == $0.location }) {
+            foldedRanges.remove(at: index)
+            invalidateFoldLayout()
+            return
+        }
+
         super.mouseDown(with: event)
     }
 
