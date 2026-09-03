@@ -227,7 +227,7 @@ struct ContentView: View {
             fileMonitor.onChange = { url in reloadIfChanged(url) }
             fileMonitor.sync(with: watchedURLs)
         }
-        .onChange(of: tabManager.tabs.compactMap { $0.filePath }) { _ in
+        .onChange(of: tabManager.activeTab?.filePath) { _ in
             fileMonitor.sync(with: watchedURLs)
         }
         .onDisappear {
@@ -387,9 +387,10 @@ struct ContentView: View {
 
     // MARK: - External File Changes
 
-    /// File paths of every open tab, the set the monitor should watch.
+    /// Only the active tab's file is watched, so launch does not `open()` every restored
+    /// file at once, which would trigger a macOS file-access prompt per protected folder.
     private var watchedURLs: Set<URL> {
-        Set(tabManager.tabs.compactMap { $0.filePath })
+        tabManager.activeTab?.filePath.map { [$0] } ?? []
     }
 
     /// Handles a disk change for `url`. Reads the new content once and, for each tab on
