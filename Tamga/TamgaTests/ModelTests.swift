@@ -47,4 +47,16 @@ final class ModelTests: XCTestCase {
         let utf8BOM = Data([0xEF, 0xBB, 0xBF]) + Data("hi".utf8)
         XCTAssertEqual(FileEncoding.detect(from: utf8BOM), .utf8)
     }
+
+    /// Loads each migrated grammar through the resolver. A non-nil `Setup` proves the
+    /// grammar symbol links, its query bundle resolves by name, and its highlights.scm
+    /// compiles against that grammar, because a mismatch makes LanguageConfiguration throw.
+    func testMigratedGrammarsLoad() {
+        for language in TreeSitterLanguageResolver.migratedLanguages {
+            XCTAssertNotNil(
+                TreeSitterLanguageResolver.setup(for: language),
+                "\(language.rawValue) grammar failed to load"
+            )
+        }
+    }
 }

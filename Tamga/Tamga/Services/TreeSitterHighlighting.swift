@@ -3,12 +3,17 @@ import Neon
 import SwiftTreeSitter
 import SwiftTreeSitterLayer
 import TreeSitterBash
+import TreeSitterC
+import TreeSitterCPP
 import TreeSitterCSS
+import TreeSitterGo
 import TreeSitterHTML
 import TreeSitterJSON
+import TreeSitterJava
 import TreeSitterJavaScript
 import TreeSitterPHP
 import TreeSitterPython
+import TreeSitterRust
 import TreeSitterSQL
 import TreeSitterSwift
 import TreeSitterXML
@@ -86,7 +91,8 @@ enum TreeSitterTheme {
 enum TreeSitterLanguageResolver {
     /// Languages currently driven by tree-sitter. Kept in sync with ``setup(for:)``.
     static let migratedLanguages: Set<SyntaxLanguage> = [
-        .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php
+        .html, .javascript, .css, .python, .json, .xml, .shell, .yaml, .swift, .sql, .php,
+        .go, .rust, .c, .java, .cpp
     ]
 
     /// A resolved tree-sitter setup: the root language plus a provider for embedded
@@ -116,6 +122,11 @@ enum TreeSitterLanguageResolver {
     private static let swiftConfiguration = config(tree_sitter_swift(), "swift", bundle: "TamgaGrammars_TreeSitterSwift")
     private static let sqlConfiguration = config(tree_sitter_sql(), "sql", bundle: "TamgaGrammars_TreeSitterSQL")
     private static let phpConfiguration = config(tree_sitter_php(), "php", bundle: "TamgaGrammars_TreeSitterPHP")
+    private static let goConfiguration = config(tree_sitter_go(), "go", bundle: "TamgaGrammars_TreeSitterGo")
+    private static let rustConfiguration = config(tree_sitter_rust(), "rust", bundle: "TamgaGrammars_TreeSitterRust")
+    private static let cConfiguration = config(tree_sitter_c(), "c", bundle: "TamgaGrammars_TreeSitterC")
+    private static let javaConfiguration = config(tree_sitter_java(), "java", bundle: "TamgaGrammars_TreeSitterJava")
+    private static let cppConfiguration = config(tree_sitter_cpp(), "cpp", bundle: "TamgaGrammars_TreeSitterCPP")
 
     /// Maps an injection language name (from a host grammar's `injections.scm`) to a
     /// child configuration. Names are taken from the actual query files, not guessed:
@@ -150,7 +161,12 @@ enum TreeSitterLanguageResolver {
         .xml: { xmlConfiguration },
         .swift: { swiftConfiguration },
         .sql: { sqlConfiguration },
-        .php: { phpConfiguration }
+        .php: { phpConfiguration },
+        .go: { goConfiguration },
+        .rust: { rustConfiguration },
+        .c: { cConfiguration },
+        .java: { javaConfiguration },
+        .cpp: { cppConfiguration }
     ]
 
     static func setup(for language: SyntaxLanguage) -> Setup? {

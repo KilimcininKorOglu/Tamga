@@ -25,6 +25,11 @@ let package = Package(
                 "TreeSitterSwift",
                 "TreeSitterSQL",
                 "TreeSitterPHP",
+                "TreeSitterGo",
+                "TreeSitterRust",
+                "TreeSitterC",
+                "TreeSitterJava",
+                "TreeSitterCPP",
             ]
         ),
     ],
@@ -112,6 +117,46 @@ let package = Package(
         .target(
             name: "TreeSitterPHP",
             path: "Sources/TreeSitterPHP",
+            sources: ["src/parser.c", "src/scanner.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterGo",
+            path: "Sources/TreeSitterGo",
+            sources: ["src/parser.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterRust",
+            path: "Sources/TreeSitterRust",
+            sources: ["src/parser.c", "src/scanner.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterC",
+            path: "Sources/TreeSitterC",
+            sources: ["src/parser.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterJava",
+            path: "Sources/TreeSitterJava",
+            sources: ["src/parser.c"],
+            resources: [.copy("queries")],
+            publicHeadersPath: "bindings/swift",
+            cSettings: [.headerSearchPath("src")]
+        ),
+        .target(
+            name: "TreeSitterCPP",
+            path: "Sources/TreeSitterCPP",
             sources: ["src/parser.c", "src/scanner.c"],
             resources: [.copy("queries")],
             publicHeadersPath: "bindings/swift",

@@ -127,6 +127,11 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
     case shell = "Shell"
     case yaml = "YAML"
     case toml = "TOML"
+    case go = "Go"
+    case rust = "Rust"
+    case c = "C"
+    case java = "Java"
+    case cpp = "C++"
 
     var displayName: String {
         rawValue
@@ -148,6 +153,11 @@ enum SyntaxLanguage: String, Codable, CaseIterable {
         case .shell: return ["sh", "bash", "zsh", "ksh", "fish"]
         case .yaml: return ["yml", "yaml"]
         case .toml: return ["toml", "ini", "conf", "cfg", "env"]
+        case .go: return ["go"]
+        case .rust: return ["rs"]
+        case .c: return ["c", "h"]
+        case .java: return ["java"]
+        case .cpp: return ["cpp", "cc", "cxx", "hpp", "hh", "hxx", "c++"]
         }
     }
 

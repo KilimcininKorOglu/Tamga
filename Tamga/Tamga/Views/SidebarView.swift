@@ -141,7 +141,12 @@ struct SidebarView: View {
         .shell: "terminal",
         .yaml: "list.bullet.indent",
         .xml: "doc.richtext",
-        .toml: "gearshape"
+        .toml: "gearshape",
+        .go: "g.square",
+        .rust: "r.square",
+        .c: "c.square",
+        .java: "cup.and.saucer",
+        .cpp: "plus.square"
     ]
 
     private func fileIcon(for language: SyntaxLanguage) -> String {
