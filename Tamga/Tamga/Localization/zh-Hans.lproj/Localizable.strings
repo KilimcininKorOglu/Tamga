@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "命令面板";
 "command.palette.placeholder" = "输入命令…";
+
+// Minimap
+"minimap" = "缩略图";

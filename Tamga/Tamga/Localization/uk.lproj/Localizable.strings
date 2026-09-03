@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "Палітра команд";
 "command.palette.placeholder" = "Введіть команду…";
+
+// Minimap
+"minimap" = "Мінікарта";

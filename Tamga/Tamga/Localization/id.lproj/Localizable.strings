@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "Palet Perintah";
 "command.palette.placeholder" = "Ketik perintah…";
+
+// Minimap
+"minimap" = "Minimap";

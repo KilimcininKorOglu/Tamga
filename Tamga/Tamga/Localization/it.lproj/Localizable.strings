@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "Palette comandi";
 "command.palette.placeholder" = "Digita un comando…";
+
+// Minimap
+"minimap" = "Minimappa";

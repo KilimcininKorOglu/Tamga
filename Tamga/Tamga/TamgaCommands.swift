@@ -283,6 +283,8 @@ struct TamgaCommands: Commands {
             Toggle(String(localized: "show.invisibles"), isOn: $appState.showInvisibleCharacters)
                 .keyboardShortcut("8", modifiers: [.command, .option])
 
+            Toggle(String(localized: "minimap"), isOn: $appState.isMinimapVisible)
+
             Divider()
 
             Button(String(localized: "zoom.in")) {

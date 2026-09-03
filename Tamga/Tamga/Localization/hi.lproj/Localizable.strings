@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "कमांड पैलेट";
 "command.palette.placeholder" = "कमांड टाइप करें…";
+
+// Minimap
+"minimap" = "मिनिमैप";

@@ -26,6 +26,7 @@ class AppState: ObservableObject {
     @Published var isSidebarVisible: Bool = false
     @Published var isMarkdownPreviewEnabled: Bool = false
     @Published var showInvisibleCharacters: Bool = false
+    @Published var isMinimapVisible: Bool = false
     @Published var appLanguage: AppLanguage = .system
 
     private let userDefaults = UserDefaults.standard
@@ -61,6 +62,7 @@ class AppState: ObservableObject {
         showLineNumbers = userDefaults.object(forKey: "lineNumbers") as? Bool ?? true
         isAutoSaveEnabled = userDefaults.object(forKey: "autoSave") as? Bool ?? false
         autoSaveInterval = userDefaults.object(forKey: "autoSaveInterval") as? TimeInterval ?? 60
+        isMinimapVisible = userDefaults.object(forKey: "minimap") as? Bool ?? false
 
         if let themeRaw = userDefaults.string(forKey: "theme"),
             let theme = AppTheme(rawValue: themeRaw)
@@ -116,6 +118,7 @@ class AppState: ObservableObject {
         userDefaults.set(currentTheme.rawValue, forKey: "theme")
         userDefaults.set(isAutoSaveEnabled, forKey: "autoSave")
         userDefaults.set(autoSaveInterval, forKey: "autoSaveInterval")
+        userDefaults.set(isMinimapVisible, forKey: "minimap")
         userDefaults.set(appLanguage.rawValue, forKey: "appLanguage")
 
         if let data = try? JSONEncoder().encode(recentFiles) {

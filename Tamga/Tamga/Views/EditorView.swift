@@ -105,6 +105,14 @@ struct HighlightedTextEditor: NSViewRepresentable {
         context.coordinator.updateGutterAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
         context.coordinator.applyGutter(visible: showLineNumbers)
 
+        // Right-pinned overview of the whole document; hidden until enabled.
+        let minimap = MinimapView(frame: .zero)
+        minimap.textView = textView
+        minimap.scrollView = scrollView
+        minimap.isHidden = true
+        scrollView.addSubview(minimap)
+        context.coordinator.minimapView = minimap
+
         // Redraw the gutter and keep it pinned as the text scrolls or the view resizes.
         NotificationCenter.default.addObserver(
             context.coordinator,
@@ -151,8 +159,10 @@ struct HighlightedTextEditor: NSViewRepresentable {
         // Update word wrap
         if isWordWrapEnabled {
             textView.textContainer?.widthTracksTextView = true
+            // Reserve room on the right for the minimap so wrapped text does not run under it.
+            let minimapInset = AppState.shared.isMinimapVisible ? MinimapView.width : 0
             textView.textContainer?.containerSize = NSSize(
-                width: scrollView.contentView.bounds.width - 16,
+                width: scrollView.contentView.bounds.width - 16 - minimapInset,
                 height: CGFloat.greatestFiniteMagnitude
             )
             scrollView.hasHorizontalScroller = false
@@ -171,6 +181,10 @@ struct HighlightedTextEditor: NSViewRepresentable {
         // Update the line number gutter
         context.coordinator.updateGutterAppearance(fontSize: fontSize, isDarkMode: isDarkMode)
         context.coordinator.applyGutter(visible: showLineNumbers)
+
+        // Update the minimap. Read the singleton so toggling it needs no extra parameter
+        // threaded through the four editor call sites.
+        context.coordinator.applyMinimap(visible: AppState.shared.isMinimapVisible, isDarkMode: isDarkMode)
 
         // Apply syntax highlighting
         context.coordinator.applySyntaxHighlighting(language: language, isDarkMode: isDarkMode)
@@ -209,6 +223,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
         weak var textView: NSTextView?
         weak var scrollView: NSScrollView?
         weak var gutterView: GutterView?
+        weak var minimapView: MinimapView?
         var lastGoToPosition: Int?
         private var lastAppliedMatchCurrent = -1
 
@@ -233,6 +248,7 @@ struct HighlightedTextEditor: NSViewRepresentable {
             guard let textView = textView, !isUpdating else { return }
             parent.text = textView.string
             layoutGutter()
+            minimapView?.needsDisplay = true
             applySyntaxHighlighting(language: parent.language, isDarkMode: parent.isDarkMode)
         }
 
@@ -368,8 +384,37 @@ struct HighlightedTextEditor: NSViewRepresentable {
             textView.scrollRangeToVisible(currentRange)
         }
 
+        // MARK: - Minimap
+
+        /// Shows or hides the minimap and repaints it with theme-matched colors.
+        func applyMinimap(visible: Bool, isDarkMode: Bool) {
+            guard let minimapView else { return }
+            minimapView.isHidden = !visible
+            minimapView.barColor =
+                isDarkMode ? NSColor(white: 0.72, alpha: 1) : NSColor.secondaryLabelColor
+            minimapView.backgroundColor =
+                isDarkMode
+                ? NSColor(red: 0.15, green: 0.15, blue: 0.17, alpha: 1)
+                : NSColor.controlBackgroundColor
+            layoutMinimap()
+        }
+
+        /// Pins the minimap to the right edge of the clip view.
+        private func layoutMinimap() {
+            guard let scrollView, let minimapView, !minimapView.isHidden else { return }
+            let clip = scrollView.contentView.frame
+            minimapView.frame = NSRect(
+                x: clip.maxX - MinimapView.width,
+                y: clip.minY,
+                width: MinimapView.width,
+                height: clip.height
+            )
+            minimapView.needsDisplay = true
+        }
+
         @objc func scrollViewDidScroll(_ notification: Notification) {
             layoutGutter()
+            layoutMinimap()
         }
     }
 }

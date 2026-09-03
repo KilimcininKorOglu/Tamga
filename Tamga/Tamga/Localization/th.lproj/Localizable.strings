@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "แผงคำสั่ง";
 "command.palette.placeholder" = "พิมพ์คำสั่ง…";
+
+// Minimap
+"minimap" = "มินิแมป";

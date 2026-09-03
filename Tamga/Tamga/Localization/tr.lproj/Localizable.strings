@@ -126,3 +126,6 @@
 // Command palette
 "command.palette" = "Komut paleti";
 "command.palette.placeholder" = "Bir komut yazın…";
+
+// Minimap
+"minimap" = "Mini harita";
