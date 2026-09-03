@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Mini harita";
+
+"trim.trailing.whitespace" = "Satır Sonu Boşluklarını Kaldır";

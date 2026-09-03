@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Мінікарта";
+
+"trim.trailing.whitespace" = "Видалити пробіли в кінці рядків";

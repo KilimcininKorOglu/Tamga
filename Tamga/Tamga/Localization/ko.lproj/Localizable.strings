@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "미니맵";
+
+"trim.trailing.whitespace" = "줄 끝 공백 제거";

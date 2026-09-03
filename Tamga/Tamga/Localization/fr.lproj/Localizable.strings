@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Minimap";
+
+"trim.trailing.whitespace" = "Supprimer les espaces en fin de ligne";

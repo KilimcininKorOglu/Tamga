@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "الخريطة المصغرة";
+
+"trim.trailing.whitespace" = "إزالة المسافات الزائدة في نهاية السطر";

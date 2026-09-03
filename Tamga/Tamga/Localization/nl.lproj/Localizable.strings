@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Minimap";
+
+"trim.trailing.whitespace" = "Witruimte aan regeleinde verwijderen";

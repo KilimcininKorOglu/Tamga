@@ -26,6 +26,7 @@ extension Notification.Name {
     static let sortLinesDescending = Notification.Name("sortLinesDescending")
     static let removeDuplicateLines = Notification.Name("removeDuplicateLines")
     static let removeEmptyLines = Notification.Name("removeEmptyLines")
+    static let trimTrailingWhitespace = Notification.Name("trimTrailingWhitespace")
     static let uppercaseSelection = Notification.Name("uppercaseSelection")
     static let lowercaseSelection = Notification.Name("lowercaseSelection")
     static let capitalizeSelection = Notification.Name("capitalizeSelection")

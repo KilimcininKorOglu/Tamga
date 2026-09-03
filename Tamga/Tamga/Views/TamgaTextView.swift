@@ -105,6 +105,7 @@ class TamgaTextView: NSTextView {
         (.sortLinesDescending, #selector(handleSortLinesDescending)),
         (.removeDuplicateLines, #selector(handleRemoveDuplicateLines)),
         (.removeEmptyLines, #selector(handleRemoveEmptyLines)),
+        (.trimTrailingWhitespace, #selector(handleTrimTrailingWhitespace)),
         (.uppercaseSelection, #selector(handleUppercase)),
         (.lowercaseSelection, #selector(handleLowercase)),
         (.capitalizeSelection, #selector(handleCapitalize)),

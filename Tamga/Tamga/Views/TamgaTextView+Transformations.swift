@@ -28,6 +28,11 @@ extension TamgaTextView {
         removeEmptyLines()
     }
 
+    @objc func handleTrimTrailingWhitespace() {
+        guard window?.firstResponder === self else { return }
+        trimTrailingWhitespace()
+    }
+
     @objc func handleUppercase() {
         guard window?.firstResponder === self else { return }
         changeCase(.uppercase)
@@ -245,6 +250,26 @@ extension TamgaTextView {
         let keptLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
 
         let newContent = keptLines.joined(separator: "\n")
+        let fullRange = NSRange(location: 0, length: (string as NSString).length)
+        if replaceCharactersUndoable(in: fullRange, with: newContent) {
+            setSelectedRange(NSRange(location: 0, length: 0))
+        }
+    }
+
+    // MARK: - Trim Trailing Whitespace
+
+    private func trimTrailingWhitespace() {
+        clearAllFolds()
+        let lines = string.components(separatedBy: "\n")
+        let trimmedLines = lines.map { line in
+            line.replacingOccurrences(
+                of: "[ \t]+$",
+                with: "",
+                options: .regularExpression
+            )
+        }
+
+        let newContent = trimmedLines.joined(separator: "\n")
         let fullRange = NSRange(location: 0, length: (string as NSString).length)
         if replaceCharactersUndoable(in: fullRange, with: newContent) {
             setSelectedRange(NSRange(location: 0, length: 0))

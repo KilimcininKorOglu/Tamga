@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "মিনিম্যাপ";
+
+"trim.trailing.whitespace" = "লাইনের শেষের ফাঁকা স্থান সরান";

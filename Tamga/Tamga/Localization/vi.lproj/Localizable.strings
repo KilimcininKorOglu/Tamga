@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Bản đồ thu nhỏ";
+
+"trim.trailing.whitespace" = "Xóa khoảng trắng cuối dòng";

@@ -554,6 +554,7 @@ struct ContentView: View {
             PaletteCommand(title: String(localized: "sort.lines.descending")) { post(.sortLinesDescending) },
             PaletteCommand(title: String(localized: "remove.duplicate.lines")) { post(.removeDuplicateLines) },
             PaletteCommand(title: String(localized: "remove.empty.lines")) { post(.removeEmptyLines) },
+            PaletteCommand(title: String(localized: "trim.trailing.whitespace")) { post(.trimTrailingWhitespace) },
             PaletteCommand(title: String(localized: "uppercase")) { post(.uppercaseSelection) },
             PaletteCommand(title: String(localized: "lowercase")) { post(.lowercaseSelection) },
             PaletteCommand(title: String(localized: "capitalize")) { post(.capitalizeSelection) },

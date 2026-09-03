@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Minimapa";
+
+"trim.trailing.whitespace" = "Usuń białe znaki na końcu wiersza";

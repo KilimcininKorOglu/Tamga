@@ -199,6 +199,10 @@ struct TamgaCommands: Commands {
                 NotificationCenter.default.post(name: .removeEmptyLines, object: nil)
             }
 
+            Button(String(localized: "trim.trailing.whitespace")) {
+                NotificationCenter.default.post(name: .trimTrailingWhitespace, object: nil)
+            }
+
             // Change Case submenu
             Menu(String(localized: "change.case")) {
                 Button(String(localized: "uppercase")) {

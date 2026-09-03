@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "Мини-карта";
+
+"trim.trailing.whitespace" = "Удалить пробелы в конце строк";

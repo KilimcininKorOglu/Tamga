@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "มินิแมป";
+
+"trim.trailing.whitespace" = "ลบช่องว่างท้ายบรรทัด";

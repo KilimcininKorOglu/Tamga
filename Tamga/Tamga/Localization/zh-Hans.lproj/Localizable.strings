@@ -129,3 +129,5 @@
 
 // Minimap
 "minimap" = "缩略图";
+
+"trim.trailing.whitespace" = "删除行尾空白";
