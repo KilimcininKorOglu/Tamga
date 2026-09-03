@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Evidenzia occorrenze";
 
 "auto.close.brackets" = "Chiudi automaticamente le parentesi";
+
+"complete.word" = "Completa parola";

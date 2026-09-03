@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Surligner les occurrences";
 
 "auto.close.brackets" = "Fermeture automatique des parenthèses";
+
+"complete.word" = "Compléter le mot";

@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Podświetl wystąpienia";
 
 "auto.close.brackets" = "Automatyczne zamykanie nawiasów";
+
+"complete.word" = "Uzupełnij słowo";

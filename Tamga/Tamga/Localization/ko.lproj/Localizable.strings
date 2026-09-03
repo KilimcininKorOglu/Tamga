@@ -137,3 +137,5 @@
 "highlight.occurrences" = "일치 항목 강조";
 
 "auto.close.brackets" = "괄호 자동 닫기";
+
+"complete.word" = "단어 완성";

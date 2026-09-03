@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Highlight Occurrences";
 
 "auto.close.brackets" = "Auto-Close Brackets";
+
+"complete.word" = "Complete Word";

@@ -543,6 +543,7 @@ struct ContentView: View {
             PaletteCommand(title: String(localized: "reopen.closed.tab")) { tabManager.reopenLastClosedTab() },
             PaletteCommand(title: String(localized: "find")) { documentViewModel.toggleSearch() },
             PaletteCommand(title: String(localized: "go.to.line")) { documentViewModel.toggleGoToLine() },
+            PaletteCommand(title: String(localized: "complete.word")) { post(.completeWord) },
             PaletteCommand(title: String(localized: "sidebar")) { appState.isSidebarVisible.toggle() },
             PaletteCommand(title: String(localized: "word.wrap")) { appState.isWordWrapEnabled.toggle() },
             PaletteCommand(title: String(localized: "line.numbers")) { appState.showLineNumbers.toggle() },

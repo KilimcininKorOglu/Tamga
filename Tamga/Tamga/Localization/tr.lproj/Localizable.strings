@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Eşleşmeleri Vurgula";
 
 "auto.close.brackets" = "Parantezleri Otomatik Kapat";
+
+"complete.word" = "Kelimeyi Tamamla";

@@ -130,4 +130,19 @@ final class AutoCloseTests: XCTestCase {
         XCTAssertEqual(textView.string, "(")
         AppState.shared.isAutoCloseBracketsEnabled = true
     }
+
+    func testCompletionsSuggestDocumentWords() {
+        let textView = makeTextView()
+        textView.string = "counter counterValue count other"
+        let range = NSRange(location: 0, length: 5)  // "count"
+        let suggestions = textView.completions(forPartialWordRange: range, indexOfSelectedItem: nil)
+        XCTAssertEqual(suggestions, ["counter", "counterValue"])
+    }
+
+    func testCompletionsReturnNilWhenNoMatch() {
+        let textView = makeTextView()
+        textView.string = "alpha beta"
+        let range = NSRange(location: 0, length: 5)  // "alpha", no longer word starts with it
+        XCTAssertNil(textView.completions(forPartialWordRange: range, indexOfSelectedItem: nil))
+    }
 }

@@ -172,6 +172,7 @@ class TamgaTextView: NSTextView {
         (.removeDuplicateLines, #selector(handleRemoveDuplicateLines)),
         (.removeEmptyLines, #selector(handleRemoveEmptyLines)),
         (.trimTrailingWhitespace, #selector(handleTrimTrailingWhitespace)),
+        (.completeWord, #selector(handleCompleteWord)),
         (.uppercaseSelection, #selector(handleUppercase)),
         (.lowercaseSelection, #selector(handleLowercase)),
         (.capitalizeSelection, #selector(handleCapitalize)),
@@ -307,6 +308,48 @@ class TamgaTextView: NSTextView {
         let inner = (string as NSString).substring(with: selection)
         super.insertText(open + inner + close, replacementRange: selection)
         setSelectedRange(NSRange(location: selection.location + (open as NSString).length, length: (inner as NSString).length))
+    }
+
+    // MARK: - Word completion
+
+    /// Completes the partial word from the other words already in the document, so the
+    /// suggestions match the file's own identifiers instead of a system dictionary.
+    override func completions(
+        forPartialWordRange charRange: NSRange,
+        indexOfSelectedItem index: UnsafeMutablePointer<Int>?
+    ) -> [String]? {
+        let text = string as NSString
+        guard charRange.length > 0, NSMaxRange(charRange) <= text.length else { return nil }
+        let partial = text.substring(with: charRange).lowercased()
+
+        let matches = documentWords().filter { word in
+            word.count > partial.count && word.lowercased().hasPrefix(partial)
+        }
+        return matches.isEmpty ? nil : matches
+    }
+
+    /// Triggers the completion list. Reached from the Edit menu through a notification.
+    @objc func handleCompleteWord() {
+        guard window?.firstResponder === self else { return }
+        complete(nil)
+    }
+
+    /// The unique identifier-like words in the document, sorted for a stable menu order.
+    private func documentWords() -> [String] {
+        let text = string
+        guard let regex = try? NSRegularExpression(pattern: "[A-Za-z_][A-Za-z0-9_]*") else { return [] }
+        let nsText = text as NSString
+        let matches = regex.matches(in: text, range: NSRange(location: 0, length: nsText.length))
+
+        var seen = Set<String>()
+        var words: [String] = []
+        for match in matches {
+            let word = nsText.substring(with: match.range)
+            if seen.insert(word).inserted {
+                words.append(word)
+            }
+        }
+        return words.sorted()
     }
 
     override func performKeyEquivalent(with event: NSEvent) -> Bool {

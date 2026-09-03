@@ -137,3 +137,5 @@
 "highlight.occurrences" = "تمييز التطابقات";
 
 "auto.close.brackets" = "إغلاق الأقواس تلقائيًا";
+
+"complete.word" = "إكمال الكلمة";

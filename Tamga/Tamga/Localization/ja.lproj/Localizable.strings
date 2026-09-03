@@ -137,3 +137,5 @@
 "highlight.occurrences" = "一致箇所を強調表示";
 
 "auto.close.brackets" = "括弧を自動的に閉じる";
+
+"complete.word" = "単語を補完";

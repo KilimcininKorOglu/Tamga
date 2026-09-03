@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Підсвічувати збіги";
 
 "auto.close.brackets" = "Автозакриття дужок";
+
+"complete.word" = "Завершити слово";

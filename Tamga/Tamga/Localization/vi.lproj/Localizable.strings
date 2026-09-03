@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Làm nổi bật các lần xuất hiện";
 
 "auto.close.brackets" = "Tự động đóng dấu ngoặc";
+
+"complete.word" = "Hoàn thành từ";

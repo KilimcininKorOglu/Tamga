@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Overeenkomsten markeren";
 
 "auto.close.brackets" = "Haakjes automatisch sluiten";
+
+"complete.word" = "Woord aanvullen";

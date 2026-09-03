@@ -137,3 +137,5 @@
 "highlight.occurrences" = "ไฮไลต์ที่ตรงกัน";
 
 "auto.close.brackets" = "ปิดวงเล็บอัตโนมัติ";
+
+"complete.word" = "เติมคำให้สมบูรณ์";

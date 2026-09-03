@@ -137,3 +137,5 @@
 "highlight.occurrences" = "高亮匹配项";
 
 "auto.close.brackets" = "自动闭合括号";
+
+"complete.word" = "补全单词";

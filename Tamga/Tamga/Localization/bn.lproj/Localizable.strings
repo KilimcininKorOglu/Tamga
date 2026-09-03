@@ -137,3 +137,5 @@
 "highlight.occurrences" = "উপস্থিতি হাইলাইট করুন";
 
 "auto.close.brackets" = "স্বয়ংক্রিয়ভাবে বন্ধনী বন্ধ করুন";
+
+"complete.word" = "শব্দ সম্পূর্ণ করুন";

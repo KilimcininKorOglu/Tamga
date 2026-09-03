@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Resaltar coincidencias";
 
 "auto.close.brackets" = "Cerrar corchetes automáticamente";
+
+"complete.word" = "Completar palabra";

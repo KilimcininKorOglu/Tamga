@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Sorot Kemunculan";
 
 "auto.close.brackets" = "Tutup Tanda Kurung Otomatis";
+
+"complete.word" = "Lengkapi Kata";

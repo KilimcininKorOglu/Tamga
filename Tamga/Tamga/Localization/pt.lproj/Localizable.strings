@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Realçar ocorrências";
 
 "auto.close.brackets" = "Fechar parênteses automaticamente";
+
+"complete.word" = "Completar palavra";

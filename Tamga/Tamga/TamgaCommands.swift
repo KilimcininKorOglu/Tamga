@@ -162,6 +162,11 @@ struct TamgaCommands: Commands {
             }
             .keyboardShortcut("l", modifiers: .command)
 
+            Button(String(localized: "complete.word")) {
+                NotificationCenter.default.post(name: .completeWord, object: nil)
+            }
+            .keyboardShortcut(.space, modifiers: .control)
+
             Divider()
 
             Button(String(localized: "duplicate.line")) {

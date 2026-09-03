@@ -137,3 +137,5 @@
 "highlight.occurrences" = "Подсветка совпадений";
 
 "auto.close.brackets" = "Автозакрытие скобок";
+
+"complete.word" = "Завершить слово";
