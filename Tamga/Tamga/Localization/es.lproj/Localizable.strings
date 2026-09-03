@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Eliminar espacios finales";
 
 "indent.guides" = "Guías de sangría";
+
+"highlight.occurrences" = "Resaltar coincidencias";

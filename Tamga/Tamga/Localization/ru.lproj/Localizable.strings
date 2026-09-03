@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Удалить пробелы в конце строк";
 
 "indent.guides" = "Направляющие отступов";
+
+"highlight.occurrences" = "Подсветка совпадений";

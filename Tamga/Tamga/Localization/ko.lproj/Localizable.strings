@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "줄 끝 공백 제거";
 
 "indent.guides" = "들여쓰기 가이드";
+
+"highlight.occurrences" = "일치 항목 강조";

@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Remover espaços no final da linha";
 
 "indent.guides" = "Guias de indentação";
+
+"highlight.occurrences" = "Realçar ocorrências";

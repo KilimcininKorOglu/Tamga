@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "ลบช่องว่างท้ายบรรทัด";
 
 "indent.guides" = "เส้นนำการเยื้อง";
+
+"highlight.occurrences" = "ไฮไลต์ที่ตรงกัน";

@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "行末の空白を削除";
 
 "indent.guides" = "インデントガイド";
+
+"highlight.occurrences" = "一致箇所を強調表示";

@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "লাইনের শেষের ফাঁকা স্থান সরান";
 
 "indent.guides" = "ইনডেন্ট গাইড";
+
+"highlight.occurrences" = "উপস্থিতি হাইলাইট করুন";

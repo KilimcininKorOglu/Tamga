@@ -28,6 +28,7 @@ class AppState: ObservableObject {
     @Published var showInvisibleCharacters: Bool = false
     @Published var isMinimapVisible: Bool = false
     @Published var isIndentGuidesVisible: Bool = false
+    @Published var isOccurrenceHighlightEnabled: Bool = true
     @Published var appLanguage: AppLanguage = .system
 
     private let userDefaults = UserDefaults.standard
@@ -65,6 +66,7 @@ class AppState: ObservableObject {
         autoSaveInterval = userDefaults.object(forKey: "autoSaveInterval") as? TimeInterval ?? 60
         isMinimapVisible = userDefaults.object(forKey: "minimap") as? Bool ?? false
         isIndentGuidesVisible = userDefaults.object(forKey: "indentGuides") as? Bool ?? false
+        isOccurrenceHighlightEnabled = userDefaults.object(forKey: "occurrenceHighlight") as? Bool ?? true
 
         if let themeRaw = userDefaults.string(forKey: "theme"),
             let theme = AppTheme(rawValue: themeRaw)
@@ -122,6 +124,7 @@ class AppState: ObservableObject {
         userDefaults.set(autoSaveInterval, forKey: "autoSaveInterval")
         userDefaults.set(isMinimapVisible, forKey: "minimap")
         userDefaults.set(isIndentGuidesVisible, forKey: "indentGuides")
+        userDefaults.set(isOccurrenceHighlightEnabled, forKey: "occurrenceHighlight")
         userDefaults.set(appLanguage.rawValue, forKey: "appLanguage")
 
         if let data = try? JSONEncoder().encode(recentFiles) {

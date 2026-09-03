@@ -291,6 +291,8 @@ struct TamgaCommands: Commands {
 
             Toggle(String(localized: "indent.guides"), isOn: $appState.isIndentGuidesVisible)
 
+            Toggle(String(localized: "highlight.occurrences"), isOn: $appState.isOccurrenceHighlightEnabled)
+
             Divider()
 
             Button(String(localized: "zoom.in")) {

@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Satır Sonu Boşluklarını Kaldır";
 
 "indent.guides" = "Girinti Kılavuzları";
+
+"highlight.occurrences" = "Eşleşmeleri Vurgula";

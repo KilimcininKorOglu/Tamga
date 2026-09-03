@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Xóa khoảng trắng cuối dòng";
 
 "indent.guides" = "Đường dẫn thụt lề";
+
+"highlight.occurrences" = "Làm nổi bật các lần xuất hiện";

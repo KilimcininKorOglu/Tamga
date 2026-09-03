@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Usuń białe znaki na końcu wiersza";
 
 "indent.guides" = "Prowadnice wcięć";
+
+"highlight.occurrences" = "Podświetl wystąpienia";

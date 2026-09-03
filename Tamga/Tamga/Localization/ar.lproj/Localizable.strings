@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "إزالة المسافات الزائدة في نهاية السطر";
 
 "indent.guides" = "أدلة المسافة البادئة";
+
+"highlight.occurrences" = "تمييز التطابقات";

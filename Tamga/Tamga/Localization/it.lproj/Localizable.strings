@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Rimuovi spazi finali";
 
 "indent.guides" = "Guide di indentazione";
+
+"highlight.occurrences" = "Evidenzia occorrenze";

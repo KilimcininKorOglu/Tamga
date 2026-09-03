@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Trim Trailing Whitespace";
 
 "indent.guides" = "Indent Guides";
+
+"highlight.occurrences" = "Highlight Occurrences";

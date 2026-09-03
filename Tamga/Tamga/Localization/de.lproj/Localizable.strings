@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Leerzeichen am Zeilenende entfernen";
 
 "indent.guides" = "Einrückungshilfen";
+
+"highlight.occurrences" = "Vorkommen hervorheben";

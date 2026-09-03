@@ -205,6 +205,10 @@ struct HighlightedTextEditor: NSViewRepresentable {
             current: currentMatchIndex,
             isDarkMode: isDarkMode
         )
+
+        // Re-apply selection-driven decorations (they share the background layer and get
+        // cleared by the syntax pass above). No-op while the find panel is open.
+        context.coordinator.applySelectionHighlights()
     }
 
     private func updateColors(textView: NSTextView, isDarkMode: Bool) {
@@ -260,6 +264,51 @@ struct HighlightedTextEditor: NSViewRepresentable {
         func textViewDidChangeSelection(_ notification: Notification) {
             guard let textView = textView else { return }
             parent.onCursorPositionChange(textView.selectedRange().location)
+            applySelectionHighlights()
+        }
+
+        /// Paints selection-driven decorations on the temporary-attribute background layer:
+        /// every occurrence of the selected word. This layer is shared with the search
+        /// highlighter, so it only runs while the find panel is closed (`searchMatches`
+        /// empty); otherwise the search highlights own the layer and stay untouched.
+        func applySelectionHighlights() {
+            guard let textView = textView, let layoutManager = textView.layoutManager else { return }
+            guard parent.searchMatches.isEmpty else { return }
+
+            let nsText = textView.string as NSString
+            let length = nsText.length
+            layoutManager.removeTemporaryAttribute(
+                .backgroundColor,
+                forCharacterRange: NSRange(location: 0, length: length)
+            )
+
+            applyOccurrenceHighlights(textView: textView, layoutManager: layoutManager, nsText: nsText, length: length)
+        }
+
+        /// Highlights every occurrence of the current selection when it is a single word,
+        /// so the same identifier stands out across the document.
+        private func applyOccurrenceHighlights(
+            textView: NSTextView,
+            layoutManager: NSLayoutManager,
+            nsText: NSString,
+            length: Int
+        ) {
+            guard AppState.shared.isOccurrenceHighlightEnabled else { return }
+            let selection = textView.selectedRange()
+            guard selection.length >= 2, NSMaxRange(selection) <= length else { return }
+
+            let selected = nsText.substring(with: selection)
+            guard !selected.contains(where: { $0.isWhitespace || $0.isNewline }) else { return }
+
+            let color = NSColor.systemGray.withAlphaComponent(parent.isDarkMode ? 0.4 : 0.28)
+            var searchRange = NSRange(location: 0, length: length)
+            while searchRange.length > 0 {
+                let found = nsText.range(of: selected, options: [], range: searchRange)
+                guard found.location != NSNotFound else { break }
+                layoutManager.addTemporaryAttribute(.backgroundColor, value: color, forCharacterRange: found)
+                let next = NSMaxRange(found)
+                searchRange = NSRange(location: next, length: length - next)
+            }
         }
 
         // MARK: - Gutter

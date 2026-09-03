@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "Видалити пробіли в кінці рядків";
 
 "indent.guides" = "Напрямні відступів";
+
+"highlight.occurrences" = "Підсвічувати збіги";

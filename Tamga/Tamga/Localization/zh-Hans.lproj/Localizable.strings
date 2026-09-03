@@ -133,3 +133,5 @@
 "trim.trailing.whitespace" = "删除行尾空白";
 
 "indent.guides" = "缩进参考线";
+
+"highlight.occurrences" = "高亮匹配项";
