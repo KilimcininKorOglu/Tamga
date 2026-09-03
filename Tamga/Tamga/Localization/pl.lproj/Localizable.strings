@@ -114,3 +114,8 @@
 "preferences.editor" = "Edytor";
 "font" = "Czcionka";
 "font.size" = "Rozmiar czcionki";
+
+// Export
+"export" = "Eksportuj";
+"export.html" = "Eksportuj jako HTML";
+"export.pdf" = "Eksportuj jako PDF";

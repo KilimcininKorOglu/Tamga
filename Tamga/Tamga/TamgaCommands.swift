@@ -72,6 +72,16 @@ struct TamgaCommands: Commands {
             .keyboardShortcut("p", modifiers: .command)
             .disabled(tabManager?.activeTab == nil)
 
+            Menu(String(localized: "export")) {
+                Button(String(localized: "export.html")) {
+                    exportCurrentTab(asPDF: false)
+                }
+                Button(String(localized: "export.pdf")) {
+                    exportCurrentTab(asPDF: true)
+                }
+            }
+            .disabled(tabManager?.activeTab == nil)
+
             Divider()
 
             Button(String(localized: "close.tab")) {
@@ -396,6 +406,28 @@ struct TamgaCommands: Commands {
             tabManager?.openTab(with: url, content: content, lineEnding: lineEnding)
         } catch {
             print("Failed to open recent file: \(error)")
+        }
+    }
+
+    private func exportCurrentTab(asPDF: Bool) {
+        guard let tab = tabManager?.activeTab else { return }
+        let name = tab.filePath?.lastPathComponent ?? tab.title
+        if asPDF {
+            ExportService.exportPDF(
+                content: tab.content,
+                language: tab.language,
+                fontName: appState.fontName,
+                fontSize: appState.fontSize,
+                suggestedName: name
+            )
+        } else {
+            ExportService.exportHTML(
+                content: tab.content,
+                language: tab.language,
+                fontName: appState.fontName,
+                fontSize: appState.fontSize,
+                suggestedName: name
+            )
         }
     }
 

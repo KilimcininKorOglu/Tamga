@@ -114,3 +114,8 @@
 "preferences.editor" = "Éditeur";
 "font" = "Police";
 "font.size" = "Taille de police";
+
+// Export
+"export" = "Exporter";
+"export.html" = "Exporter en HTML";
+"export.pdf" = "Exporter en PDF";

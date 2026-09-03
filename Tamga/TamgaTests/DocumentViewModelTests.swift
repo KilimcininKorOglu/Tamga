@@ -103,6 +103,14 @@ final class DocumentViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.goToLine(99, in: content))
     }
 
+    func testHTMLExportProducesHTML() {
+        let data = ExportService.htmlData(content: "let value = 1", language: .swift, fontName: "Menlo", fontSize: 13)
+        let html = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        XCTAssertFalse(html.isEmpty)
+        XCTAssertTrue(html.lowercased().contains("<html") || html.lowercased().contains("<span"))
+        XCTAssertTrue(html.contains("value"))
+    }
+
     func testFindNextAndPreviousWrap() {
         let viewModel = DocumentViewModel()
         viewModel.searchText = "a"

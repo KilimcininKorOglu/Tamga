@@ -114,3 +114,8 @@
 "preferences.editor" = "편집기";
 "font" = "글꼴";
 "font.size" = "글꼴 크기";
+
+// Export
+"export" = "내보내기";
+"export.html" = "HTML로 내보내기";
+"export.pdf" = "PDF로 내보내기";

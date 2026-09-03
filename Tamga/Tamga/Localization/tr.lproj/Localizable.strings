@@ -114,3 +114,8 @@
 "preferences.editor" = "Editör";
 "font" = "Yazı tipi";
 "font.size" = "Yazı tipi boyutu";
+
+// Export
+"export" = "Dışa aktar";
+"export.html" = "HTML olarak dışa aktar";
+"export.pdf" = "PDF olarak dışa aktar";

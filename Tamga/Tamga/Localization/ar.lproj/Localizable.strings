@@ -114,3 +114,8 @@
 "preferences.editor" = "المحرر";
 "font" = "الخط";
 "font.size" = "حجم الخط";
+
+// Export
+"export" = "تصدير";
+"export.html" = "تصدير كـ HTML";
+"export.pdf" = "تصدير كـ PDF";

@@ -114,3 +114,8 @@
 "preferences.editor" = "Editor";
 "font" = "Fuente";
 "font.size" = "Tamaño de fuente";
+
+// Export
+"export" = "Exportar";
+"export.html" = "Exportar como HTML";
+"export.pdf" = "Exportar como PDF";

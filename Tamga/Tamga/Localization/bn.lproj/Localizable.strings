@@ -114,3 +114,8 @@
 "preferences.editor" = "এডিটর";
 "font" = "ফন্ট";
 "font.size" = "ফন্ট আকার";
+
+// Export
+"export" = "এক্সপোর্ট";
+"export.html" = "HTML হিসেবে এক্সপোর্ট";
+"export.pdf" = "PDF হিসেবে এক্সপোর্ট";

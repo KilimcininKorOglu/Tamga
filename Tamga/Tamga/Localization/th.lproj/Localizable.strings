@@ -114,3 +114,8 @@
 "preferences.editor" = "ตัวแก้ไข";
 "font" = "แบบอักษร";
 "font.size" = "ขนาดอักษร";
+
+// Export
+"export" = "ส่งออก";
+"export.html" = "ส่งออกเป็น HTML";
+"export.pdf" = "ส่งออกเป็น PDF";

@@ -114,3 +114,8 @@
 "preferences.editor" = "编辑器";
 "font" = "字体";
 "font.size" = "字体大小";
+
+// Export
+"export" = "导出";
+"export.html" = "导出为 HTML";
+"export.pdf" = "导出为 PDF";

@@ -114,3 +114,8 @@
 "preferences.editor" = "エディタ";
 "font" = "フォント";
 "font.size" = "フォントサイズ";
+
+// Export
+"export" = "書き出す";
+"export.html" = "HTMLとして書き出す";
+"export.pdf" = "PDFとして書き出す";

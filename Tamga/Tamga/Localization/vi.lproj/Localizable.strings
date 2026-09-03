@@ -114,3 +114,8 @@
 "preferences.editor" = "Trình sửa";
 "font" = "Phông chữ";
 "font.size" = "Cỡ chữ";
+
+// Export
+"export" = "Xuất";
+"export.html" = "Xuất dạng HTML";
+"export.pdf" = "Xuất dạng PDF";
