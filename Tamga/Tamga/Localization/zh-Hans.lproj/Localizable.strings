@@ -131,3 +131,5 @@
 "minimap" = "缩略图";
 
 "trim.trailing.whitespace" = "删除行尾空白";
+
+"indent.guides" = "缩进参考线";

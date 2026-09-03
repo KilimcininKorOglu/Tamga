@@ -549,6 +549,7 @@ struct ContentView: View {
             PaletteCommand(title: String(localized: "split.view")) { appState.isSplitViewEnabled.toggle() },
             PaletteCommand(title: String(localized: "markdown.preview")) { appState.isMarkdownPreviewEnabled.toggle() },
             PaletteCommand(title: String(localized: "show.invisibles")) { appState.showInvisibleCharacters.toggle() },
+            PaletteCommand(title: String(localized: "indent.guides")) { appState.isIndentGuidesVisible.toggle() },
             PaletteCommand(title: String(localized: "duplicate.line")) { post(.duplicateLine) },
             PaletteCommand(title: String(localized: "sort.lines.ascending")) { post(.sortLinesAscending) },
             PaletteCommand(title: String(localized: "sort.lines.descending")) { post(.sortLinesDescending) },

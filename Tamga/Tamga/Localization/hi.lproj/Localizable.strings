@@ -131,3 +131,5 @@
 "minimap" = "मिनिमैप";
 
 "trim.trailing.whitespace" = "पंक्ति के अंत के रिक्त स्थान हटाएँ";
+
+"indent.guides" = "इंडेंट गाइड";

@@ -131,3 +131,5 @@
 "minimap" = "Minimap";
 
 "trim.trailing.whitespace" = "Witruimte aan regeleinde verwijderen";
+
+"indent.guides" = "Inspringhulplijnen";

@@ -13,6 +13,14 @@ class TamgaTextView: NSTextView {
         }
     }
 
+    var showIndentGuides: Bool = false {
+        didSet {
+            if showIndentGuides != oldValue {
+                needsDisplay = true
+            }
+        }
+    }
+
     private let spaceSymbol = "·"
     private let tabSymbol = "→"
     private let newlineSymbol = "¶"
@@ -35,11 +43,69 @@ class TamgaTextView: NSTextView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
+        if showIndentGuides {
+            drawIndentGuides(in: dirtyRect)
+        }
+
         if showInvisibles {
             drawInvisibleCharacters(in: dirtyRect)
         }
 
         drawFoldIndicators()
+    }
+
+    /// Draws a faint vertical line at each indentation level (every 4 columns) so nested
+    /// code is easy to scan. The indent is measured from each line's start, so a
+    /// soft-wrapped continuation fragment repeats the same guides down its height.
+    private func drawIndentGuides(in rect: NSRect) {
+        guard let layoutManager = layoutManager, let textContainer = textContainer else { return }
+
+        let text = string as NSString
+        let font = self.font ?? NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        let spaceWidth = (" " as NSString).size(withAttributes: [.font: font]).width
+        guard spaceWidth > 0 else { return }
+
+        let indentWidth = 4
+        NSColor.tertiaryLabelColor.withAlphaComponent(0.5).setStroke()
+
+        let glyphRange = layoutManager.glyphRange(forBoundingRect: rect, in: textContainer)
+        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { [weak self] (_, usedRect, _, charRange, _) in
+            guard let self = self, !self.isFolded(charRange.location) else { return }
+
+            let lineStart = text.lineRange(for: NSRange(location: charRange.location, length: 0)).location
+            let indentCols = self.leadingIndentColumns(atLineStart: lineStart, in: text, indentWidth: indentWidth)
+            guard indentCols >= indentWidth else { return }
+
+            let top = usedRect.minY + self.textContainerInset.height
+            let bottom = usedRect.maxY + self.textContainerInset.height
+            for col in stride(from: indentWidth, to: indentCols, by: indentWidth) {
+                let x = self.textContainerInset.width + CGFloat(col) * spaceWidth + 0.5
+                let path = NSBezierPath()
+                path.move(to: NSPoint(x: x, y: top))
+                path.line(to: NSPoint(x: x, y: bottom))
+                path.lineWidth = 1
+                path.stroke()
+            }
+        }
+    }
+
+    /// Counts the leading indentation of a line in columns, expanding a tab to the next
+    /// 4-column stop so tabs and spaces line up with the editor's Tab-to-4-spaces rule.
+    private func leadingIndentColumns(atLineStart start: Int, in text: NSString, indentWidth: Int) -> Int {
+        var cols = 0
+        var idx = start
+        while idx < text.length {
+            let char = text.character(at: idx)
+            if char == 0x20 {
+                cols += 1
+            } else if char == 0x09 {
+                cols += indentWidth - (cols % indentWidth)
+            } else {
+                break
+            }
+            idx += 1
+        }
+        return cols
     }
 
     private func drawInvisibleCharacters(in rect: NSRect) {

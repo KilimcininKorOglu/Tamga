@@ -131,3 +131,5 @@
 "minimap" = "Мінікарта";
 
 "trim.trailing.whitespace" = "Видалити пробіли в кінці рядків";
+
+"indent.guides" = "Напрямні відступів";

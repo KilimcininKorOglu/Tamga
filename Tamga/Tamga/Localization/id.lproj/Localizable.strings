@@ -131,3 +131,5 @@
 "minimap" = "Minimap";
 
 "trim.trailing.whitespace" = "Hapus Spasi di Akhir Baris";
+
+"indent.guides" = "Panduan Indentasi";

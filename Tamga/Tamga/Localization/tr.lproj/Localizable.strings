@@ -131,3 +131,5 @@
 "minimap" = "Mini harita";
 
 "trim.trailing.whitespace" = "Satır Sonu Boşluklarını Kaldır";
+
+"indent.guides" = "Girinti Kılavuzları";

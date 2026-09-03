@@ -131,3 +131,5 @@
 "minimap" = "মিনিম্যাপ";
 
 "trim.trailing.whitespace" = "লাইনের শেষের ফাঁকা স্থান সরান";
+
+"indent.guides" = "ইনডেন্ট গাইড";

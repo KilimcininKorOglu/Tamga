@@ -131,3 +131,5 @@
 "minimap" = "ミニマップ";
 
 "trim.trailing.whitespace" = "行末の空白を削除";
+
+"indent.guides" = "インデントガイド";

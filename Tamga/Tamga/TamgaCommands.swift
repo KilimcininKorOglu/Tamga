@@ -289,6 +289,8 @@ struct TamgaCommands: Commands {
 
             Toggle(String(localized: "minimap"), isOn: $appState.isMinimapVisible)
 
+            Toggle(String(localized: "indent.guides"), isOn: $appState.isIndentGuidesVisible)
+
             Divider()
 
             Button(String(localized: "zoom.in")) {

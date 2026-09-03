@@ -142,6 +142,10 @@ struct HighlightedTextEditor: NSViewRepresentable {
             textView.needsDisplay = true
         }
 
+        // Update indent guides. Read the singleton so toggling it needs no extra parameter
+        // threaded through the four editor call sites.
+        textView.showIndentGuides = AppState.shared.isIndentGuidesVisible
+
         // Update text if changed externally
         if textView.string != text {
             // Stored fold positions belong to the previous content; drop them before
