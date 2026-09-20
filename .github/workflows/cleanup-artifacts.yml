@@ -1,10 +1,10 @@
 name: Cleanup Artifacts
 
-# The build matrix uploads one IPK artifact per architecture (30+ per run) only so
-# the publish job can download them again. They serve no purpose afterwards, and a
-# full artifact store makes every later run fail at "Upload package artifact" with
-# "Artifact storage quota has been hit", which skips the publish job and leaves the
-# release without IPKs. This workflow deletes the leftovers.
+# GitHub keeps every uploaded artifact for 90 days by default, and each one counts
+# against the account-wide storage quota. Once the quota fills, later runs fail at
+# their upload step instead of publishing. This repository uploads no artifacts
+# today, so the job is preventive: it keeps the store clean from the first build or
+# release workflow that starts uploading them.
 
 on:
   schedule:
